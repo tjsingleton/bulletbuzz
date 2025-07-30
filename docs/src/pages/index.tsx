@@ -1,43 +1,33 @@
-import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React from 'react';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-import styles from './index.module.css';
-
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-export default function Home(): ReactNode {
+export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
+      title={`${siteConfig.title}`}
+      description="BulletBuzz - Auto-Battler Game">
+      <main style={{
+        padding: 0,
+        margin: 0,
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden'
+      }}>
+        <iframe
+          src="/bulletbuzz/index.html"
+          style={{
+            width: '100%',
+            height: '100%',
+            border: 'none',
+            margin: 0,
+            padding: 0
+          }}
+          title="BulletBuzz Game"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
       </main>
     </Layout>
   );

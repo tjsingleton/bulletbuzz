@@ -6,7 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
-    "build:full": "npm run build && node deploy-game.js",
+    "build:full": "npm run build && sleep 2 && node deploy-game.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "npm run build:full && docusaurus deploy",
     "clear": "docusaurus clear",

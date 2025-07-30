@@ -53,8 +53,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-        // Disable the home page so it doesn't create index.html
-        pages: false,
+        // Enable pages so we can create a custom index page
+        pages: {
+          path: 'src/pages',
+        },
       }),
     ],
   ],
