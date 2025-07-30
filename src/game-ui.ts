@@ -514,51 +514,48 @@ function drawGameOver(): void {
   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   
   ctx.font = '18px serif';
-  ctx.textAlign = 'left';
   const statsX = panelX + 30;
+  const statsWidth = panelWidth - 60;
   let statsY = panelY + 100;
-  const lineHeight = 25;
+  const lineHeight = 30;
+  
+  // Helper function to draw a stat line with proper alignment
+  const drawStatLine = (emoji: string, label: string, value: string, color: string) => {
+    ctx!.fillStyle = color;
+    ctx!.textAlign = 'left';
+    ctx!.fillText(`${emoji} ${label}`, statsX, statsY);
+    
+    ctx!.textAlign = 'right';
+    ctx!.fillText(value, statsX + statsWidth, statsY);
+    
+    statsY += lineHeight;
+  };
   
   // Game time
-  ctx.fillStyle = '#FFD700';
-  ctx.fillText(`⏱️ Survival Time: ${timeString}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('⏱️', 'Survival Time', timeString, '#FFD700');
   
   // Level reached
-  ctx.fillStyle = '#FF6B6B';
-  ctx.fillText(`📈 Level Reached: ${gameState.level}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('📈', 'Level Reached', gameState.level.toString(), '#FF6B6B');
   
   // Enemies killed
-  ctx.fillStyle = '#4ECDC4';
-  ctx.fillText(`💀 Enemies Killed: ${gameState.enemiesKilled}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('💀', 'Enemies Killed', gameState.enemiesKilled.toString(), '#4ECDC4');
   
   // XP collected
-  ctx.fillStyle = '#45B7D1';
-  ctx.fillText(`⭐ XP Collected: ${gameState.xpCollected}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('⭐', 'XP Collected', gameState.xpCollected.toString(), '#45B7D1');
   
   // Hearts collected
-  ctx.fillStyle = '#FF69B4';
-  ctx.fillText(`❤️ Hearts Collected: ${gameState.heartsCollected}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('❤️', 'Hearts Collected', gameState.heartsCollected.toString(), '#FF69B4');
   
   // Axes thrown
-  ctx.fillStyle = '#9B59B6';
-  ctx.fillText(`🪓 Axes Thrown: ${gameState.axesCount}`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('🪓', 'Axes Thrown', gameState.axesCount.toString(), '#9B59B6');
   
   // Kill rate
   const killRate = (gameState.enemiesKilled / (gameState.gameTime / 60)).toFixed(2);
-  ctx.fillStyle = '#E74C3C';
-  ctx.fillText(`⚡ Kill Rate: ${killRate} kills/min`, statsX, statsY);
-  statsY += lineHeight;
+  drawStatLine('⚡', 'Kill Rate', `${killRate} kills/min`, '#E74C3C');
   
   // XP efficiency
   const xpEfficiency = (gameState.xpCollected / Math.max(1, gameState.enemiesKilled)).toFixed(2);
-  ctx.fillStyle = '#F39C12';
-  ctx.fillText(`🎯 XP Efficiency: ${xpEfficiency} XP/kill`, statsX, statsY);
+  drawStatLine('🎯', 'XP Efficiency', `${xpEfficiency} XP/kill`, '#F39C12');
   
   // Instructions
   ctx.fillStyle = 'white';
