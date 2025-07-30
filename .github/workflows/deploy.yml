@@ -47,10 +47,14 @@ jobs:
     - name: Build documentation
       run: mkdocs build
       
-    - name: Copy game files to docs
+    - name: Copy game files to site
       run: |
+        # Copy the game files to the site directory
         cp index.html site/
         cp -r dist site/
+        cp game-screenshot.png site/
+        cp README.md site/
+        cp LICENSE site/
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
