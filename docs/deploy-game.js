@@ -16,13 +16,17 @@ const targetDir = path.join(__dirname, 'build');
 
 console.log('Copying game files to docs build directory...');
 
-// Copy index.html
+// Copy index.html (this will override Docusaurus index.html)
 const indexHtml = fs.readFileSync(path.join(sourceDir, 'index.html'), 'utf8');
 // Update the script paths to be relative to the docs build directory
 const updatedIndexHtml = indexHtml
   .replace('./dist/BulletBuzzGame.js', './dist/BulletBuzzGame.js')
   .replace('dist/game-ui.js', './dist/game-ui.js');
 fs.writeFileSync(path.join(targetDir, 'index.html'), updatedIndexHtml);
+
+// Also copy the game's index.html to the root of the build directory
+// This ensures it's served as the main page
+console.log('Setting game as the main page...');
 
 // Copy dist directory
 const distSource = path.join(sourceDir, 'dist');

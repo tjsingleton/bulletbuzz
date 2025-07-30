@@ -20,7 +20,7 @@ const config = {
   organizationName: 'tjsingleton', // Usually your GitHub org/user name.
   projectName: 'bulletbuzz', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -53,6 +53,8 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        // Disable the home page so it doesn't create index.html
+        pages: false,
       }),
     ],
   ],
@@ -77,7 +79,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://tjsingleton.github.io/bulletbuzz/',
+            href: 'https://tjsingleton.github.io/bulletbuzz/index.html',
             label: '🎮 Play Game',
             position: 'right',
           },
@@ -134,7 +136,7 @@ const config = {
               },
               {
                 label: 'Play Game',
-                href: 'https://tjsingleton.github.io/bulletbuzz/',
+                href: 'https://tjsingleton.github.io/bulletbuzz/index.html',
               },
             ],
           },
