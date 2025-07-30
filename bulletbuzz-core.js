@@ -9,6 +9,7 @@
  * - Heart drops for healing
  * - Auto-attacking with axes
  * - Configurable balance parameters
+ * - Fixed timestep game loop for consistent performance
  */
 
 class BulletBuzzGame {
@@ -24,6 +25,16 @@ class BulletBuzzGame {
     this.enemiesSpawned = 0;
     this.levelTimes = {};
     
+    // Fixed timestep variables
+    this.accumulator = 0;
+    this.timestep = 1/60; // 60 FPS fixed timestep
+    
+    // Memory management - maximum array sizes
+    this.maxEnemies = 100;
+    this.maxXpDrops = 200;
+    this.maxHeartDrops = 50;
+    this.maxAxes = 50;
+    
     // Game objects
     this.player = {
       x: 400,
@@ -32,7 +43,7 @@ class BulletBuzzGame {
       speed: config.playerSpeed || 0.85,
       hp: config.startHp || 12,
       maxHp: config.startHp || 12,
-                   pickupRange: config.pickupRange || 8,
+      pickupRange: config.pickupRange || 8,
       attackRange: config.attackRange || 86.25,
       hitTimer: 0
     };
@@ -91,6 +102,11 @@ class BulletBuzzGame {
   }
   
   spawnEnemy() {
+    // Check if we've reached the maximum number of enemies
+    if (this.enemies.length >= this.maxEnemies) {
+      return;
+    }
+    
     const angle = Math.random() * 2 * Math.PI;
     const distance = 300;
     let spawnX = this.player.x + Math.cos(angle) * distance;
@@ -111,7 +127,8 @@ class BulletBuzzGame {
       speed: isWasp ? this.enemySpeed * 1.5 : this.enemySpeed,
       type: isWasp ? 'wasp' : 'bee',
       hp: isWasp ? 2 : 1,
-      maxHp: isWasp ? 2 : 1
+      maxHp: isWasp ? 2 : 1,
+      lifetime: 0 // Track enemy lifetime for cleanup
     };
     
     this.enemies.push(enemy);
@@ -128,7 +145,7 @@ class BulletBuzzGame {
       }
       
       // Heart drops
-      if (Math.random() < this.heartDropRate) {
+      if (Math.random() < this.heartDropRate && this.heartDrops.length < this.maxHeartDrops) {
         this.heartDrops.push({
           x: Math.random() * this.canvasWidth,
           y: Math.random() * this.canvasHeight,
@@ -162,15 +179,18 @@ class BulletBuzzGame {
       const predictedY = target.y + (target.vy || 0) * leadTime;
       const angle = Math.atan2(predictedY - this.player.y, predictedX - this.player.x);
       
-      this.axes.push({
-        x: this.player.x,
-        y: this.player.y,
-        vx: Math.cos(angle) * this.projectileSpeed * 2, // Double the horizontal speed
-        vy: Math.sin(angle) * this.projectileSpeed * 2, // Double the vertical speed
-        rotation: 0,
-        lifetime: 0 // Track how long the axe has existed
-      });
-      this.axesThrown += this.projectileCount;
+      // Only add axe if we haven't reached the limit
+      if (this.axes.length < this.maxAxes) {
+        this.axes.push({
+          x: this.player.x,
+          y: this.player.y,
+          vx: Math.cos(angle) * this.projectileSpeed * 2, // Double the horizontal speed
+          vy: Math.sin(angle) * this.projectileSpeed * 2, // Double the vertical speed
+          rotation: 0,
+          lifetime: 0 // Track how long the axe has existed
+        });
+        this.axesThrown += this.projectileCount;
+      }
     }
   }
   
@@ -308,6 +328,14 @@ class BulletBuzzGame {
     // XP drops
     for (let i = this.xpDrops.length - 1; i >= 0; i--) {
       const xp = this.xpDrops[i];
+      xp.lifetime = (xp.lifetime || 0) + 1;
+      
+      // Remove XP drops after 60 seconds (3600 frames at 60 FPS)
+      if (xp.lifetime > 3600) {
+        this.xpDrops.splice(i, 1);
+        continue;
+      }
+      
       const dx = this.player.x - xp.x;
       const dy = this.player.y - xp.y;
       const dist = Math.hypot(dx, dy);
@@ -368,8 +396,18 @@ class BulletBuzzGame {
       }
     }
 
-    // Enemy movement
-    this.enemies.forEach((e) => {
+    // Enemy movement and cleanup
+    for (let i = this.enemies.length - 1; i >= 0; i--) {
+      const e = this.enemies[i];
+      e.lifetime = (e.lifetime || 0) + 1;
+      
+      // Remove enemies that are too far from player (despawn after 30 seconds)
+      const distanceToPlayer = Math.hypot(this.player.x - e.x, this.player.y - e.y);
+      if (distanceToPlayer > 1000 || e.lifetime > 1800) { // 30 seconds at 60 FPS
+        this.enemies.splice(i, 1);
+        continue;
+      }
+      
       const dx = this.player.x - e.x;
       const dy = this.player.y - e.y;
       const dist = Math.hypot(dx, dy);
@@ -383,7 +421,7 @@ class BulletBuzzGame {
       // Keep enemies within canvas bounds
       e.x = Math.max(e.radius, Math.min(this.canvasWidth - e.radius, e.x));
       e.y = Math.max(e.radius, Math.min(this.canvasHeight - e.radius, e.y));
-    });
+    }
 
     // Axe collision with enemies
     for (let i = this.axes.length - 1; i >= 0; i--) {
@@ -400,7 +438,10 @@ class BulletBuzzGame {
           
           if (e.hp <= 0) {
             const dead = this.enemies.splice(j, 1)[0];
-            this.xpDrops.push({ x: dead.x, y: dead.y, r: 5 });
+            // Only add XP drop if we haven't reached the limit
+            if (this.xpDrops.length < this.maxXpDrops) {
+              this.xpDrops.push({ x: dead.x, y: dead.y, r: 5, lifetime: 0 });
+            }
             this.enemiesKilled++;
             this.lastKilledEnemy = { x: dead.x, y: dead.y }; // Track last killed enemy position
           }
@@ -431,10 +472,17 @@ class BulletBuzzGame {
     }
   }
   
-  step() {
+  step(deltaTime = 1/60) {
     if (!this.paused && !this.showShop && this.player.hp > 0) {
-      this.update();
-      this.gameTime += 1/60; // Assuming 60 FPS
+      // Fixed timestep with accumulator
+      this.accumulator += deltaTime;
+      
+      // Update at fixed timestep
+      while (this.accumulator >= this.timestep) {
+        this.update();
+        this.gameTime += this.timestep;
+        this.accumulator -= this.timestep;
+      }
     }
   }
   
@@ -466,6 +514,39 @@ class BulletBuzzGame {
     this.showShop = false;
     this.shopOptions = [];
     this.autoShopSelected = false;
+    
+    // Reset timestep variables
+    this.accumulator = 0;
+  }
+  
+  // Memory cleanup method
+  cleanup() {
+    // Force garbage collection of arrays
+    this.enemies.length = 0;
+    this.xpDrops.length = 0;
+    this.heartDrops.length = 0;
+    this.axes.length = 0;
+    
+    // Clear references
+    this.lastKilledEnemy = null;
+    this.shopOptions = [];
+    
+    // Reset timestep
+    this.accumulator = 0;
+  }
+  
+  // Memory monitoring method
+  getMemoryUsage() {
+    return {
+      enemies: this.enemies.length,
+      xpDrops: this.xpDrops.length,
+      heartDrops: this.heartDrops.length,
+      axes: this.axes.length,
+      maxEnemies: this.maxEnemies,
+      maxXpDrops: this.maxXpDrops,
+      maxHeartDrops: this.maxHeartDrops,
+      maxAxes: this.maxAxes
+    };
   }
   
   getGameState() {
