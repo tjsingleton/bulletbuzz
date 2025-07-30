@@ -31,6 +31,12 @@ nav:
 plugins:
   - search
 
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+
 extra:
   social:
     - icon: fontawesome/brands/github

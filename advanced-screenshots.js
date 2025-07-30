@@ -519,6 +519,139 @@ class GameScreenshotTaker {
     }
   }
 
+  async testDocumentationLogoSize() {
+    try {
+      await this.init();
+      
+      console.log('📏 Testing documentation logo size...');
+      
+      // Load the documentation page
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+      });
+      
+      // Wait for page to load
+      await this.page.waitForSelector('img[alt*="BulletBuzz Logo"]', { timeout: 10000 });
+      
+      // Find the logo image
+      const logo = await this.page.locator('img[alt*="BulletBuzz Logo"]').first();
+      if (await logo.isVisible()) {
+        console.log('✅ Logo found on documentation page');
+        
+        // Get the computed width of the logo
+        const logoWidth = await logo.evaluate(el => {
+          const rect = el.getBoundingClientRect();
+          return rect.width;
+        });
+        
+        console.log(`📏 Logo width: ${logoWidth}px`);
+        
+        // Check if the logo has the expected size (should be around 100px based on our setting)
+        if (logoWidth <= 120 && logoWidth >= 80) {
+          console.log('✅ Logo size is correct (around 100px)');
+        } else {
+          console.log(`⚠️ Logo size is ${logoWidth}px, expected around 100px`);
+        }
+        
+        // Check if the logo has width attribute
+        const hasWidthAttr = await logo.evaluate(el => el.hasAttribute('width'));
+        if (hasWidthAttr) {
+          console.log('✅ Logo has width attribute');
+        } else {
+          console.log('⚠️ Logo does not have width attribute');
+        }
+        
+        // Take screenshot
+        await this.takeScreenshot('docs-logo-size-test');
+        
+      } else {
+        console.log('❌ Logo not found on documentation page');
+      }
+      
+    } catch (error) {
+      console.log(`❌ Error testing documentation logo size: ${error.message}`);
+      await this.takeScreenshot('docs-logo-size-error');
+    } finally {
+      await this.close();
+    }
+  }
+
+  async testMermaidDiagram() {
+    try {
+      await this.init();
+      
+      console.log('📊 Testing Mermaid diagram rendering...');
+      
+      // Load the documentation page
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+      });
+      
+      // Wait for page to load and scroll to architecture section
+      await this.page.waitForSelector('h2:has-text("🏗️ Architecture")', { timeout: 10000 });
+      
+      // Scroll to the architecture section
+      await this.page.evaluate(() => {
+        const architectureSection = document.querySelector('h2:has-text("🏗️ Architecture")');
+        if (architectureSection) {
+          architectureSection.scrollIntoView();
+        }
+      });
+      
+      // Wait a bit for any lazy loading
+      await this.page.waitForTimeout(2000);
+      
+      // Look for Mermaid diagram elements
+      const mermaidElements = await this.page.locator('.mermaid').count();
+      if (mermaidElements > 0) {
+        console.log(`✅ Found ${mermaidElements} Mermaid diagram(s)`);
+        
+        // Check if the diagram is visible and rendered
+        const firstDiagram = await this.page.locator('.mermaid').first();
+        if (await firstDiagram.isVisible()) {
+          console.log('✅ Mermaid diagram is visible');
+          
+          // Check if it has SVG content (indicating it's rendered)
+          const hasSvg = await firstDiagram.evaluate(el => {
+            return el.querySelector('svg') !== null;
+          });
+          
+          if (hasSvg) {
+            console.log('✅ Mermaid diagram is properly rendered with SVG');
+          } else {
+            console.log('⚠️ Mermaid diagram found but may not be fully rendered');
+          }
+          
+          // Take screenshot
+          await this.takeScreenshot('mermaid-diagram-test');
+          
+        } else {
+          console.log('❌ Mermaid diagram is not visible');
+        }
+      } else {
+        console.log('❌ No Mermaid diagrams found');
+        
+        // Check if there's a code block that should be rendered
+        const codeBlocks = await this.page.locator('pre code').count();
+        console.log(`Found ${codeBlocks} code blocks`);
+        
+        // Look for mermaid code blocks
+        const mermaidCodeBlocks = await this.page.locator('pre code:has-text("graph TB")').count();
+        if (mermaidCodeBlocks > 0) {
+          console.log(`⚠️ Found ${mermaidCodeBlocks} Mermaid code blocks that should be rendered`);
+        }
+      }
+      
+    } catch (error) {
+      console.log(`❌ Error testing Mermaid diagram: ${error.message}`);
+      await this.takeScreenshot('mermaid-diagram-error');
+    } finally {
+      await this.close();
+    }
+  }
+
     async captureSpeedTest(speed = 10) {
     try {
       await this.init();
@@ -653,6 +786,16 @@ async function main() {
       case 'game-doc-link':
         console.log('🎮 Testing game documentation link...');
         await taker.testGameDocumentationLink();
+        break;
+        
+      case 'docs-logo-size':
+        console.log('📏 Testing documentation logo size...');
+        await taker.testDocumentationLogoSize();
+        break;
+        
+      case 'mermaid-diagram':
+        console.log('📊 Testing Mermaid diagram rendering...');
+        await taker.testMermaidDiagram();
         break;
         
       case 'all':
