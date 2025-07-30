@@ -2,6 +2,19 @@
 
 BulletBuzz uses Playwright for comprehensive automated screenshot testing and error detection.
 
+## 🆕 Comprehensive Testing System
+
+For unified testing across all environments, see the [Comprehensive Testing System](comprehensive-testing.md) which allows you to run the same tests against any URL with just a parameter change.
+
+### Quick Start
+```bash
+# Test any environment
+npm run test:comprehensive:local    # Local development
+npm run test:comprehensive:game     # GitHub Pages game
+npm run test:comprehensive:docs     # GitHub Pages docs
+npm run test:comprehensive:all      # All environments
+```
+
 ## 🧪 Test Types
 
 ### Core Tests
