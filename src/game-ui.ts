@@ -484,10 +484,11 @@ function drawShop(): void {
     ctx!.lineWidth = 1;
     ctx!.strokeRect(panelX + 25, optionY - 20, panelWidth - 50, 35);
     
-    // Option text with better spacing
+    // Option text with better spacing and vertical centering
     ctx!.fillStyle = 'white';
     ctx!.textAlign = 'left';
-    ctx!.fillText(`${key}. ${label}`, panelX + 40, optionY);
+    ctx!.textBaseline = 'middle';
+    ctx!.fillText(`${key}. ${label}`, panelX + 40, optionY - 2.5);
   });
   
   // Instructions

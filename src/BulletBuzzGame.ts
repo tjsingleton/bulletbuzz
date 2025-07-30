@@ -100,13 +100,22 @@ export class BulletBuzzGame {
   public getShopOptions(): ShopOption[] {
     // Generate shop options if shop is open and no options exist
     if (this.game.showShop && this.shopOptions.length === 0) {
-      this.shopOptions = [
+      const allOptions = [
         { key: '1', label: '⚡ +0.1 Speed', apply: () => this.game.player.speed += 0.1 },
         { key: '2', label: '🎯 +5 Attack Range', apply: () => this.game.attackRange += 5 },
         { key: '3', label: '🪓 +1 Projectile', apply: () => this.game.projectileCount++ },
         { key: '4', label: '💨 +0.2 Attack Speed', apply: () => this.game.attackSpeed += 0.2 },
         { key: '5', label: '📏 +2 Pickup Range', apply: () => this.game.player.pickupRange += 2 }
-      ].sort(() => 0.5 - Math.random()).slice(0, 3); // Random 3 options
+      ];
+      
+      // Shuffle and take 3 random options, then renumber them sequentially
+      this.shopOptions = allOptions
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3)
+        .map((option, index) => ({
+          ...option,
+          key: (index + 1).toString()
+        }));
       
       // Auto-shop if enabled
       const autoShopCheckbox = document.getElementById("autoShop") as HTMLInputElement;
