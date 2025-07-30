@@ -20,7 +20,10 @@
     "screenshots:game-states": "node scripts/screenshots.js game-states",
     "screenshots:game-over": "node scripts/screenshots.js game-over",
     "screenshots:all": "node scripts/screenshots.js all",
-    "screenshots:help": "node scripts/screenshots.js"
+    "screenshots:help": "node scripts/screenshots.js",
+    "docs:dev": "cd docs && npm start",
+    "docs:build": "cd docs && npm run build",
+    "docs:deploy": "cd docs && npm run deploy"
   },
   "repository": {
     "type": "git",
