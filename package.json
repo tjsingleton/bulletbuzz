@@ -31,6 +31,7 @@
     "test:documentation": "node advanced-screenshots.js documentation",
     "test:game-content": "node advanced-screenshots.js game-content",
     "test:readme-docs": "node advanced-screenshots.js readme-docs",
+    "test:game-doc-link": "node advanced-screenshots.js game-doc-link",
     "deploy": "./scripts/deploy.sh",
     "deploy:quick": "./scripts/quick-deploy.sh",
     "test:all": "./scripts/test-deployment.sh",

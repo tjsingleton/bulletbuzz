@@ -386,72 +386,138 @@ class GameScreenshotTaker {
       }
     }
 
-    async testReadmeDocumentationLink() {
-      try {
-        await this.init();
+      async testReadmeDocumentationLink() {
+    try {
+      await this.init();
+      
+      console.log('📖 Testing README documentation link...');
+      
+      // Load the README from GitHub
+      await this.page.goto('https://github.com/tjsingleton/bulletbuzz/blob/main/README.md', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+      });
+      
+      // Wait for the README content to load
+      await this.page.waitForSelector('.markdown-body', { timeout: 10000 });
+      
+      // Look for the documentation link in the README
+      const docLink = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').isVisible();
+      if (docLink) {
+        console.log('✅ Documentation link found in README');
+      } else {
+        console.log('❌ Documentation link not found in README');
+      }
+      
+      // Check for the logo in README
+      const logoInReadme = await this.page.locator('img[alt*="BulletBuzz Logo"]').isVisible();
+      if (logoInReadme) {
+        console.log('✅ Logo found in README');
+      } else {
+        console.log('⚠️ Logo not found in README');
+      }
+      
+      // Take screenshot of README
+      await this.takeScreenshot('readme-test');
+      
+      // Test the documentation link by clicking it
+      const docLinkElement = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').first();
+      if (await docLinkElement.isVisible()) {
+        console.log('🔗 Testing documentation link click...');
         
-        console.log('📖 Testing README documentation link...');
+        // Open link in new tab
+        await docLinkElement.click({ button: 'middle' });
         
-        // Load the README from GitHub
-        await this.page.goto('https://github.com/tjsingleton/bulletbuzz/blob/main/README.md', { 
-          waitUntil: 'networkidle',
-          timeout: 30000 
-        });
+        // Wait for new page to load
+        const pages = this.browser.contexts()[0].pages();
+        const newPage = pages[pages.length - 1];
         
-        // Wait for the README content to load
-        await this.page.waitForSelector('.markdown-body', { timeout: 10000 });
+        await newPage.waitForLoadState('networkidle', { timeout: 15000 });
         
-        // Look for the documentation link in the README
-        const docLink = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').isVisible();
-        if (docLink) {
-          console.log('✅ Documentation link found in README');
+        // Check if documentation loaded
+        const docTitle = await newPage.title();
+        if (docTitle.includes('BulletBuzz')) {
+          console.log('✅ Documentation link works correctly');
         } else {
-          console.log('❌ Documentation link not found in README');
+          console.log('❌ Documentation link failed to load');
         }
         
-        // Check for the logo in README
-        const logoInReadme = await this.page.locator('img[alt*="BulletBuzz Logo"]').isVisible();
-        if (logoInReadme) {
-          console.log('✅ Logo found in README');
-        } else {
-          console.log('⚠️ Logo not found in README');
-        }
+        await newPage.close();
+      }
+      
+    } catch (error) {
+      console.log(`❌ Error testing README documentation link: ${error.message}`);
+      await this.takeScreenshot('readme-error');
+    } finally {
+      await this.close();
+    }
+  }
+
+  async testGameDocumentationLink() {
+    try {
+      await this.init();
+      
+      console.log('🎮 Testing game documentation link...');
+      
+      // Load the game page
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/game/', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+      });
+      
+      // Wait for game to load
+      await this.page.waitForSelector('#gameCanvas', { timeout: 10000 });
+      
+      // Look for the "View Documentation" link
+      const docLink = await this.page.locator('a[href="../"]').isVisible();
+      if (docLink) {
+        console.log('✅ Documentation link found in game');
+      } else {
+        console.log('❌ Documentation link not found in game');
+      }
+      
+      // Take screenshot of game page
+      await this.takeScreenshot('game-doc-link-test');
+      
+      // Test the documentation link by clicking it
+      const docLinkElement = await this.page.locator('a[href="../"]').first();
+      if (await docLinkElement.isVisible()) {
+        console.log('🔗 Testing game documentation link click...');
         
-        // Take screenshot of README
-        await this.takeScreenshot('readme-test');
+        // Click the documentation link
+        await docLinkElement.click();
         
-        // Test the documentation link by clicking it
-        const docLinkElement = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').first();
-        if (await docLinkElement.isVisible()) {
-          console.log('🔗 Testing documentation link click...');
+        // Wait for navigation
+        await this.page.waitForLoadState('networkidle', { timeout: 15000 });
+        
+        // Check if we're now on the documentation page
+        const currentUrl = this.page.url();
+        if (currentUrl.includes('tjsingleton.github.io/bulletbuzz') && !currentUrl.includes('/game/')) {
+          console.log('✅ Game documentation link works correctly');
           
-          // Open link in new tab
-          await docLinkElement.click({ button: 'middle' });
-          
-          // Wait for new page to load
-          const pages = this.browser.contexts()[0].pages();
-          const newPage = pages[pages.length - 1];
-          
-          await newPage.waitForLoadState('networkidle', { timeout: 15000 });
-          
-          // Check if documentation loaded
-          const docTitle = await newPage.title();
+          // Check for documentation content
+          const docTitle = await this.page.title();
           if (docTitle.includes('BulletBuzz')) {
-            console.log('✅ Documentation link works correctly');
+            console.log('✅ Documentation page loaded successfully');
           } else {
-            console.log('❌ Documentation link failed to load');
+            console.log('⚠️ Documentation page title unexpected');
           }
           
-          await newPage.close();
+          // Take screenshot of documentation page
+          await this.takeScreenshot('game-doc-link-result');
+          
+        } else {
+          console.log('❌ Game documentation link failed to navigate correctly');
         }
-        
-      } catch (error) {
-        console.log(`❌ Error testing README documentation link: ${error.message}`);
-        await this.takeScreenshot('readme-error');
-      } finally {
-        await this.close();
       }
+      
+    } catch (error) {
+      console.log(`❌ Error testing game documentation link: ${error.message}`);
+      await this.takeScreenshot('game-doc-link-error');
+    } finally {
+      await this.close();
     }
+  }
 
     async captureSpeedTest(speed = 10) {
     try {
@@ -582,6 +648,11 @@ async function main() {
       case 'readme-docs':
         console.log('📖 Testing README documentation link...');
         await taker.testReadmeDocumentationLink();
+        break;
+        
+      case 'game-doc-link':
+        console.log('🎮 Testing game documentation link...');
+        await taker.testGameDocumentationLink();
         break;
         
       case 'all':
