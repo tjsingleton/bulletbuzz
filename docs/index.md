@@ -39,6 +39,83 @@ BulletBuzz is a bullet heaven game inspired by Brotato and Vampire Survivors, wh
 - **Level System**: XP progression and shop management
 - **Spawn System**: Dynamic enemy and pickup generation
 
+### System Architecture
+
+```mermaid
+graph TB
+    subgraph "Game Engine"
+        Game[Game.ts<br/>Main Game Loop]
+        Player[Player.ts<br/>Player Entity]
+        Enemy[Enemy.ts<br/>Enemy Entities]
+        Axe[Axe.ts<br/>Weapon System]
+        HeartDrop[HeartDrop.ts<br/>Health Pickups]
+        XpDrop[XpDrop.ts<br/>XP Pickups]
+    end
+    
+    subgraph "Systems"
+        CollisionSystem[CollisionSystem.ts<br/>Collision Detection]
+        LevelSystem[LevelSystem.ts<br/>Level Management]
+        SpawnSystem[SpawnSystem.ts<br/>Enemy Spawning]
+    end
+    
+    subgraph "UI & Rendering"
+        GameUI[game-ui.ts<br/>User Interface]
+        Canvas[HTML5 Canvas<br/>Rendering]
+    end
+    
+    subgraph "Types & Interfaces"
+        Types[types.ts<br/>Type Definitions]
+    end
+    
+    %% Core relationships
+    Game --> Player
+    Game --> Enemy
+    Game --> Axe
+    Game --> HeartDrop
+    Game --> XpDrop
+    
+    %% System relationships
+    Game --> CollisionSystem
+    Game --> LevelSystem
+    Game --> SpawnSystem
+    
+    %% UI relationships
+    Game --> GameUI
+    GameUI --> Canvas
+    
+    %% Type relationships
+    Game --> Types
+    Player --> Types
+    Enemy --> Types
+    Axe --> Types
+    HeartDrop --> Types
+    XpDrop --> Types
+    CollisionSystem --> Types
+    LevelSystem --> Types
+    SpawnSystem --> Types
+    
+    %% System interactions
+    CollisionSystem --> Player
+    CollisionSystem --> Enemy
+    CollisionSystem --> Axe
+    CollisionSystem --> HeartDrop
+    CollisionSystem --> XpDrop
+    
+    SpawnSystem --> Enemy
+    LevelSystem --> SpawnSystem
+    
+    %% Styling
+    classDef coreClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef systemClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef uiClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef typeClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    
+    class Game,Player,Enemy,Axe,HeartDrop,XpDrop coreClass
+    class CollisionSystem,LevelSystem,SpawnSystem systemClass
+    class GameUI,Canvas uiClass
+    class Types typeClass
+```
+
 ## 🎮 Game Features
 
 ### 🧠 Advanced AI
