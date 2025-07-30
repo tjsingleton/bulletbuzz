@@ -1,20 +1,8 @@
 # 🎮 BulletBuzz - Auto-Battler Game
 
-<div style="text-align: center; margin: 2rem 0;">
-  <iframe 
-    src="../index.html" 
-    width="800" 
-    height="600" 
-    style="border: 2px solid #333; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
-    title="BulletBuzz Game">
-  </iframe>
-</div>
-
 ## 🚀 Quick Start
 
-**Play BulletBuzz directly above!** 
-
-For faster testing, you can also play at: [https://tjsingleton.github.io/bulletbuzz/](https://tjsingleton.github.io/bulletbuzz/)
+**Play BulletBuzz at**: [https://tjsingleton.github.io/bulletbuzz/](https://tjsingleton.github.io/bulletbuzz/)
 
 **🎮 Development Mode**: Add `?speed=10` to the URL for 10x game speed!
 
