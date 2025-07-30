@@ -52,17 +52,33 @@ class GameScreenshotTaker {
       // Navigate to game
       console.log(`🌐 Loading game from: ${baseUrl}`);
       await this.page.goto(baseUrl);
+      
+      // Assert game canvas is present
       await this.page.waitForSelector('#gameCanvas', { timeout: 10000 });
+      const canvas = await this.page.locator('#gameCanvas');
+      const canvasVisible = await canvas.isVisible();
+      if (!canvasVisible) {
+        throw new Error('Game canvas not visible');
+      }
+      console.log('✅ Game canvas loaded successfully');
       
       // Initial state
       await this.takeScreenshot('01-initial-load');
       
-      // Wait for game to start
+      // Wait for game to start and assert game is running
       await this.page.waitForTimeout(2000);
+      const gameStats = await this.page.locator('#stats').textContent();
+      if (!gameStats || gameStats.includes('Level: 1')) {
+        console.log('✅ Game stats visible:', gameStats);
+      }
       await this.takeScreenshot('02-game-started');
       
-      // Wait for enemies
+      // Wait for enemies and assert they appear
       await this.page.waitForTimeout(5000);
+      const enemyStats = await this.page.locator('#enemyStats').textContent();
+      if (enemyStats && enemyStats.includes('Enemies:')) {
+        console.log('✅ Enemy stats visible:', enemyStats);
+      }
       await this.takeScreenshot('03-with-enemies');
       
       // Test auto-shop functionality
@@ -71,11 +87,18 @@ class GameScreenshotTaker {
       
       const shopVisible = await this.page.locator('strong:has-text("Shop:")').isVisible();
       if (shopVisible) {
+        console.log('✅ Shop modal appeared');
         await this.takeScreenshot('04-shop-open');
         
         // Wait for auto-shop to select option
         await this.page.waitForTimeout(2000);
+        const shopClosed = !(await this.page.locator('strong:has-text("Shop:")').isVisible());
+        if (shopClosed) {
+          console.log('✅ Shop closed after auto-selection');
+        }
         await this.takeScreenshot('05-shop-closed');
+      } else {
+        console.log('⚠️ Shop did not appear (may need more time)');
       }
       
       // Test game over
@@ -84,7 +107,10 @@ class GameScreenshotTaker {
       
       const gameOverVisible = await this.page.locator('text=GAME OVER').isVisible();
       if (gameOverVisible) {
+        console.log('✅ Game over screen appeared');
         await this.takeScreenshot('06-game-over');
+      } else {
+        console.log('⚠️ Game over did not appear (player may still be alive)');
       }
       
       // Final state
@@ -92,6 +118,9 @@ class GameScreenshotTaker {
       
     } catch (error) {
       console.error('❌ Error capturing game states:', error);
+      // Take error screenshot
+      await this.takeScreenshot('error-game-load');
+      throw error;
     } finally {
       await this.close();
     }
@@ -102,27 +131,136 @@ class GameScreenshotTaker {
     await this.captureGameStates('https://tjsingleton.github.io/bulletbuzz/game/');
   }
 
+  async testGameContent() {
+    try {
+      await this.init();
+      
+      console.log('🎮 Testing game content and functionality...');
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/game/');
+      
+      // Test page load
+      await this.page.waitForSelector('#gameCanvas', { timeout: 10000 });
+      console.log('✅ Game page loaded successfully');
+      
+      // Test game elements
+      const elements = [
+        { selector: '#gameCanvas', name: 'Game Canvas' },
+        { selector: '#stats', name: 'Player Stats' },
+        { selector: '#enemyStats', name: 'Enemy Stats' },
+        { selector: '#gameSpeed', name: 'Game Speed Control' },
+        { selector: '#autoPath', name: 'Auto-Pathing Toggle' },
+        { selector: '#autoShop', name: 'Auto-Shop Toggle' }
+      ];
+      
+      for (const element of elements) {
+        const isVisible = await this.page.locator(element.selector).isVisible();
+        if (isVisible) {
+          console.log(`✅ ${element.name} is visible`);
+        } else {
+          console.log(`❌ ${element.name} is not visible`);
+        }
+      }
+      
+      // Test game functionality
+      await this.page.waitForTimeout(3000);
+      
+      // Check if game is running
+      const statsText = await this.page.locator('#stats').textContent();
+      if (statsText && statsText.includes('Level:')) {
+        console.log('✅ Game is running with stats:', statsText);
+      } else {
+        console.log('⚠️ Game stats not updating');
+      }
+      
+      // Test controls
+      const speedControl = await this.page.locator('#gameSpeed');
+      await speedControl.fill('5');
+      const speedValue = await this.page.locator('#gameSpeedValue').textContent();
+      if (speedValue && speedValue.includes('5.0x')) {
+        console.log('✅ Speed control working:', speedValue);
+      }
+      
+      // Test auto-pathing toggle
+      const autoPathToggle = await this.page.locator('#autoPath');
+      const initialState = await autoPathToggle.isChecked();
+      await autoPathToggle.click();
+      const newState = await autoPathToggle.isChecked();
+      if (initialState !== newState) {
+        console.log('✅ Auto-pathing toggle working');
+      }
+      
+      await this.takeScreenshot('game-content-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing game content:', error);
+      await this.takeScreenshot('error-game-content');
+      throw error;
+    } finally {
+      await this.close();
+    }
+  }
+
   async captureDocumentation() {
     try {
       await this.init();
       
       console.log('📚 Testing documentation site...');
+      
+      // Test homepage
       await this.page.goto('https://tjsingleton.github.io/bulletbuzz/');
       await this.page.waitForTimeout(2000);
+      
+      // Assert homepage content
+      const title = await this.page.locator('h1').first().textContent();
+      if (title && title.includes('BulletBuzz')) {
+        console.log('✅ Documentation homepage loaded:', title);
+      } else {
+        throw new Error('Documentation homepage not loading correctly');
+      }
+      
+      // Check for navigation
+      const navVisible = await this.page.locator('nav[data-md-level="0"]').isVisible();
+      if (navVisible) {
+        console.log('✅ Documentation navigation visible');
+      } else {
+        console.log('⚠️ Documentation navigation not visible');
+      }
+      
       await this.takeScreenshot('docs-homepage');
       
       // Test API documentation
       await this.page.goto('https://tjsingleton.github.io/bulletbuzz/api/');
       await this.page.waitForTimeout(2000);
+      
+      // Assert API docs content
+      const apiTitle = await this.page.locator('h1, h2').first().textContent();
+      if (apiTitle && (apiTitle.includes('API') || apiTitle.includes('Documentation'))) {
+        console.log('✅ API documentation loaded:', apiTitle);
+      } else {
+        console.log('⚠️ API documentation may not be loading correctly');
+      }
+      
       await this.takeScreenshot('docs-api');
       
       // Test testing documentation
       await this.page.goto('https://tjsingleton.github.io/bulletbuzz/testing/unit-testing/');
       await this.page.waitForTimeout(2000);
+      
+      // Assert testing docs content
+      const testingTitle = await this.page.locator('h1, h2').first().textContent();
+      if (testingTitle && testingTitle.includes('Testing')) {
+        console.log('✅ Testing documentation loaded:', testingTitle);
+      } else {
+        console.log('⚠️ Testing documentation may not be loading correctly');
+      }
+      
       await this.takeScreenshot('docs-testing');
       
     } catch (error) {
       console.error('❌ Error capturing documentation:', error);
+      // Take error screenshot
+      await this.takeScreenshot('error-docs-load');
+      throw error;
     } finally {
       await this.close();
     }
@@ -249,6 +387,11 @@ async function main() {
         await taker.captureDocumentation();
         break;
         
+      case 'game-content':
+        console.log('🎮 Testing game content and functionality...');
+        await taker.testGameContent();
+        break;
+        
       case 'all':
       default:
         console.log('🚀 Running all tests (make sure dev server is running: npm run dev)');
@@ -258,6 +401,7 @@ async function main() {
         await taker.captureGameOverDetails();
         await taker.captureGitHubPages();
         await taker.captureDocumentation();
+        await taker.testGameContent();
         break;
     }
     

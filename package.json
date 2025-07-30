@@ -28,7 +28,8 @@
     "docs:generate:watch": "typedoc --out docs/api src/**/*.ts --watch",
     "docs:generate:json": "typedoc --out docs/api src/**/*.ts --json docs/api/docs.json",
     "test:github-pages": "node advanced-screenshots.js github-pages",
-    "test:documentation": "node advanced-screenshots.js documentation"
+    "test:documentation": "node advanced-screenshots.js documentation",
+    "test:game-content": "node advanced-screenshots.js game-content"
   },
   "repository": {
     "type": "git",
