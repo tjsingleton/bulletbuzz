@@ -341,6 +341,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Architecture
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -720,6 +729,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Architecture
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -810,8 +828,8 @@
   
 
 
-<h1 id="bulletbuzz">🎮 BulletBuzz</h1>
-<p><img alt="BulletBuzz Logo" src="logo.png" />{ width="150" }</p>
+<h1 id="bulletbuzz">BulletBuzz</h1>
+<p><img alt="BulletBuzz Logo" src="logo.png" />{ width="100" }</p>
 <h2 id="quick-start">🚀 Quick Start</h2>
 <p><strong>🎮 <a href="https://tjsingleton.github.io/bulletbuzz/game/">Play BulletBuzz Game</a></strong></p>
 <p><strong>📖 <a href="https://tjsingleton.github.io/bulletbuzz/">View Documentation</a></strong></p>
@@ -843,6 +861,80 @@
 <li><strong>Level System</strong>: XP progression and shop management</li>
 <li><strong>Spawn System</strong>: Dynamic enemy and pickup generation</li>
 </ul>
+<h3 id="system-architecture">System Architecture</h3>
+<pre><code class="language-mermaid">graph TB
+    subgraph &quot;Game Engine&quot;
+        Game[Game.ts&lt;br/&gt;Main Game Loop]
+        Player[Player.ts&lt;br/&gt;Player Entity]
+        Enemy[Enemy.ts&lt;br/&gt;Enemy Entities]
+        Axe[Axe.ts&lt;br/&gt;Weapon System]
+        HeartDrop[HeartDrop.ts&lt;br/&gt;Health Pickups]
+        XpDrop[XpDrop.ts&lt;br/&gt;XP Pickups]
+    end
+
+    subgraph &quot;Systems&quot;
+        CollisionSystem[CollisionSystem.ts&lt;br/&gt;Collision Detection]
+        LevelSystem[LevelSystem.ts&lt;br/&gt;Level Management]
+        SpawnSystem[SpawnSystem.ts&lt;br/&gt;Enemy Spawning]
+    end
+
+    subgraph &quot;UI &amp; Rendering&quot;
+        GameUI[game-ui.ts&lt;br/&gt;User Interface]
+        Canvas[HTML5 Canvas&lt;br/&gt;Rendering]
+    end
+
+    subgraph &quot;Types &amp; Interfaces&quot;
+        Types[types.ts&lt;br/&gt;Type Definitions]
+    end
+
+    %% Core relationships
+    Game --&gt; Player
+    Game --&gt; Enemy
+    Game --&gt; Axe
+    Game --&gt; HeartDrop
+    Game --&gt; XpDrop
+
+    %% System relationships
+    Game --&gt; CollisionSystem
+    Game --&gt; LevelSystem
+    Game --&gt; SpawnSystem
+
+    %% UI relationships
+    Game --&gt; GameUI
+    GameUI --&gt; Canvas
+
+    %% Type relationships
+    Game --&gt; Types
+    Player --&gt; Types
+    Enemy --&gt; Types
+    Axe --&gt; Types
+    HeartDrop --&gt; Types
+    XpDrop --&gt; Types
+    CollisionSystem --&gt; Types
+    LevelSystem --&gt; Types
+    SpawnSystem --&gt; Types
+
+    %% System interactions
+    CollisionSystem --&gt; Player
+    CollisionSystem --&gt; Enemy
+    CollisionSystem --&gt; Axe
+    CollisionSystem --&gt; HeartDrop
+    CollisionSystem --&gt; XpDrop
+
+    SpawnSystem --&gt; Enemy
+    LevelSystem --&gt; SpawnSystem
+
+    %% Styling
+    classDef coreClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef systemClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef uiClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef typeClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+
+    class Game,Player,Enemy,Axe,HeartDrop,XpDrop coreClass
+    class CollisionSystem,LevelSystem,SpawnSystem systemClass
+    class GameUI,Canvas uiClass
+    class Types typeClass
+</code></pre>
 <h2 id="game-features">🎮 Game Features</h2>
 <h3 id="advanced-ai">🧠 Advanced AI</h3>
 <ul>

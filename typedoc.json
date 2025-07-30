@@ -17,5 +17,7 @@
     "UI Components",
     "Types",
     "*"
-  ]
+  ],
+  "customCss": "docs/api-custom.css",
+  "customJs": "docs/api-custom.js"
 } 

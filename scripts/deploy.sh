@@ -67,6 +67,4 @@ else
     print_success "Deployment completed! 🎉"
     print_status "Game will be available at: https://tjsingleton.github.io/bulletbuzz/game/"
     print_status "Documentation will be available at: https://tjsingleton.github.io/bulletbuzz/"
-else
-    print_warning "No changes detected"
 fi 
