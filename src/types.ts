@@ -40,10 +40,11 @@ export interface Enemy {
   y: number;
   radius: number;
   speed: number;
-  type: 'bee' | 'wasp';
   hp: number;
   maxHp: number;
-  attackCooldown: number;
+  damage: number;
+  xpValue: number;
+  color: string;
   lifetime: number;
 }
 
@@ -51,26 +52,33 @@ export interface Enemy {
 export interface XpDrop {
   x: number;
   y: number;
-  r: number;
+  radius: number;
+  value: number;
+  color: string;
   lifetime: number;
+  collected: boolean;
 }
 
 // Heart drop interface
 export interface HeartDrop {
   x: number;
   y: number;
-  r: number;
+  radius: number;
+  healAmount: number;
+  color: string;
   lifetime: number;
+  collected: boolean;
 }
 
 // Axe projectile interface
 export interface Axe {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  rotation: number;
+  radius: number;
+  speed: number;
+  damage: number;
   lifetime: number;
+  color: string;
 }
 
 // Shop option interface

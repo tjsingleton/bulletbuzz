@@ -20,7 +20,8 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "allowUnusedLabels": false,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "moduleDetection": "force"
   },
   "include": [
     "src/**/*"

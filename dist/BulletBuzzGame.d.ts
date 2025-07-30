@@ -1,83 +1,70 @@
-import { GameConfig, Player, Enemy, XpDrop, HeartDrop, Axe, ShopOption, GameState, MemoryUsage } from './types';
+import { GameConfig, GameState, MemoryUsage, ShopOption } from './types.js';
 /**
- * BulletBuzz Core Game Logic
- * A headless version for testing and simulation
- *
- * Core Features:
- * - Auto-pathing player that collects XP and avoids enemies
- * - Enemy spawning and movement
- * - XP-based leveling system
- * - Heart drops for healing
- * - Auto-attacking with axes
- * - Configurable balance parameters
- * - Fixed timestep game loop for consistent performance
+ * BulletBuzzGame - Main Game Interface
+ * Provides a clean API for the modular game architecture
  */
 export declare class BulletBuzzGame {
-    private gameTime;
-    private level;
-    private score;
-    private enemiesKilled;
-    private xpCollected;
-    private heartsCollected;
-    private axesThrown;
-    private enemiesSpawned;
-    private levelTimes;
-    private accumulator;
-    private readonly timestep;
-    private readonly maxEnemies;
-    private readonly maxXpDrops;
-    private readonly maxHeartDrops;
-    private readonly maxAxes;
-    player: Player;
-    enemies: Enemy[];
-    xpDrops: XpDrop[];
-    heartDrops: HeartDrop[];
-    axes: Axe[];
-    baseSpawnInterval: number;
-    enemySpeed: number;
-    heartDropRate: number;
-    avoidDistance: number;
-    avoidStrength: number;
-    fleeRange: number;
-    fleeStrength: number;
-    singleEnemyLevel: number;
-    minSpawnInterval: number;
-    levelScaling: number;
-    earlyLevelScaling: number;
-    attackRange: number;
-    projectileCount: number;
-    projectileSpeed: number;
-    attackSpeed: number;
-    private spawnTimer;
-    paused: boolean;
-    showShop: boolean;
-    private attackTimer;
-    autoPathing: boolean;
-    private wanderDirection;
-    private wanderTimer;
-    private readonly wanderInterval;
-    private lastKilledEnemy;
-    readonly canvasWidth: number;
-    readonly canvasHeight: number;
-    shopOptions: ShopOption[];
-    private readonly upgradePool;
+    private game;
+    private shopOptions;
     constructor(config?: GameConfig);
-    private spawnEnemy;
-    private conditionalSpawn;
-    private shootAxe;
-    private update;
+    /**
+     * Step the game forward by delta time
+     */
     step(deltaTime?: number): void;
-    reset(): void;
-    cleanup(): void;
-    getMemoryUsage(): MemoryUsage;
-    logGameState(): void;
-    logPerformance(): void;
+    /**
+     * Get current game state
+     */
     getGameState(): GameState;
+    /**
+     * Get memory usage statistics
+     */
+    getMemoryUsage(): MemoryUsage;
+    /**
+     * Reset game to initial state
+     */
+    reset(): void;
+    /**
+     * Check if game is over
+     */
     isGameOver(): boolean;
-    hasReachedLevel(targetLevel: number): boolean;
+    /**
+     * Set auto-pathing mode
+     */
     setAutoPathing(enabled: boolean): void;
+    /**
+     * Get auto-pathing status
+     */
+    get autoPathing(): boolean;
+    /**
+     * Select shop option
+     */
     selectShopOption(key: string): void;
+    /**
+     * Auto-select shop option
+     */
     autoShop(): void;
+    /**
+     * Get available shop options
+     */
     getShopOptions(): ShopOption[];
+    /**
+     * Check if shop is open
+     */
     isShopOpen(): boolean;
+    /**
+     * Check if target level has been reached
+     */
+    hasReachedLevel(targetLevel: number): boolean;
+    /**
+     * Log game state for debugging
+     */
+    logGameState(): void;
+    /**
+     * Log performance statistics
+     */
+    logPerformance(): void;
+    /**
+     * Cleanup resources
+     */
+    cleanup(): void;
 }
