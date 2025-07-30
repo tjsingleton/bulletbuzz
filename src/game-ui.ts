@@ -445,39 +445,56 @@ function drawShop(): void {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   // Shop panel
-  const panelWidth = 400;
-  const panelHeight = 200;
+  const panelWidth = 450;
+  const panelHeight = 280;
   const panelX = (canvas.width - panelWidth) / 2;
   const panelY = (canvas.height - panelHeight) / 2;
   
-  ctx.fillStyle = '#333';
+  // Panel background with gradient effect
+  ctx.fillStyle = '#2a2a2a';
   ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
   ctx.strokeStyle = '#666';
   ctx.lineWidth = 2;
   ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
   
-  // Title
+  // Title with better padding
   ctx.fillStyle = 'white';
-  ctx.font = '24px serif';
+  ctx.font = '32px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('🏪 SHOP', canvas.width / 2, panelY + 30);
+  ctx.fillText('🏪 SHOP', canvas.width / 2, panelY + 50);
   
-  // Options
+  // Subtitle
+  ctx.fillStyle = '#ccc';
+  ctx.font = '16px serif';
+  ctx.fillText('Choose your upgrade:', canvas.width / 2, panelY + 80);
+  
+  // Options with button-like styling
   ctx.font = '18px serif';
   shopOptions.forEach((option, index) => {
-    const optionY = panelY + 70 + index * 30;
+    const optionY = panelY + 110 + index * 45;
     const key = option.key;
     const label = option.label;
     
-    // Option background
-    ctx!.fillStyle = '#555';
-    ctx!.fillRect(panelX + 20, optionY - 15, panelWidth - 40, 25);
+    // Button background with hover effect
+    ctx!.fillStyle = '#444';
+    ctx!.fillRect(panelX + 25, optionY - 20, panelWidth - 50, 35);
     
-    // Option text
+    // Button border
+    ctx!.strokeStyle = '#666';
+    ctx!.lineWidth = 1;
+    ctx!.strokeRect(panelX + 25, optionY - 20, panelWidth - 50, 35);
+    
+    // Option text with better spacing
     ctx!.fillStyle = 'white';
     ctx!.textAlign = 'left';
-    ctx!.fillText(`${key}. ${label}`, panelX + 30, optionY);
+    ctx!.fillText(`${key}. ${label}`, panelX + 40, optionY);
   });
+  
+  // Instructions
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Click an option or press 1-5 to select', canvas.width / 2, panelY + panelHeight - 20);
 }
 
 // Draw game over screen
@@ -569,17 +586,17 @@ function handleShopClick(x: number, y: number): void {
   if (!game || !canvas) return;
   
   const shopOptions = game.getShopOptions();
-  const panelWidth = 400;
-  const panelHeight = 200;
+  const panelWidth = 450;
+  const panelHeight = 280;
   const panelX = (canvas.width - panelWidth) / 2;
   const panelY = (canvas.height - panelHeight) / 2;
   
   // Check if click is within shop panel
-  if (x >= panelX + 20 && x <= panelX + panelWidth - 20) {
+  if (x >= panelX + 25 && x <= panelX + panelWidth - 25) {
     // Check regular shop options
     shopOptions.forEach((option, index) => {
-      const optionY = panelY + 70 + index * 30;
-      if (y >= optionY - 15 && y <= optionY + 10) {
+      const optionY = panelY + 110 + index * 45;
+      if (y >= optionY - 20 && y <= optionY + 15) {
         game!.selectShopOption(option.key);
       }
     });
