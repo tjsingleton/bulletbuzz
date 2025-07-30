@@ -7,6 +7,9 @@ class GameScreenshotTaker {
     this.browser = null;
     this.page = null;
     this.screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
+    this.consoleErrors = [];
+    this.networkErrors = [];
+    this.pageErrors = [];
     
     // Create screenshots directory if it doesn't exist
     if (!fs.existsSync(this.screenshotsDir)) {
@@ -23,11 +26,102 @@ class GameScreenshotTaker {
       viewport: { width: 1200, height: 800 }
     });
     this.page = await context.newPage();
+    
+    // Listen for console errors
+    this.page.on('console', msg => {
+      if (msg.type() === 'error') {
+        this.consoleErrors.push({
+          type: 'console',
+          message: msg.text(),
+          location: msg.location(),
+          timestamp: new Date().toISOString()
+        });
+        console.log(`❌ Console Error: ${msg.text()}`);
+      }
+    });
+    
+    // Listen for page errors
+    this.page.on('pageerror', error => {
+      this.pageErrors.push({
+        type: 'pageerror',
+        message: error.message,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      });
+      console.log(`❌ Page Error: ${error.message}`);
+    });
+    
+    // Listen for network failures
+    this.page.on('requestfailed', request => {
+      this.networkErrors.push({
+        type: 'requestfailed',
+        url: request.url(),
+        failure: request.failure(),
+        timestamp: new Date().toISOString()
+      });
+      console.log(`❌ Network Error: ${request.url()} - ${request.failure()?.errorText || 'Unknown error'}`);
+    });
+    
+    // Listen for response errors (4xx, 5xx)
+    this.page.on('response', response => {
+      if (response.status() >= 400) {
+        this.networkErrors.push({
+          type: 'response_error',
+          url: response.url(),
+          status: response.status(),
+          statusText: response.statusText(),
+          timestamp: new Date().toISOString()
+        });
+        console.log(`❌ Response Error: ${response.url()} - ${response.status()} ${response.statusText()}`);
+      }
+    });
   }
 
   async close() {
     if (this.browser) {
       await this.browser.close();
+    }
+  }
+
+  reportErrors() {
+    const totalErrors = this.consoleErrors.length + this.networkErrors.length + this.pageErrors.length;
+    
+    if (totalErrors > 0) {
+      console.log(`\n⚠️  Found ${totalErrors} errors during testing:`);
+      
+      if (this.consoleErrors.length > 0) {
+        console.log(`\n📝 Console Errors (${this.consoleErrors.length}):`);
+        this.consoleErrors.forEach((error, index) => {
+          console.log(`  ${index + 1}. ${error.message}`);
+          if (error.location?.url) {
+            console.log(`     Location: ${error.location.url}:${error.location.lineNumber}`);
+          }
+        });
+      }
+      
+      if (this.networkErrors.length > 0) {
+        console.log(`\n🌐 Network Errors (${this.networkErrors.length}):`);
+        this.networkErrors.forEach((error, index) => {
+          if (error.type === 'requestfailed') {
+            console.log(`  ${index + 1}. Failed to load: ${error.url}`);
+            console.log(`     Error: ${error.failure?.errorText || 'Unknown'}`);
+          } else {
+            console.log(`  ${index + 1}. ${error.url} - ${error.status} ${error.statusText}`);
+          }
+        });
+      }
+      
+      if (this.pageErrors.length > 0) {
+        console.log(`\n💥 Page Errors (${this.pageErrors.length}):`);
+        this.pageErrors.forEach((error, index) => {
+          console.log(`  ${index + 1}. ${error.message}`);
+        });
+      }
+      
+      return false; // Indicates errors were found
+    } else {
+      console.log('\n✅ No errors detected during testing');
+      return true; // Indicates no errors
     }
   }
 
@@ -52,6 +146,12 @@ class GameScreenshotTaker {
       // Navigate to game
       console.log(`🌐 Loading game from: ${baseUrl}`);
       await this.page.goto(baseUrl);
+      
+      // Check for immediate errors after page load
+      if (this.consoleErrors.length > 0 || this.networkErrors.length > 0 || this.pageErrors.length > 0) {
+        console.log('⚠️ Errors detected during page load - checking if game can still function');
+        this.reportErrors();
+      }
       
       // Assert game canvas is present
       await this.page.waitForSelector('#gameCanvas', { timeout: 10000 });
@@ -116,10 +216,17 @@ class GameScreenshotTaker {
       // Final state
       await this.takeScreenshot('07-final-state');
       
+      // Final error report
+      const noErrors = this.reportErrors();
+      if (!noErrors) {
+        console.log('⚠️ Game may have issues despite appearing to function');
+      }
+      
     } catch (error) {
       console.error('❌ Error capturing game states:', error);
       // Take error screenshot
       await this.takeScreenshot('error-game-load');
+      this.reportErrors(); // Report any errors that occurred
       throw error;
     } finally {
       await this.close();
@@ -210,6 +317,12 @@ class GameScreenshotTaker {
       await this.page.goto('https://tjsingleton.github.io/bulletbuzz/');
       await this.page.waitForTimeout(2000);
       
+      // Check for errors after page load
+      if (this.consoleErrors.length > 0 || this.networkErrors.length > 0 || this.pageErrors.length > 0) {
+        console.log('⚠️ Errors detected during documentation load');
+        this.reportErrors();
+      }
+      
       // Assert homepage content
       const title = await this.page.locator('h1').first().textContent();
       if (title && title.includes('BulletBuzz')) {
@@ -256,10 +369,17 @@ class GameScreenshotTaker {
       
       await this.takeScreenshot('docs-testing');
       
+      // Final error report
+      const noErrors = this.reportErrors();
+      if (!noErrors) {
+        console.log('⚠️ Documentation may have issues despite appearing to function');
+      }
+      
     } catch (error) {
       console.error('❌ Error capturing documentation:', error);
       // Take error screenshot
       await this.takeScreenshot('error-docs-load');
+      this.reportErrors(); // Report any errors that occurred
       throw error;
     } finally {
       await this.close();
