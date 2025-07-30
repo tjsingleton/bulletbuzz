@@ -49,18 +49,18 @@ jobs:
       
     - name: Organize site structure
       run: |
-        # Create a clean site structure
-        # Documentation stays at root, game goes to /game/ subdirectory
+        set -e
+        echo "Contents of project root after build:"
+        ls -l
         mkdir -p site/game
         cp index.html site/game/
         cp -r dist site/game/
+        cp logo.png favicon.ico logo-192.png logo-512.png site/game/ || true
         cp game-screenshot.png site/
         cp README.md site/
         cp LICENSE site/
-        
-        # Ensure documentation assets are preserved
-        # The mkdocs build should have already created the proper structure
-        # DO NOT copy game files to root - they would overwrite docs
+        echo "Contents of site/game after copy:"
+        ls -l site/game
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
