@@ -5,8 +5,8 @@
   "main": "dist/BulletBuzzGame.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run build && live-server --port=3000 --open=/index.html",
-    "dev:watch": "npm run build:watch & live-server --port=3000 --open=/index.html",
+    "dev": "npm run build && live-server",
+    "dev:watch": "npm run build:watch & live-server",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "type-check": "tsc --noEmit"

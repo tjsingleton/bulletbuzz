@@ -1,0 +1,18 @@
+{
+  "port": 3000,
+  "host": "127.0.0.1",
+  "root": "./",
+  "open": "/index.html",
+  "ignore": [
+    ".git/**",
+    "node_modules/**",
+    "dist/**",
+    "*.log",
+    ".DS_Store"
+  ],
+  "file": "index.html",
+  "wait": 1000,
+  "mount": [],
+  "logLevel": 2,
+  "middleware": []
+} 
