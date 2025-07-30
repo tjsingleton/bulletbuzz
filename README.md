@@ -2,6 +2,8 @@
 
 A browser-based auto-battler game with sophisticated AI, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
 
+![BulletBuzz Game Screenshot](game-screenshot.png)
+
 ## 🚀 Play Now
 
 **[Play BulletBuzz on GitHub Pages](https://tjsingleton.github.io/bulletbuzz/)**
@@ -36,6 +38,7 @@ A browser-based auto-battler game with sophisticated AI, featuring auto-pathing,
 - **Parameter Adjustment**: Live game balance controls
 - **Performance Monitoring**: Memory and performance tracking
 - **URL Parameters**: Game speed control via URL
+- **Automated Screenshots**: Playwright-based screenshot testing
 
 ## 🏗️ Architecture
 
@@ -59,8 +62,13 @@ bulletbuzz/
 │       └── LevelSystem.ts   # Level progression and shop
 ├── dist/                    # Compiled JavaScript
 ├── tests/                   # Unit tests
+├── scripts/                 # Utility scripts
+│   └── screenshots.js       # Screenshot automation
+├── .tmp/                    # Temporary files (screenshots)
 ├── index.html              # Game interface
 ├── test-runner.js          # Headless simulation
+├── screenshot-test.js       # Basic screenshot testing
+├── advanced-screenshots.js  # Advanced screenshot class
 └── package.json            # Dependencies & scripts
 ```
 
@@ -70,6 +78,7 @@ bulletbuzz/
 - **ES Modules**: Modern JavaScript modules
 - **Node.js**: Headless testing environment
 - **Jest**: Unit testing framework
+- **Playwright**: Automated browser testing and screenshots
 
 ## 🚀 Quick Start
 
@@ -109,6 +118,36 @@ node test-runner.js --test-configs
 # Open browser console and use: debugGame.logState()
 ```
 
+### Screenshot Testing
+```bash
+# Basic screenshot test
+npm run screenshots
+
+# Advanced screenshot testing
+npm run screenshots:advanced
+
+# UI element screenshots
+npm run screenshots:ui
+
+# Speed test screenshots
+npm run screenshots:speed
+
+# Game state screenshots
+npm run screenshots:game-states
+
+# Game over screenshots
+npm run screenshots:game-over
+
+# All screenshot tests
+npm run screenshots:all
+
+# Clean up screenshots
+npm run screenshots:clean
+
+# Show available commands
+npm run screenshots:help
+```
+
 ## 🎮 Controls
 
 ### Game Controls
@@ -140,6 +179,7 @@ debugGame.spawnEnemy()     // Force spawn enemy
 - **Balance Testing**: Test different parameter configurations
 - **Performance Monitoring**: Track memory usage and performance
 - **Regression Testing**: Ensure changes don't break existing functionality
+- **Screenshot Testing**: Automated visual testing with Playwright
 
 ### Parameter Adjustment
 Real-time adjustment of game balance via browser sliders:
@@ -192,6 +232,21 @@ node test-runner.js --test-configs
 node test-runner.js --runs 10 --target 5 --time 300
 ```
 
+### Screenshot Development
+```bash
+# Take screenshots during development
+npm run screenshots:ui
+
+# Test different game states
+npm run screenshots:game-states
+
+# Verify UI changes
+npm run screenshots:all
+
+# Clean up after testing
+npm run screenshots:clean
+```
+
 ## 📈 Performance
 
 ### Optimizations
@@ -226,6 +281,54 @@ node test-runner.js --runs 10 --target 5 --time 300
 - **XP Progress**: Visual progress bar with current/required
 - **Game Controls**: Speed slider, auto-pathing, auto-shop
 
+## 📸 Screenshot Testing
+
+### Automated Visual Testing
+- **Playwright Integration**: Cross-browser screenshot testing
+- **Game State Capture**: Screenshots at different game stages
+- **UI Element Testing**: Pause, resume, auto-pathing states
+- **Speed Testing**: Screenshots at different game speeds
+- **Shop Testing**: Shop modal and auto-shop functionality
+- **Game Over Testing**: Detailed statistics and modal screenshots
+
+### Screenshot Features
+- **Temporary Storage**: Screenshots stored in `.tmp/screenshots/`
+- **Automatic Cleanup**: Old screenshots removed before new tests
+- **Live-Server Ignored**: Screenshots don't trigger development reloads
+- **Git Ignored**: Temporary files not tracked in version control
+- **Timestamped Files**: Organized screenshots with timestamps
+- **Full Page Capture**: Complete game interface screenshots
+
+### Screenshot Commands
+```bash
+# Basic screenshot test
+npm run screenshots
+
+# Advanced screenshot testing
+npm run screenshots:advanced
+
+# UI element screenshots
+npm run screenshots:ui
+
+# Speed test screenshots
+npm run screenshots:speed
+
+# Game state screenshots
+npm run screenshots:game-states
+
+# Game over screenshots
+npm run screenshots:game-over
+
+# All screenshot tests
+npm run screenshots:all
+
+# Clean up screenshots
+npm run screenshots:clean
+
+# Show available commands
+npm run screenshots:help
+```
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -245,6 +348,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 - [x] **Auto-Shop**: Automatic upgrade selection
 - [x] **Pickup Attraction**: XP and heart attraction mechanics
 - [x] **URL Parameters**: Game speed control via URL
+- [x] **Screenshot Testing**: Automated visual testing with Playwright
 - [ ] **Multiplayer Support**: Real-time multiplayer battles
 - [ ] **More Enemy Types**: Different enemy behaviors and abilities
 - [ ] **Power-ups**: Temporary buffs and special abilities
