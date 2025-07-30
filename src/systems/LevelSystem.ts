@@ -99,8 +99,26 @@ export class LevelSystem {
         this.game.axes.push(axe);
         this.game.axesThrown++;
       }
+    } else {
+      // Throw random axes for visual feedback when no enemies are in range
+      for (let i = 0; i < this.game.projectileCount; i++) {
+        const randomAngle = Math.random() * Math.PI * 2;
+        const randomDistance = 50 + Math.random() * 100;
+        const targetX = player.x + Math.cos(randomAngle) * randomDistance;
+        const targetY = player.y + Math.sin(randomAngle) * randomDistance;
+        
+        const axe = new Axe(
+          player.x,
+          player.y,
+          targetX,
+          targetY,
+          this.game.projectileSpeed,
+          1
+        );
+        this.game.axes.push(axe);
+        this.game.axesThrown++;
+      }
     }
-    // Don't throw axes if no enemies are in range
   }
 
   /**

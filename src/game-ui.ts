@@ -482,22 +482,89 @@ function drawShop(): void {
 
 // Draw game over screen
 function drawGameOver(): void {
-  if (!ctx || !canvas) return;
+  if (!ctx || !canvas || !game) return;
   
   // Semi-transparent overlay
   ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Game over text
-  ctx.fillStyle = 'red';
+  // Modal panel
+  const panelWidth = 500;
+  const panelHeight = 400;
+  const panelX = (canvas.width - panelWidth) / 2;
+  const panelY = (canvas.height - panelHeight) / 2;
+  
+  // Panel background
+  ctx.fillStyle = '#2a2a2a';
+  ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+  ctx.strokeStyle = '#666';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+  
+  // Skull emoji and title
+  ctx.fillStyle = 'white';
   ctx.font = '48px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
+  ctx.fillText('💀 GAME OVER 💀', canvas.width / 2, panelY + 50);
+  
+  // Game statistics
+  const gameState = game.getGameState();
+  const minutes = Math.floor(gameState.gameTime / 60);
+  const seconds = Math.floor(gameState.gameTime % 60);
+  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  ctx.font = '18px serif';
+  ctx.textAlign = 'left';
+  const statsX = panelX + 30;
+  let statsY = panelY + 100;
+  const lineHeight = 25;
+  
+  // Game time
+  ctx.fillStyle = '#FFD700';
+  ctx.fillText(`⏱️ Survival Time: ${timeString}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // Level reached
+  ctx.fillStyle = '#FF6B6B';
+  ctx.fillText(`📈 Level Reached: ${gameState.level}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // Enemies killed
+  ctx.fillStyle = '#4ECDC4';
+  ctx.fillText(`💀 Enemies Killed: ${gameState.enemiesKilled}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // XP collected
+  ctx.fillStyle = '#45B7D1';
+  ctx.fillText(`⭐ XP Collected: ${gameState.xpCollected}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // Hearts collected
+  ctx.fillStyle = '#FF69B4';
+  ctx.fillText(`❤️ Hearts Collected: ${gameState.heartsCollected}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // Axes thrown
+  ctx.fillStyle = '#9B59B6';
+  ctx.fillText(`🪓 Axes Thrown: ${gameState.axesCount}`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // Kill rate
+  const killRate = (gameState.enemiesKilled / (gameState.gameTime / 60)).toFixed(2);
+  ctx.fillStyle = '#E74C3C';
+  ctx.fillText(`⚡ Kill Rate: ${killRate} kills/min`, statsX, statsY);
+  statsY += lineHeight;
+  
+  // XP efficiency
+  const xpEfficiency = (gameState.xpCollected / Math.max(1, gameState.enemiesKilled)).toFixed(2);
+  ctx.fillStyle = '#F39C12';
+  ctx.fillText(`🎯 XP Efficiency: ${xpEfficiency} XP/kill`, statsX, statsY);
   
   // Instructions
   ctx.fillStyle = 'white';
-  ctx.font = '24px serif';
-  ctx.fillText('Press R to restart', canvas.width / 2, canvas.height / 2 + 50);
+  ctx.font = '20px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Press R to restart or refresh the page', canvas.width / 2, panelY + panelHeight - 30);
 }
 
 // Handle shop click
