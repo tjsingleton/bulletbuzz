@@ -286,7 +286,7 @@
   
   
   <span class="md-ellipsis">
-    API Reference
+    Features
     
   </span>
   
@@ -296,6 +296,74 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/event-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Event System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
@@ -348,10 +416,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -364,8 +432,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Testing
           </label>
@@ -502,12 +570,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../performance-testing/" class="md-nav__link">
+      <a href="../screenshot-testing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Performance Testing
+    Screenshot Testing
     
   </span>
   
@@ -525,12 +593,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../screenshot-testing/" class="md-nav__link">
+      <a href="../test-coverage-report/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Screenshot Testing
+    Test Coverage Report
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Performance Testing
     
   </span>
   
@@ -655,15 +746,15 @@
 <h1 id="unit-testing">Unit Testing</h1>
 <p>BulletBuzz includes comprehensive unit tests covering all major game systems.</p>
 <h2 id="running-tests">Running Tests</h2>
-<pre><code class="language-bash"># Run all tests
-npm test
+<div class="highlight"><pre><span></span><code><span class="c1"># Run all tests</span>
+npm<span class="w"> </span><span class="nb">test</span>
 
-# Run tests in watch mode
-npm run test:watch
+<span class="c1"># Run tests in watch mode</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:watch
 
-# Run tests with coverage
-npm run test:coverage
-</code></pre>
+<span class="c1"># Run tests with coverage</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:coverage
+</code></pre></div>
 <h2 id="test-structure">Test Structure</h2>
 <p>Tests are organized by system:</p>
 <ul>
@@ -688,16 +779,16 @@ npm run test:coverage
 <li>✅ Memory management</li>
 </ul>
 <h2 id="example-test">Example Test</h2>
-<pre><code class="language-typescript">describe('Player', () =&gt; {
-  it('should move towards target position', () =&gt; {
-    const player = new Player(100, 100);
-    player.moveTowards(200, 200);
+<div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Player&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should move towards target position&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Player</span><span class="p">(</span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">player</span><span class="p">.</span><span class="nx">moveTowards</span><span class="p">(</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="mf">200</span><span class="p">);</span>
 
-    expect(player.x).toBeGreaterThan(100);
-    expect(player.y).toBeGreaterThan(100);
-  });
-});
-</code></pre>
+<span class="w">    </span><span class="nx">expect</span><span class="p">(</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span><span class="p">).</span><span class="nx">toBeGreaterThan</span><span class="p">(</span><span class="mf">100</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">expect</span><span class="p">(</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span><span class="p">).</span><span class="nx">toBeGreaterThan</span><span class="p">(</span><span class="mf">100</span><span class="p">);</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
 
 
 
@@ -765,6 +856,10 @@ npm run test:coverage
     
     
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+        <script src="../../mermaid-init.js"></script>
       
     
   </body>

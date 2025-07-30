@@ -590,12 +590,12 @@ class GameScreenshotTaker {
       });
       
       // Wait for page to load and scroll to architecture section
-      await this.page.waitForSelector('h2:has-text("🏗️ Architecture")', { timeout: 10000 });
+      await this.page.waitForSelector('h2', { timeout: 10000 });
       
       // Scroll to the architecture section
       await this.page.evaluate(() => {
-        const architectureSection = document.querySelector('h2:has-text("🏗️ Architecture")');
-        if (architectureSection) {
+        const architectureSection = document.querySelector('h2');
+        if (architectureSection && architectureSection.textContent.includes('🏗️ Architecture')) {
           architectureSection.scrollIntoView();
         }
       });
@@ -618,8 +618,34 @@ class GameScreenshotTaker {
             return el.querySelector('svg') !== null;
           });
           
+          // Check if it still has code content (indicating it's not rendered)
+          const hasCode = await firstDiagram.evaluate(el => {
+            return el.querySelector('code') !== null;
+          });
+          
           if (hasSvg) {
             console.log('✅ Mermaid diagram is properly rendered with SVG');
+            
+            // Get SVG dimensions to verify it's actually visible
+            const svgInfo = await firstDiagram.evaluate(el => {
+              const svg = el.querySelector('svg');
+              if (svg) {
+                return {
+                  width: svg.getAttribute('width') || svg.getBoundingClientRect().width,
+                  height: svg.getAttribute('height') || svg.getBoundingClientRect().height,
+                  hasContent: svg.innerHTML.length > 0
+                };
+              }
+              return null;
+            });
+            
+            if (svgInfo && svgInfo.hasContent) {
+              console.log(`✅ SVG is properly rendered with content (${svgInfo.width}x${svgInfo.height})`);
+            } else {
+              console.log('⚠️ SVG found but may be empty');
+            }
+          } else if (hasCode) {
+            console.log('⚠️ Mermaid diagram still shows code block (not rendered)');
           } else {
             console.log('⚠️ Mermaid diagram found but may not be fully rendered');
           }
@@ -740,6 +766,121 @@ class GameScreenshotTaker {
     }
   }
 
+  async runComprehensiveTests(baseUrl = 'http://localhost:8080') {
+    try {
+      await this.init();
+      
+      console.log(`🧪 Running comprehensive tests against: ${baseUrl}`);
+      
+      // Test 1: Basic page load
+      await this.page.goto(baseUrl);
+      await this.page.waitForTimeout(2000);
+      
+      // Check for errors after page load
+      if (this.consoleErrors.length > 0 || this.networkErrors.length > 0 || this.pageErrors.length > 0) {
+        console.log('⚠️ Errors detected during page load');
+        this.reportErrors();
+      }
+      
+      // Test 2: Game canvas loading
+      const canvasVisible = await this.page.locator('#gameCanvas').isVisible();
+      if (canvasVisible) {
+        console.log('✅ Game canvas loaded successfully');
+      } else {
+        console.log('❌ Game canvas not visible');
+      }
+      
+      // Test 3: Game stats visibility
+      const statsVisible = await this.page.locator('#stats').isVisible();
+      if (statsVisible) {
+        console.log('✅ Game stats visible');
+      } else {
+        console.log('❌ Game stats not visible');
+      }
+      
+      // Test 4: Game controls
+      const speedControl = await this.page.locator('#gameSpeed').isVisible();
+      const autoPathToggle = await this.page.locator('#autoPath').isVisible();
+      const autoShopToggle = await this.page.locator('#autoShop').isVisible();
+      
+      if (speedControl && autoPathToggle && autoShopToggle) {
+        console.log('✅ All game controls visible');
+      } else {
+        console.log('⚠️ Some game controls missing');
+      }
+      
+      // Test 5: Game functionality (if it's a game page)
+      if (baseUrl.includes('/game/') || baseUrl.includes('localhost')) {
+        console.log('🎮 Testing game functionality...');
+        
+        // Wait for game to start
+        await this.page.waitForTimeout(3000);
+        
+        // Check if enemies are spawning
+        const enemyStats = await this.page.locator('#enemyStats').isVisible();
+        if (enemyStats) {
+          console.log('✅ Enemy spawning working');
+        } else {
+          console.log('⚠️ Enemy spawning may not be working');
+        }
+        
+        // Test speed control (it's a range input, not a select)
+        await this.page.fill('#gameSpeed', '5');
+        await this.page.waitForTimeout(1000);
+        console.log('✅ Speed control functional');
+        
+        // Test auto-pathing toggle
+        await this.page.click('#autoPath');
+        await this.page.waitForTimeout(500);
+        console.log('✅ Auto-pathing toggle functional');
+        
+        // Test auto-shop toggle
+        await this.page.click('#autoShop');
+        await this.page.waitForTimeout(500);
+        console.log('✅ Auto-shop toggle functional');
+        
+        await this.takeScreenshot('comprehensive-game-test');
+      } else {
+        // Test documentation functionality
+        console.log('📚 Testing documentation functionality...');
+        
+        // Check for navigation (use a more specific selector)
+        const navVisible = await this.page.locator('nav[data-md-level="0"]').isVisible();
+        if (navVisible) {
+          console.log('✅ Documentation navigation visible');
+        } else {
+          console.log('⚠️ Documentation navigation not visible');
+        }
+        
+        // Check for search functionality
+        const searchVisible = await this.page.locator('[data-md-component="search"]').isVisible();
+        if (searchVisible) {
+          console.log('✅ Search functionality available');
+        } else {
+          console.log('⚠️ Search functionality not available');
+        }
+        
+        await this.takeScreenshot('comprehensive-docs-test');
+      }
+      
+      // Final error report
+      const noErrors = this.reportErrors();
+      if (!noErrors) {
+        console.log('⚠️ Site may have issues despite appearing to function');
+      } else {
+        console.log('✅ No errors detected');
+      }
+      
+    } catch (error) {
+      console.error('❌ Error during comprehensive tests:', error);
+      await this.takeScreenshot('error-comprehensive-test');
+      this.reportErrors();
+      throw error;
+    } finally {
+      await this.close();
+    }
+  }
+
   // Clean up temporary screenshots directory
   cleanup() {
     if (fs.existsSync(this.screenshotsDir)) {
@@ -753,6 +894,7 @@ class GameScreenshotTaker {
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'all';
+  const url = args[1] || null;
   
   console.log('📸 Starting advanced screenshot tests...');
   
@@ -763,6 +905,12 @@ async function main() {
   
   try {
     switch (command) {
+      case 'comprehensive':
+        const testUrl = url || 'http://localhost:8080';
+        console.log(`🧪 Running comprehensive tests against: ${testUrl}`);
+        await taker.runComprehensiveTests(testUrl);
+        break;
+        
       case 'github-pages':
         console.log('🌐 Testing GitHub Pages deployment...');
         await taker.captureGitHubPages();

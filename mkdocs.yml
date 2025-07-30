@@ -19,13 +19,16 @@ theme:
 
 nav:
   - Home: index.md
+  - Features:
+    - Event System: features/event-system.md
   - API Reference:
     - Generated API Docs: api/index.html
   - Testing:
     - Unit Testing: testing/unit-testing.md
     - Integration Testing: testing/integration-testing.md
-    - Performance Testing: testing/performance-testing.md
     - Screenshot Testing: testing/screenshot-testing.md
+    - Test Coverage Report: testing/test-coverage-report.md
+    - Performance Testing: testing/performance-testing.md
     - Headless Simulation: testing/headless-simulation.md
 
 plugins:
@@ -43,4 +46,5 @@ extra:
       link: https://github.com/tjsingleton/bulletbuzz
 
 extra_javascript:
-  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js 
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+  - mermaid-init.js 

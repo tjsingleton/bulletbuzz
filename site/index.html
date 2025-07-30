@@ -14,7 +14,7 @@
       
       
       
-        <link rel="next" href="api/">
+        <link rel="next" href="features/event-system/">
       
       
       <link rel="icon" href="favicon.ico">
@@ -452,7 +452,7 @@
   
   
   <span class="md-ellipsis">
-    API Reference
+    Features
     
   </span>
   
@@ -462,6 +462,74 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/event-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Event System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
@@ -512,10 +580,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -528,8 +596,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Testing
           </label>
@@ -588,12 +656,12 @@
   
   
     <li class="md-nav__item">
-      <a href="testing/performance-testing/" class="md-nav__link">
+      <a href="testing/screenshot-testing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Performance Testing
+    Screenshot Testing
     
   </span>
   
@@ -611,12 +679,35 @@
   
   
     <li class="md-nav__item">
-      <a href="testing/screenshot-testing/" class="md-nav__link">
+      <a href="testing/test-coverage-report/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Screenshot Testing
+    Test Coverage Report
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="testing/performance-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Performance Testing
     
   </span>
   
@@ -829,7 +920,7 @@
 
 
 <h1 id="bulletbuzz">BulletBuzz</h1>
-<p><img alt="BulletBuzz Logo" src="logo.png" />{ width="100" }</p>
+<p><img src="logo.png" alt="BulletBuzz Logo" width="100" style="max-width: 100px; height: auto;"></p>
 <h2 id="quick-start">🚀 Quick Start</h2>
 <p><strong>🎮 <a href="https://tjsingleton.github.io/bulletbuzz/game/">Play BulletBuzz Game</a></strong></p>
 <p><strong>📖 <a href="https://tjsingleton.github.io/bulletbuzz/">View Documentation</a></strong></p>
@@ -840,7 +931,7 @@
 <li><strong>🧠 Advanced AI</strong>: Intelligent auto-pathing with wall avoidance and smart targeting</li>
 <li><strong>⚔️ Bullet Heaven</strong>: Survive waves of enemies in an endless arena</li>
 <li><strong>🎨 Modern UI</strong>: Professional shop modals and detailed game over screens</li>
-<li><strong>🧪 Testing</strong>: Comprehensive unit tests and automated screenshot testing</li>
+<li><strong>🧪 Testing</strong>: Comprehensive unit tests, integration tests, and automated screenshot testing with error detection</li>
 </ul>
 <h2 id="architecture">🏗️ Architecture</h2>
 <h3 id="technology-stack">Technology Stack</h3>
@@ -851,6 +942,9 @@
 <li><strong>Node.js</strong>: Headless testing environment</li>
 <li><strong>Jest</strong>: Unit testing framework</li>
 <li><strong>Playwright</strong>: Automated browser testing and screenshots</li>
+<li><strong>MkDocs</strong>: Professional documentation site</li>
+<li><strong>TypeDoc</strong>: Auto-generated API documentation</li>
+<li><strong>Mermaid</strong>: Architecture diagram rendering</li>
 </ul>
 <h3 id="core-systems">Core Systems</h3>
 <ul>
@@ -862,8 +956,8 @@
 <li><strong>Spawn System</strong>: Dynamic enemy and pickup generation</li>
 </ul>
 <h3 id="system-architecture">System Architecture</h3>
-<pre><code class="language-mermaid">graph TB
-    subgraph &quot;Game Engine&quot;
+<pre class="mermaid"><code>graph TB
+    subgraph "Game Engine"
         Game[Game.ts&lt;br/&gt;Main Game Loop]
         Player[Player.ts&lt;br/&gt;Player Entity]
         Enemy[Enemy.ts&lt;br/&gt;Enemy Entities]
@@ -872,18 +966,18 @@
         XpDrop[XpDrop.ts&lt;br/&gt;XP Pickups]
     end
 
-    subgraph &quot;Systems&quot;
+    subgraph "Systems"
         CollisionSystem[CollisionSystem.ts&lt;br/&gt;Collision Detection]
         LevelSystem[LevelSystem.ts&lt;br/&gt;Level Management]
         SpawnSystem[SpawnSystem.ts&lt;br/&gt;Enemy Spawning]
     end
 
-    subgraph &quot;UI &amp; Rendering&quot;
+    subgraph "UI &amp; Rendering"
         GameUI[game-ui.ts&lt;br/&gt;User Interface]
         Canvas[HTML5 Canvas&lt;br/&gt;Rendering]
     end
 
-    subgraph &quot;Types &amp; Interfaces&quot;
+    subgraph "Types &amp; Interfaces"
         Types[types.ts&lt;br/&gt;Type Definitions]
     end
 
@@ -933,8 +1027,7 @@
     class Game,Player,Enemy,Axe,HeartDrop,XpDrop coreClass
     class CollisionSystem,LevelSystem,SpawnSystem systemClass
     class GameUI,Canvas uiClass
-    class Types typeClass
-</code></pre>
+    class Types typeClass</code></pre>
 <h2 id="game-features">🎮 Game Features</h2>
 <h3 id="advanced-ai">🧠 Advanced AI</h3>
 <ul>
@@ -1037,6 +1130,10 @@
     
     
       <script src="assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+        <script src="mermaid-init.js"></script>
       
     
   </body>

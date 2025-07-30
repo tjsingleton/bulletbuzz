@@ -16,7 +16,7 @@
         <link rel="prev" href="../unit-testing/">
       
       
-        <link rel="next" href="../performance-testing/">
+        <link rel="next" href="../screenshot-testing/">
       
       
       <link rel="icon" href="../../favicon.ico">
@@ -286,7 +286,7 @@
   
   
   <span class="md-ellipsis">
-    API Reference
+    Features
     
   </span>
   
@@ -296,6 +296,74 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/event-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Event System
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
@@ -348,10 +416,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -364,8 +432,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Testing
           </label>
@@ -410,6 +478,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Integration Testing
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -422,29 +503,268 @@
 
       </a>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../performance-testing/" class="md-nav__link">
         
-  
-  
-  <span class="md-ellipsis">
-    Performance Testing
-    
-  </span>
-  
 
-      </a>
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Test Categories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Test Categories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Running Integration Tests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Test Coverage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Test Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-system-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game System Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      UI Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Test Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 Test Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#playwright-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Playwright Integration Testing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-detection-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Detection Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Test Scenarios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Test Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-complete-game-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Complete Game Session
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-documentation-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Documentation Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-logo-integration-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Logo Integration Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-integration-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Common Integration Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐛 Common Integration Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-integration-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game Integration Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Test Results
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Test Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#success-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Success Criteria
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failure Indicators
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Continuous Integration
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -463,6 +783,52 @@
   
   <span class="md-ellipsis">
     Screenshot Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-coverage-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Test Coverage Report
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Performance Testing
     
   </span>
   
@@ -523,6 +889,257 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Test Categories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Test Categories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Running Integration Tests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Test Coverage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Test Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-system-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game System Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      UI Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Test Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 Test Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#playwright-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Playwright Integration Testing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-detection-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Detection Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Test Scenarios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Test Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-complete-game-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Complete Game Session
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-documentation-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Documentation Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-logo-integration-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Logo Integration Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-integration-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Common Integration Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐛 Common Integration Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-integration-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Game Integration Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Test Results
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Test Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#success-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Success Criteria
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failure Indicators
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Continuous Integration
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -541,6 +1158,193 @@
 
 
 <h1 id="integration-testing">Integration Testing</h1>
+<p>BulletBuzz includes comprehensive integration testing to ensure all systems work together correctly.</p>
+<h2 id="test-categories">🧪 Test Categories</h2>
+<h3 id="deployment-integration-tests">Deployment Integration Tests</h3>
+<ul>
+<li><strong>GitHub Pages Deployment</strong>: Verifies game and docs are accessible</li>
+<li><strong>Documentation Integration</strong>: Tests links between game and docs</li>
+<li><strong>Logo Integration</strong>: Verifies logo displays correctly across all pages</li>
+<li><strong>Mermaid Diagram Integration</strong>: Tests architecture diagram rendering</li>
+</ul>
+<h3 id="game-integration-tests">Game Integration Tests</h3>
+<ul>
+<li><strong>End-to-End Game Flow</strong>: Complete game session testing</li>
+<li><strong>UI Integration</strong>: Shop, game over, and HUD functionality</li>
+<li><strong>System Integration</strong>: Collision, spawning, and level progression</li>
+<li><strong>Performance Integration</strong>: Memory and performance monitoring</li>
+</ul>
+<h2 id="running-integration-tests">🚀 Running Integration Tests</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run all integration tests</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:all
+
+<span class="c1"># Run specific integration tests</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:github-pages<span class="w">      </span><span class="c1"># Deployment testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:documentation<span class="w">     </span><span class="c1"># Documentation testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:game-content<span class="w">      </span><span class="c1"># Game functionality testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:readme-docs<span class="w">       </span><span class="c1"># README link testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:game-doc-link<span class="w">     </span><span class="c1"># Game-to-docs link testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:docs-logo-size<span class="w">    </span><span class="c1"># Logo integration testing</span>
+npm<span class="w"> </span>run<span class="w"> </span>test:mermaid-diagram<span class="w">   </span><span class="c1"># Diagram rendering testing</span>
+</code></pre></div>
+<h2 id="test-coverage">📊 Test Coverage</h2>
+<h3 id="deployment-integration">Deployment Integration</h3>
+<ul>
+<li>✅ Game loads correctly on GitHub Pages</li>
+<li>✅ Documentation site is accessible</li>
+<li>✅ All assets (JS, CSS, images) load properly</li>
+<li>✅ Navigation links work correctly</li>
+<li>✅ Logo displays with correct size</li>
+<li>✅ Mermaid diagrams render properly</li>
+</ul>
+<h3 id="game-system-integration">Game System Integration</h3>
+<ul>
+<li>✅ Player movement and AI integration</li>
+<li>✅ Enemy spawning and AI integration</li>
+<li>✅ Combat system integration</li>
+<li>✅ Pickup system integration</li>
+<li>✅ Level progression integration</li>
+<li>✅ Shop system integration</li>
+</ul>
+<h3 id="ui-integration">UI Integration</h3>
+<ul>
+<li>✅ Game canvas rendering</li>
+<li>✅ Shop modal functionality</li>
+<li>✅ Game over screen display</li>
+<li>✅ HUD elements (health, XP, level)</li>
+<li>✅ Range visualization</li>
+<li>✅ Performance metrics display</li>
+</ul>
+<h2 id="test-implementation">🔧 Test Implementation</h2>
+<h3 id="playwright-integration-testing">Playwright Integration Testing</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// advanced-screenshots.js</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ScreenshotTaker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">testGameContent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Load game page</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="kr">goto</span><span class="p">(</span><span class="s1">&#39;https://tjsingleton.github.io/bulletbuzz/game/&#39;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Wait for game to load</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">waitForSelector</span><span class="p">(</span><span class="s1">&#39;#gameCanvas&#39;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Verify game is running</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">canvas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">locator</span><span class="p">(</span><span class="s1">&#39;#gameCanvas&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">isVisible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">canvas</span><span class="p">.</span><span class="nx">isVisible</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Check for game elements</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">hasPlayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">locator</span><span class="p">(</span><span class="s1">&#39;.player&#39;</span><span class="p">).</span><span class="nx">count</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">hasEnemies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">locator</span><span class="p">(</span><span class="s1">&#39;.enemy&#39;</span><span class="p">).</span><span class="nx">count</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">isVisible</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">hasPlayer</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">hasEnemies</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="error-detection-integration">Error Detection Integration</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// Monitor all types of errors</span>
+<span class="nx">page</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">type</span><span class="p">()</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;error&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`❌ Console Error: </span><span class="si">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">page</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`❌ Network Error: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">url</span><span class="p">()</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">page</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;pageerror&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">error</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`❌ Page Error: </span><span class="si">${</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="test-scenarios">📋 Test Scenarios</h2>
+<h3 id="1-complete-game-session">1. Complete Game Session</h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="nx">testCompleteGameSession</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Start game</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="kr">goto</span><span class="p">(</span><span class="s1">&#39;https://tjsingleton.github.io/bulletbuzz/game/&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">waitForSelector</span><span class="p">(</span><span class="s1">&#39;#gameCanvas&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Wait for game to run</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">waitForTimeout</span><span class="p">(</span><span class="mf">5000</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Check game state</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">gameState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">window</span><span class="p">.</span><span class="nx">game</span><span class="o">?</span><span class="p">.</span><span class="nx">getGameState</span><span class="p">();</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="c1">// Verify game is running</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">gameState</span><span class="p">.</span><span class="nx">isRunning</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">gameState</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">health</span><span class="p">).</span><span class="nx">toBeGreaterThan</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-documentation-integration">2. Documentation Integration</h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="nx">testDocumentationIntegration</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Test game-to-docs link</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="kr">goto</span><span class="p">(</span><span class="s1">&#39;https://tjsingleton.github.io/bulletbuzz/game/&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">docLink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">locator</span><span class="p">(</span><span class="s1">&#39;a[href=&quot;../&quot;]&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">docLink</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Verify we&#39;re on docs page</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">currentUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">url</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">currentUrl</span><span class="p">).</span><span class="nx">toContain</span><span class="p">(</span><span class="s1">&#39;tjsingleton.github.io/bulletbuzz&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">currentUrl</span><span class="p">).</span><span class="nx">not</span><span class="p">.</span><span class="nx">toContain</span><span class="p">(</span><span class="s1">&#39;/game/&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-logo-integration-test">3. Logo Integration Test</h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="nx">testLogoIntegration</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Test logo on docs page</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="kr">goto</span><span class="p">(</span><span class="s1">&#39;https://tjsingleton.github.io/bulletbuzz/&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">logo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">locator</span><span class="p">(</span><span class="s1">&#39;img[alt*=&quot;BulletBuzz Logo&quot;]&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Verify logo size</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">logoWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">logo</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="nx">el</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">().</span><span class="nx">width</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">logoWidth</span><span class="p">).</span><span class="nx">toBeGreaterThan</span><span class="p">(</span><span class="mf">80</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">logoWidth</span><span class="p">).</span><span class="nx">toBeLessThan</span><span class="p">(</span><span class="mf">120</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="common-integration-issues">🐛 Common Integration Issues</h2>
+<h3 id="deployment-issues">Deployment Issues</h3>
+<ol>
+<li><strong>404 Errors</strong>: Game files not deployed to GitHub Pages</li>
+<li><strong>Asset Loading</strong>: CSS/JS files not loading correctly</li>
+<li><strong>Path Issues</strong>: Incorrect relative paths in deployed files</li>
+</ol>
+<h3 id="game-integration-issues">Game Integration Issues</h3>
+<ol>
+<li><strong>Canvas Not Loading</strong>: Game not initializing properly</li>
+<li><strong>AI Not Working</strong>: Player or enemy AI not functioning</li>
+<li><strong>Systems Not Connected</strong>: Collision or spawning not working</li>
+</ol>
+<h3 id="documentation-issues">Documentation Issues</h3>
+<ol>
+<li><strong>Links Broken</strong>: Navigation links not working</li>
+<li><strong>Logo Not Displaying</strong>: Image paths incorrect</li>
+<li><strong>Mermaid Not Rendering</strong>: JavaScript not loading</li>
+</ol>
+<h2 id="test-results">📈 Test Results</h2>
+<h3 id="success-criteria">Success Criteria</h3>
+<ul>
+<li>✅ All pages load without errors</li>
+<li>✅ Game runs smoothly</li>
+<li>✅ Documentation is accessible</li>
+<li>✅ All links work correctly</li>
+<li>✅ Assets load properly</li>
+<li>✅ No console or network errors</li>
+</ul>
+<h3 id="failure-indicators">Failure Indicators</h3>
+<ul>
+<li>❌ 404 errors for game files</li>
+<li>❌ Console errors in browser</li>
+<li>❌ Game not loading or running</li>
+<li>❌ Broken navigation links</li>
+<li>❌ Missing or incorrect assets</li>
+</ul>
+<h2 id="continuous-integration">🔄 Continuous Integration</h2>
+<p>Integration tests run:
+- On every deployment
+- Before merging pull requests
+- During development for quick feedback
+- As part of the CI/CD pipeline</p>
+<p>The integration testing ensures all systems work together correctly and provides immediate feedback on any issues.</p>
 
 
 
@@ -608,6 +1412,10 @@
     
     
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+        <script src="../../mermaid-init.js"></script>
       
     
   </body>
