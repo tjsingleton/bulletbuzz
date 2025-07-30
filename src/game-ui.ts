@@ -14,8 +14,29 @@ let gameStatePrinted: boolean = false;
 let autoShopTimer: number | null = null;
 let gameSpeed: number = 1.0;
 
+// Get game speed from URL parameters
+function getGameSpeedFromURL(): number {
+  const urlParams = new URLSearchParams(window.location.search);
+  const speedParam = urlParams.get('speed');
+  if (speedParam) {
+    const speed = parseFloat(speedParam);
+    if (!isNaN(speed) && speed > 0) {
+      return speed;
+    }
+  }
+  return 1.0; // Default speed
+}
+
 // Initialize game UI
 function initGameUI(): void {
+  // Set game speed from URL parameter
+  gameSpeed = getGameSpeedFromURL();
+  
+  // Log if game speed was set from URL
+  if (gameSpeed !== 1.0) {
+    console.log(`🎮 Game speed set to ${gameSpeed}x from URL parameter`);
+  }
+  
   canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
   if (!canvas) {
     console.error("Canvas element not found!");
@@ -57,6 +78,12 @@ function initGameUI(): void {
   const speedValueDisplay = document.getElementById("gameSpeedValue");
   if (speedValueDisplay) {
     speedValueDisplay.textContent = gameSpeed.toFixed(1) + "x";
+  }
+  
+  // Initialize game speed slider
+  const gameSpeedSlider = document.getElementById("gameSpeed") as HTMLInputElement;
+  if (gameSpeedSlider) {
+    gameSpeedSlider.value = gameSpeed.toString();
   }
   
   // Initialize auto-pathing checkbox
