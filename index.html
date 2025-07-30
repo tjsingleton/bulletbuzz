@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BulletBuzz Game</title>
+  <style>
+    body { 
+      background: black; 
+      margin: 0; 
+      padding: 0; 
+      font-family: sans-serif;
+    }
+    canvas { background: #111; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <!-- Game Controls -->
+  <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 15px; flex-wrap: wrap;">
+    <label style="color: white; font-family: sans-serif; display: flex; align-items: center; gap: 8px;">
+      <input type="checkbox" id="autoPath" checked> Enable Auto Pathing
+    </label>
+    <label style="color: white; font-family: sans-serif; display: flex; align-items: center; gap: 8px;">
+      <input type="checkbox" id="autoShop" checked> Auto Shopping
+    </label>
+  </div>
+  
+  <div style="text-align: center; margin-bottom: 15px;">
+    <label for="gameSpeed" style="color: white; font-family: sans-serif; display: block; margin-bottom: 8px;">
+              Game Speed: <span id="speedValue">1x</span>
+    </label>
+                     <input type="range" id="gameSpeed" min="1" max="20" step="0.25" value="1" style="width: 300px;">
+  </div>
+  
+  <div id="stats" style="text-align: center; color: white; font-family: sans-serif; font-size: 16px; margin-bottom: 8px;"></div>
+  <div id="enemyStats" style="text-align: center; color: #ccc; font-family: sans-serif; font-size: 14px;"></div>
+  
+  <!-- Game State Output -->
+  <div id="gameState" style="display: none; text-align: center; color: white; font-family: sans-serif; margin-top: 20px; padding: 20px; background: rgba(0,0,0,0.8); border-radius: 10px;"></div>
+  
+  <!-- Simulation Controls -->
+  <div style="color: white; font-family: sans-serif; margin-bottom: 15px;">
+    <h3>Automated Testing</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+      <label style="display: flex; align-items: center; gap: 8px;">
+        <input type="number" id="simulationRuns" value="10" min="1" max="100" style="width: 60px; padding: 4px;">
+        Number of Runs
+      </label>
+      <label style="display: flex; align-items: center; gap: 8px;">
+        <input type="number" id="targetLevel" value="5" min="1" max="20" style="width: 60px; padding: 4px;">
+        Target Level
+      </label>
+      <label style="display: flex; align-items: center; gap: 8px;">
+        <input type="number" id="maxSimulationTime" value="300" min="60" max="1800" style="width: 60px; padding: 4px;">
+        Max Time (seconds)
+      </label>
+    </div>
+    <button onclick="startSimulation()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Start Simulation</button>
+    <button onclick="clearResults()" style="padding: 10px 20px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Results</button>
+  </div>
+  
+  <!-- Parameter Adjustment Panel -->
+  <div style="color: white; font-family: sans-serif; text-align: left; background: rgba(0,0,0,0.8); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+    <h4 style="margin-top: 0; text-align: center;">Game Balance Parameters</h4>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <!-- Player Stats -->
+      <div>
+        <h5 style="margin-top: 0; color: #4CAF50;">Player Stats</h5>
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; margin-bottom: 5px;">Starting HP: <span id="startHpValue">12</span></label>
+          <input type="range" id="startHp" min="5" max="20" value="12" step="1" style="width: 100%;">
+        </div>
+                         <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Pickup Range: <span id="pickupRangeValue">8</span></label>
+                   <input type="range" id="pickupRange" min="3" max="20" value="8" step="1" style="width: 100%;">
+                 </div>
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; margin-bottom: 5px;">Player Speed: <span id="playerSpeedValue">0.85</span></label>
+          <input type="range" id="playerSpeed" min="0.5" max="1.5" value="0.85" step="0.05" style="width: 100%;">
+        </div>
+      </div>
+      
+      <!-- Enemy Stats -->
+      <div>
+        <h5 style="margin-top: 0; color: #f44336;">Enemy Stats</h5>
+                         <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Enemy Speed: <span id="enemySpeedValue">0.25</span></label>
+                   <input type="range" id="enemySpeed" min="0.05" max="0.5" value="0.25" step="0.05" style="width: 100%;">
+                 </div>
+                         <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Base Spawn Interval (ms): <span id="spawnIntervalValue">5000</span></label>
+                   <input type="range" id="spawnInterval" min="2000" max="15000" value="5000" step="500" style="width: 100%;">
+                 </div>
+                         <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Heart Drop Rate (%): <span id="heartDropRateValue">15</span></label>
+                   <input type="range" id="heartDropRate" min="5" max="50" value="15" step="1" style="width: 100%;">
+                 </div>
+      </div>
+      
+      <!-- Auto-Pathing -->
+      <div>
+        <h5 style="margin-top: 0; color: #2196F3;">Auto-Pathing</h5>
+                         <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Avoidance Distance: <span id="avoidDistanceValue">80</span></label>
+                   <input type="range" id="avoidDistance" min="50" max="200" value="80" step="10" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Avoidance Strength: <span id="avoidStrengthValue">0.8</span></label>
+                   <input type="range" id="avoidStrength" min="0.5" max="5.0" value="0.8" step="0.5" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Flee Range: <span id="fleeRangeValue">25</span></label>
+                   <input type="range" id="fleeRange" min="15" max="50" value="25" step="5" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Flee Strength: <span id="fleeStrengthValue">1.5</span></label>
+                   <input type="range" id="fleeStrength" min="1.0" max="3.0" value="1.5" step="0.1" style="width: 100%;">
+                 </div>
+      </div>
+      
+                     <!-- Difficulty Scaling -->
+               <div>
+                 <h5 style="margin-top: 0; color: #FF9800;">Difficulty Scaling</h5>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Single Enemy Until Level: <span id="singleEnemyLevelValue">4</span></label>
+                   <input type="range" id="singleEnemyLevel" min="1" max="10" value="4" step="1" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Min Spawn Interval (ms): <span id="minSpawnIntervalValue">3000</span></label>
+                   <input type="range" id="minSpawnInterval" min="2000" max="8000" value="3000" step="500" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Level Scaling Factor: <span id="levelScalingValue">15</span></label>
+                   <input type="range" id="levelScaling" min="5" max="30" value="15" step="1" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Early Level Scaling: <span id="earlyLevelScalingValue">2</span></label>
+                   <input type="range" id="earlyLevelScaling" min="1" max="10" value="2" step="1" style="width: 100%;">
+                 </div>
+               </div>
+               
+               <!-- Combat & Projectiles -->
+               <div>
+                 <h5 style="margin-top: 0; color: #9C27B0;">Combat & Projectiles</h5>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Attack Range: <span id="attackRangeValue">86.25</span></label>
+                   <input type="range" id="attackRange" min="50" max="200" value="86.25" step="5" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Projectile Count: <span id="projectileCountValue">1</span></label>
+                   <input type="range" id="projectileCount" min="1" max="5" value="1" step="1" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Projectile Speed: <span id="projectileSpeedValue">4</span></label>
+                   <input type="range" id="projectileSpeed" min="2" max="10" value="4" step="0.5" style="width: 100%;">
+                 </div>
+                 <div style="margin-bottom: 10px;">
+                   <label style="display: block; margin-bottom: 5px;">Attack Speed (APS): <span id="attackSpeedValue">1.0</span></label>
+                   <input type="range" id="attackSpeed" min="0.5" max="3.0" value="1.0" step="0.1" style="width: 100%;">
+                 </div>
+               </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 15px;">
+      <button onclick="resetToDefaults()" style="padding: 8px 16px; background: #607D8B; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Reset to Defaults</button>
+      <button onclick="applyParameters()" style="padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Apply to Game</button>
+      <button onclick="clearSavedParameters()" style="padding: 8px 16px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Saved</button>
+    </div>
+  </div>
+  
+  <div id="simulationResults" style="color: white; font-family: sans-serif; text-align: left; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; display: none;"></div>
+</div>
+
+<script src="bulletbuzz-core.js"></script>
+<script>
+// Game instance using the core game class
+let game;
+let paused = false;
+let gameStatePrinted = false;
+let simulationMode = false;
+let simulationResults = [];
+let autoShopTimer = null;
+
+// Movement state
+let keys = {};
+let movementKeys = {
+  'ArrowUp': false, 'w': false, 'W': false,
+  'ArrowDown': false, 's': false, 'S': false,
+  'ArrowLeft': false, 'a': false, 'A': false,
+  'ArrowRight': false, 'd': false, 'D': false
+};
+
+// Canvas and context
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Background canvas for crop field (drawn once)
+let backgroundCanvas = null;
+
+// Initialize game
+function initGame() {
+  const config = getParameterValues();
+  game = new BulletBuzzGame(config);
+}
+
+// Get parameter values from sliders
+function getParameterValues() {
+  return {
+    startHp: parseInt(document.getElementById("startHp").value),
+    pickupRange: parseInt(document.getElementById("pickupRange").value),
+    playerSpeed: parseFloat(document.getElementById("playerSpeed").value),
+    enemySpeed: parseFloat(document.getElementById("enemySpeed").value),
+    spawnInterval: parseInt(document.getElementById("spawnInterval").value),
+    heartDropRate: parseInt(document.getElementById("heartDropRate").value) / 100,
+    avoidDistance: parseInt(document.getElementById("avoidDistance").value),
+    avoidStrength: parseFloat(document.getElementById("avoidStrength").value),
+    fleeRange: parseInt(document.getElementById("fleeRange").value),
+    fleeStrength: parseFloat(document.getElementById("fleeStrength").value),
+    singleEnemyLevel: parseInt(document.getElementById("singleEnemyLevel").value),
+    minSpawnInterval: parseInt(document.getElementById("minSpawnInterval").value),
+    levelScaling: parseInt(document.getElementById("levelScaling").value),
+    earlyLevelScaling: parseInt(document.getElementById("earlyLevelScaling").value),
+    attackRange: parseFloat(document.getElementById("attackRange").value),
+    projectileCount: parseInt(document.getElementById("projectileCount").value),
+    projectileSpeed: parseFloat(document.getElementById("projectileSpeed").value),
+    attackSpeed: parseFloat(document.getElementById("attackSpeed").value)
+  };
+}
+
+// Apply parameters to current game
+function applyParameters() {
+  const params = getParameterValues();
+  if (game) {
+    // Update game parameters
+    game.player.maxHp = params.startHp;
+    game.player.hp = params.startHp;
+    game.player.pickupRange = params.pickupRange;
+    game.player.speed = params.playerSpeed;
+    game.player.attackRange = params.attackRange;
+    
+    game.baseSpawnInterval = params.spawnInterval;
+    game.enemySpeed = params.enemySpeed;
+    game.heartDropRate = params.heartDropRate;
+    game.avoidDistance = params.avoidDistance;
+    game.avoidStrength = params.avoidStrength;
+    game.fleeRange = params.fleeRange;
+    game.fleeStrength = params.fleeStrength;
+    game.singleEnemyLevel = params.singleEnemyLevel;
+    game.minSpawnInterval = params.minSpawnInterval;
+    game.levelScaling = params.levelScaling;
+    game.earlyLevelScaling = params.earlyLevelScaling;
+    game.attackRange = params.attackRange;
+    game.projectileCount = params.projectileCount;
+    game.projectileSpeed = params.projectileSpeed;
+    game.attackSpeed = params.attackSpeed;
+    
+    console.log("Parameters applied:", params);
+  }
+}
+
+// Reset parameters to defaults
+function resetToDefaults() {
+  const defaults = {
+    startHp: 12,
+    pickupRange: 8,
+    playerSpeed: 0.85,
+    enemySpeed: 0.15,
+    spawnInterval: 8000,
+    heartDropRate: 20,
+    avoidDistance: 80,
+    avoidStrength: 0.8,
+    fleeRange: 25,
+    fleeStrength: 1.5,
+    singleEnemyLevel: 6,
+    minSpawnInterval: 4500,
+    levelScaling: 15,
+    earlyLevelScaling: 2,
+    attackRange: 86.25,
+    projectileCount: 1,
+    projectileSpeed: 4,
+    attackSpeed: 1.0
+  };
+  
+  Object.keys(defaults).forEach(key => {
+    const slider = document.getElementById(key);
+    const valueSpan = document.getElementById(key + 'Value');
+    if (slider && valueSpan) {
+      slider.value = defaults[key];
+      valueSpan.textContent = defaults[key];
+      localStorage.setItem('gameParam_' + key, defaults[key]);
+    }
+  });
+}
+
+// Clear saved parameters
+function clearSavedParameters() {
+  const parameterSliders = [
+    'startHp', 'pickupRange', 'playerSpeed', 'enemySpeed', 'spawnInterval', 
+    'heartDropRate', 'avoidDistance', 'avoidStrength', 'fleeRange', 'fleeStrength', 'singleEnemyLevel', 'minSpawnInterval',
+    'levelScaling', 'earlyLevelScaling', 'attackRange', 'projectileCount', 'projectileSpeed', 'attackSpeed'
+  ];
+  
+  parameterSliders.forEach(id => {
+    localStorage.removeItem('gameParam_' + id);
+  });
+  console.log("All saved parameters cleared");
+}
+
+// Load saved parameters
+function loadSavedParameters() {
+  const parameterSliders = [
+    'startHp', 'pickupRange', 'playerSpeed', 'enemySpeed', 'spawnInterval', 
+    'heartDropRate', 'avoidDistance', 'avoidStrength', 'fleeRange', 'fleeStrength', 'singleEnemyLevel', 'minSpawnInterval',
+    'levelScaling', 'earlyLevelScaling', 'attackRange', 'projectileCount', 'projectileSpeed', 'attackSpeed'
+  ];
+  
+  parameterSliders.forEach(id => {
+    const slider = document.getElementById(id);
+    const valueSpan = document.getElementById(id + 'Value');
+    if (slider && valueSpan) {
+      const savedValue = localStorage.getItem('gameParam_' + id);
+      if (savedValue !== null) {
+        slider.value = savedValue;
+        valueSpan.textContent = savedValue;
+      }
+      
+      slider.addEventListener('input', function() {
+        valueSpan.textContent = this.value;
+        localStorage.setItem('gameParam_' + id, this.value);
+      });
+    }
+  });
+}
+
+// Game loop
+function gameLoop() {
+  if (!paused && game && !game.isGameOver()) {
+    const gameSpeed = parseFloat(document.getElementById("gameSpeed").value);
+    const updateFrames = Math.floor(gameSpeed);
+    
+    // Handle manual movement
+    handleManualMovement();
+    
+    // Update multiple times based on game speed
+    for (let i = 0; i < updateFrames; i++) {
+      game.step();
+    }
+    
+    updateStats();
+  }
+  
+  // Always draw, even when paused
+  if (game) {
+    draw();
+  }
+  
+  // Auto-shop logic (outside of draw to avoid multiple timeouts)
+  if (game && game.isShopOpen()) {
+    const autoShop = document.getElementById("autoShop").checked;
+    if (autoShop && !autoShopTimer) {
+      autoShopTimer = setTimeout(() => {
+        if (game && game.isShopOpen()) {
+          game.autoShop();
+        }
+        autoShopTimer = null;
+      }, 800); // Shortened from 1500ms to 800ms
+    }
+  }
+  
+  if (!simulationMode) {
+    requestAnimationFrame(gameLoop);
+  }
+}
+
+// Handle smooth manual movement
+function handleManualMovement() {
+  if (!game || game.isGameOver() || paused) return;
+  
+  const autoPath = document.getElementById("autoPath").checked;
+  game.setAutoPathing(autoPath);
+  
+  if (!autoPath) {
+    const gameSpeed = parseFloat(document.getElementById("gameSpeed").value);
+    const moveSpeed = game.player.speed * gameSpeed;
+    let dx = 0, dy = 0;
+    
+    // Only allow movement if shop is not open
+    if (!game.isShopOpen()) {
+      // Check all movement keys
+      if (keys['ArrowUp'] || keys['w'] || keys['W']) dy -= moveSpeed;
+      if (keys['ArrowDown'] || keys['s'] || keys['S']) dy += moveSpeed;
+      if (keys['ArrowLeft'] || keys['a'] || keys['A']) dx -= moveSpeed;
+      if (keys['ArrowRight'] || keys['d'] || keys['D']) dx += moveSpeed;
+      
+      // Apply diagonal movement normalization
+      if (dx !== 0 && dy !== 0) {
+        dx *= 0.707; // 1/√2 for diagonal movement
+        dy *= 0.707;
+      }
+      
+      // Update player position
+      game.player.x += dx;
+      game.player.y += dy;
+      
+      // Keep player within bounds
+      game.player.x = Math.max(game.player.radius, Math.min(game.canvasWidth - game.player.radius, game.player.x));
+      game.player.y = Math.max(game.player.radius, Math.min(game.canvasHeight - game.player.radius, game.player.y));
+    }
+  }
+}
+
+// Create background canvas with crop field (drawn once)
+function createBackgroundCanvas() {
+  backgroundCanvas = document.createElement('canvas');
+  backgroundCanvas.width = canvas.width;
+  backgroundCanvas.height = canvas.height;
+  const bgCtx = backgroundCanvas.getContext('2d');
+  
+  const cropEmojis = ['🌾', '🌽', '🥕', '🥬', '🍅', '🥒', '🌱', '🌿'];
+  const numCrops = 25; // Fewer crops
+  const cropSize = 20; // Base size for crops
+  
+  bgCtx.font = '20px serif';
+  bgCtx.textAlign = 'center';
+  bgCtx.textBaseline = 'middle';
+  bgCtx.globalAlpha = 0.5; // 50% transparency
+  
+  for (let i = 0; i < numCrops; i++) {
+    // Random position
+    const x = Math.random() * (canvas.width - 40) + 20; // Keep away from edges
+    const y = Math.random() * (canvas.height - 40) + 20;
+    
+    // Random crop type
+    const cropEmoji = cropEmojis[Math.floor(Math.random() * cropEmojis.length)];
+    
+    // Random size variation (0.5x to 1.5x base size)
+    const sizeMultiplier = 0.5 + Math.random();
+    const fontSize = Math.floor(cropSize * sizeMultiplier);
+    
+    bgCtx.font = `${fontSize}px serif`;
+    bgCtx.fillStyle = 'green';
+    bgCtx.fillText(cropEmoji, x, y);
+  }
+  
+  bgCtx.globalAlpha = 1.0; // Reset transparency
+}
+
+// Draw shop
+function drawShop() {
+  const shopOptions = game.getShopOptions();
+  
+  // Semi-transparent overlay
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Shop panel
+  const panelWidth = 400;
+  const panelHeight = 200;
+  const panelX = (canvas.width - panelWidth) / 2;
+  const panelY = (canvas.height - panelHeight) / 2;
+  
+  ctx.fillStyle = '#333';
+  ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+  ctx.strokeStyle = '#666';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+  
+  // Title
+  ctx.fillStyle = 'white';
+  ctx.font = '24px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🏪 SHOP', canvas.width / 2, panelY + 30);
+  
+  // Options
+  ctx.font = '18px serif';
+  shopOptions.forEach((option, index) => {
+    const y = panelY + 80 + (index * 40);
+    ctx.fillStyle = 'white';
+    ctx.fillText(`${option.key}. ${option.label}`, canvas.width / 2, y);
+  });
+  
+  // Auto-shop indicator
+  const autoShop = document.getElementById("autoShop").checked;
+  if (autoShop) {
+    ctx.fillStyle = 'rgba(255, 255, 0, 0.8)';
+    ctx.font = '16px serif';
+    ctx.fillText('Auto-shopping in 0.8s...', canvas.width / 2, panelY + panelHeight - 20);
+  }
+}
+
+// Draw game over screen
+function drawGameOver() {
+  const gameState = game.getGameState();
+  
+  // Semi-transparent overlay
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Game over panel
+  const panelWidth = 600;
+  const panelHeight = 500;
+  const panelX = (canvas.width - panelWidth) / 2;
+  const panelY = (canvas.height - panelHeight) / 2;
+  
+  ctx.fillStyle = '#333';
+  ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+  ctx.strokeStyle = '#666';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+  
+  // Title
+  ctx.fillStyle = '#ff4444';
+  ctx.font = '36px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('💀 GAME OVER', canvas.width / 2, panelY + 50);
+  
+  // Stats - Left column
+  ctx.fillStyle = 'white';
+  ctx.font = '18px serif';
+  ctx.textAlign = 'left';
+  
+  const leftStatsX = panelX + 40;
+  const rightStatsX = panelX + 320;
+  let statsY = panelY + 120;
+  const lineHeight = 28;
+  
+  const leftStats = [
+    `Time: ${Math.floor(gameState.gameTime / 60)}:${Math.floor(gameState.gameTime % 60).toString().padStart(2, '0')}`,
+    `Level: ${gameState.level}`,
+    `Score: ${gameState.score}`,
+    `Enemies Killed: ${gameState.enemiesKilled}`
+  ];
+  
+  const rightStats = [
+    `XP Collected: ${gameState.xpCollected}`,
+    `Hearts Collected: ${gameState.heartsCollected}`,
+    `Axes: ${gameState.axesCount}`,
+    `Enemies Spawned: ${gameState.enemiesSpawned}`
+  ];
+  
+  // Draw left column
+  leftStats.forEach(stat => {
+    ctx.fillText(stat, leftStatsX, statsY);
+    statsY += lineHeight;
+  });
+  
+  // Draw right column
+  statsY = panelY + 120;
+  rightStats.forEach(stat => {
+    ctx.fillText(stat, rightStatsX, statsY);
+    statsY += lineHeight;
+  });
+  
+  // Level progression - centered below stats
+  if (Object.keys(gameState.levelTimes).length > 0) {
+    statsY += 20;
+    ctx.fillStyle = '#ffff00';
+    ctx.font = '20px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Level Progression:', canvas.width / 2, statsY);
+    statsY += lineHeight;
+    
+    ctx.fillStyle = 'white';
+    ctx.font = '16px serif';
+    
+    // Show only the last 8 levels to avoid overflow
+    const levelEntries = Object.entries(gameState.levelTimes).slice(-8);
+    levelEntries.forEach(([level, time]) => {
+      ctx.fillText(`Level ${level}: ${time}`, canvas.width / 2, statsY);
+      statsY += lineHeight - 5;
+    });
+  }
+  
+  // Restart instruction
+  ctx.fillStyle = '#00ff00';
+  ctx.font = '24px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Click anywhere to restart', canvas.width / 2, panelY + panelHeight - 40);
+}
+
+// Draw function
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Background removed - no more crops
+  
+  // Draw pause button or restart indicator
+  ctx.font = '24px serif';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = 'white';
+  if (game && game.isGameOver()) {
+    ctx.fillText('🔄', canvas.width - 10, 10);
+  } else {
+    ctx.fillText(paused ? '▶️' : '⏸️', canvas.width - 10, 10);
+  }
+  
+  // Draw player
+  ctx.font = '28px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = game.player.hitTimer > 0 ? 'red' : 'yellow';
+  ctx.fillText('🧑‍🌾', game.player.x, game.player.y);
+  
+  // Draw flee range
+  ctx.beginPath();
+  ctx.setLineDash([2, 2]);
+  ctx.strokeStyle = 'rgba(255, 255, 0, 0.3)';
+  ctx.arc(game.player.x, game.player.y, game.fleeRange, 0, Math.PI * 2);
+  ctx.stroke();
+  
+  // Draw attack range
+  ctx.beginPath();
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = 'rgba(255, 0, 0, 0.2)';
+  ctx.arc(game.player.x, game.player.y, game.player.attackRange, 0, Math.PI * 2);
+  ctx.stroke();
+  
+  // Draw pickup range
+  ctx.beginPath();
+  ctx.strokeStyle = 'cyan';
+  ctx.arc(game.player.x, game.player.y, game.player.pickupRange * 4, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  
+  // Draw enemies
+  ctx.font = '24px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  game.enemies.forEach((e) => {
+    const emoji = e.type === 'wasp' ? '🦗' : '🐝';
+    ctx.fillText(emoji, e.x, e.y);
+  });
+  
+  // Draw XP drops
+  ctx.font = '12px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  game.xpDrops.forEach((xp) => {
+    ctx.fillText('🟢', xp.x, xp.y);
+  });
+  
+  // Draw heart drops
+  ctx.font = '16px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  game.heartDrops.forEach((h) => {
+    // Calculate fade based on lifetime (fade over 30 seconds)
+    const fadeAlpha = Math.max(0.2, 1 - (h.lifetime / 1800));
+    ctx.fillStyle = `rgba(255, 0, 0, ${fadeAlpha})`;
+    ctx.fillText('❤️', h.x, h.y);
+  });
+  
+  // Draw axes (projectiles)
+  ctx.font = '20px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  game.axes.forEach((axe) => {
+    ctx.save();
+    ctx.translate(axe.x, axe.y);
+    ctx.rotate(axe.rotation);
+    ctx.fillStyle = 'white';
+    ctx.fillText('🪓', 0, 0);
+    ctx.restore();
+  });
+  
+  // Draw HP bar
+  const hpBarWidth = 200;
+  const hpBarHeight = 15;
+  const hpBarX = 10;
+  const hpBarY = 10;
+  const hpPercentage = Math.max(0, game.player.hp) / game.player.maxHp;
+  const hpFillWidth = hpPercentage * hpBarWidth;
+  
+  ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+  ctx.fillRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
+  
+  ctx.fillStyle = hpPercentage > 0.5 ? "#ff4444" : hpPercentage > 0.25 ? "#ff8800" : "#ff0000";
+  ctx.fillRect(hpBarX, hpBarY, hpFillWidth, hpBarHeight);
+  
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
+  
+  ctx.fillStyle = "white";
+  ctx.font = "14px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  
+  // Draw shop if open
+  if (game && game.isShopOpen()) {
+    drawShop();
+  }
+  
+  // Draw game over screen
+  if (game && game.isGameOver()) {
+    drawGameOver();
+  }
+  ctx.fillText(`${Math.max(0, Math.floor(game.player.hp))}/${game.player.maxHp}`, hpBarX + hpBarWidth/2, hpBarY + hpBarHeight/2);
+  
+  // Draw XP bar
+  const levelThreshold = Math.floor(10 * Math.pow(1.5, game.level - 1));
+  const xpProgress = game.score % levelThreshold;
+  const xpBarWidth = 200;
+  const xpBarHeight = 10;
+  const xpBarX = 10;
+  const xpBarY = 35;
+  const xpFillWidth = (xpProgress / levelThreshold) * xpBarWidth;
+  
+  ctx.fillStyle = "gray";
+  ctx.fillRect(xpBarX, xpBarY, xpBarWidth, xpBarHeight);
+  
+  ctx.fillStyle = "lime";
+  ctx.fillRect(xpBarX, xpBarY, xpFillWidth, xpBarHeight);
+  
+  ctx.strokeStyle = "white";
+  ctx.strokeRect(xpBarX, xpBarY, xpBarWidth, xpBarHeight);
+  
+  ctx.fillStyle = "black";
+  ctx.font = "12px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(`${xpProgress}/${levelThreshold}`, xpBarX + xpBarWidth/2, xpBarY + xpBarHeight/2);
+  
+  // Draw timer
+  const minutes = Math.floor(game.gameTime / 60);
+  const seconds = Math.floor(game.gameTime % 60);
+  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  ctx.fillStyle = "white";
+  ctx.font = "20px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
+  ctx.fillText(`Time: ${timeString}`, canvas.width / 2, canvas.height - 20);
+  
+  // Game over screen
+  if (game.isGameOver()) {
+    if (!gameStatePrinted) {
+      printGameState();
+      gameStatePrinted = true;
+    }
+  }
+}
+
+// Update stats display
+function updateStats() {
+  const statsDiv = document.getElementById("stats");
+  const enemyStatsDiv = document.getElementById("enemyStats");
+  
+  if (game) {
+    statsDiv.innerText = `Level: ${game.level} | HP: ${Math.max(0, Math.floor(game.player.hp))}/${game.player.maxHp} | Speed: ${game.player.speed.toFixed(2)} | Pickup: ${game.player.pickupRange} | Attack Range: ${game.player.attackRange} | Axes: ${game.axes.length}`;
+    enemyStatsDiv.innerText = `Enemies: ${game.enemies.length} | Type: 🐝 | HP: 1 | Speed: ${game.enemySpeed} | APS: 1.0`;
+  }
+}
+
+// Print game state
+function printGameState() {
+  const gameState = game.getGameState();
+  const minutes = Math.floor(gameState.gameTime / 60);
+  const seconds = Math.floor(gameState.gameTime % 60);
+  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  const gameStateText = `=== GAME STATE ===
+Time: ${timeString}
+Level: ${gameState.level}
+Score: ${gameState.score}
+Player Speed: ${gameState.player.speed}
+Pickup Range: ${gameState.player.pickupRange}
+Attack Range: ${gameState.player.attackRange}
+Max HP: ${gameState.player.maxHp}
+Enemies Killed: ${gameState.enemiesKilled}
+XP Collected: ${gameState.xpCollected}
+Hearts Collected: ${gameState.heartsCollected}
+Axes: ${gameState.axesCount}
+Enemies Spawned: ${gameState.enemiesSpawned}
+XP Efficiency: ${(gameState.xpCollected / Math.max(1, gameState.enemiesKilled)).toFixed(2)} XP per kill
+Kill Rate: ${(gameState.enemiesKilled / (gameState.gameTime / 60)).toFixed(2)} kills/min
+--- Level Progression ---
+${Object.keys(gameState.levelTimes).map(level => `Level ${level}: ${gameState.levelTimes[level]}`).join('\n')}
+==================`;
+  
+  console.log(gameStateText);
+  
+  const gameStateDiv = document.getElementById("gameState");
+  gameStateDiv.style.display = "block";
+  gameStateDiv.innerHTML = `
+    <h3>Game State</h3>
+    <textarea id="gameStateText" style="width: 100%; height: 200px; font-family: monospace; background: #222; color: white; border: none; padding: 10px;" readonly>${gameStateText}</textarea>
+    <br><br>
+    <button onclick="copyGameState()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Copy Game State</button>
+  `;
+}
+
+// Copy game state
+function copyGameState() {
+  const textarea = document.getElementById("gameStateText");
+  textarea.select();
+  textarea.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  
+  const button = event.target;
+  const originalText = button.textContent;
+  button.textContent = "Copied!";
+  button.style.background = "#45a049";
+  setTimeout(() => {
+    button.textContent = originalText;
+    button.style.background = "#4CAF50";
+  }, 1000);
+}
+
+// Toggle pause
+function togglePause() {
+  paused = !paused;
+  if (!paused) {
+    gameLoop();
+  }
+}
+
+// Reset game
+function resetGame() {
+  game.reset();
+  gameStatePrinted = false;
+  paused = false;
+  simulationMode = false;
+  simulationResults = [];
+  if (autoShopTimer) {
+    clearTimeout(autoShopTimer);
+    autoShopTimer = null;
+  }
+  
+  // Clear any displayed game state
+  const gameStateDiv = document.getElementById("gameState");
+  if (gameStateDiv) {
+    gameStateDiv.style.display = "none";
+  }
+  
+  // Clear simulation results
+  const simulationResultsDiv = document.getElementById("simulationResults");
+  if (simulationResultsDiv) {
+    simulationResultsDiv.style.display = "none";
+  }
+  
+  // Reset keys state
+  keys = {};
+  movementKeys = {
+    'ArrowUp': false, 'w': false, 'W': false,
+    'ArrowDown': false, 's': false, 'S': false,
+    'ArrowLeft': false, 'a': false, 'A': false,
+    'ArrowRight': false, 'd': false, 'D': false
+  };
+  
+  gameLoop();
+}
+
+// Simulation functions
+function startSimulation() {
+  try {
+    const runs = parseInt(document.getElementById("simulationRuns").value);
+    const targetLevel = parseInt(document.getElementById("targetLevel").value);
+    const maxTime = parseInt(document.getElementById("maxSimulationTime").value);
+    
+    simulationMode = true;
+    simulationResults = [];
+    
+    console.log(`Starting simulation: ${runs} runs, target level ${targetLevel}, max time ${maxTime}s`);
+    console.log('BulletBuzzGame available:', typeof BulletBuzzGame);
+    
+    runSimulation(runs, targetLevel, maxTime, 0);
+  } catch (error) {
+    console.error('Error in startSimulation:', error);
+    alert('Simulation error: ' + error.message);
+  }
+}
+
+function runSimulation(totalRuns, targetLevel, maxTime, currentRun) {
+  try {
+    if (currentRun >= totalRuns) {
+      finishSimulation();
+      return;
+    }
+    
+    console.log(`Running simulation ${currentRun + 1}/${totalRuns}`);
+    
+    // Create new game instance for simulation
+    const config = getParameterValues();
+    console.log('Config:', config);
+    const simGame = new BulletBuzzGame(config);
+    console.log('Game created:', simGame);
+  
+  // Run the game until completion, death, or timeout
+  while (simGame.player.hp > 0 && !simGame.hasReachedLevel(targetLevel) && simGame.gameTime < maxTime) {
+    simGame.step();
+  }
+  
+  // Record results
+  const gameState = simGame.getGameState();
+  const result = {
+    run: currentRun + 1,
+    level: gameState.level,
+    time: gameState.gameTime,
+    reachedTarget: simGame.hasReachedLevel(targetLevel),
+    timeout: simGame.gameTime >= maxTime,
+    finalStats: {
+      enemiesKilled: gameState.enemiesKilled,
+      xpCollected: gameState.xpCollected,
+      heartsCollected: gameState.heartsCollected,
+      axesCount: gameState.axesCount,
+      levelTimes: gameState.levelTimes
+    }
+  };
+  
+  simulationResults.push(result);
+  
+  // Continue with next run
+  setTimeout(() => runSimulation(totalRuns, targetLevel, maxTime, currentRun + 1), 0);
+  } catch (error) {
+    console.error('Error in runSimulation:', error);
+    alert('Simulation error: ' + error.message);
+  }
+}
+
+function finishSimulation() {
+  const targetLevel = 5;
+  const successfulRuns = simulationResults.filter(r => r.reachedTarget);
+  const successRate = (successfulRuns.length / simulationResults.length) * 100;
+  const avgTime = simulationResults.reduce((sum, r) => sum + r.time, 0) / simulationResults.length;
+  const avgLevel = simulationResults.reduce((sum, r) => sum + r.level, 0) / simulationResults.length;
+  
+  const resultsDiv = document.getElementById("simulationResults");
+  resultsDiv.style.display = "block";
+  
+  let resultsText = `=== SIMULATION RESULTS ===
+Target Level: ${targetLevel}
+Total Runs: ${simulationResults.length}
+Success Rate: ${successRate.toFixed(1)}%
+Successful Runs: ${successfulRuns.length}
+Failed Runs: ${simulationResults.filter(r => !r.reachedTarget && !r.timeout).length}
+Timeout Runs: ${simulationResults.filter(r => r.timeout).length}
+Average Time: ${(avgTime / 60).toFixed(2)} minutes
+Average Level: ${avgLevel.toFixed(1)}
+
+Detailed Runs:
+${simulationResults.map((r) => {
+  const runMinutes = Math.floor(r.time / 60);
+  const runSeconds = Math.floor(r.time % 60);
+  const runTimeString = `${runMinutes.toString().padStart(2, '0')}:${runSeconds.toString().padStart(2, '0')}`;
+  const status = r.reachedTarget ? '✅' : r.timeout ? '⏰' : '❌';
+  return `Run ${r.run}: Level ${r.level} at ${runTimeString} ${status}`;
+}).join('\n')}
+
+=== END SIMULATION ===`;
+  
+  resultsDiv.innerHTML = `
+    <h3>Simulation Results</h3>
+    <textarea style="width: 100%; height: 300px; font-family: monospace; background: #222; color: white; border: none; padding: 10px;" readonly>${resultsText}</textarea>
+    <br><br>
+    <button onclick="copySimulationResults()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Copy Results</button>
+  `;
+  
+  simulationMode = false;
+}
+
+function copySimulationResults() {
+  const textarea = document.querySelector("#simulationResults textarea");
+  textarea.select();
+  textarea.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  
+  const button = event.target;
+  const originalText = button.textContent;
+  button.textContent = "Copied!";
+  button.style.background = "#45a049";
+  setTimeout(() => {
+    button.textContent = originalText;
+    button.style.background = "#4CAF50";
+  }, 1000);
+}
+
+function clearResults() {
+  document.getElementById("simulationResults").style.display = "none";
+  simulationResults = [];
+}
+
+// Event listeners
+document.addEventListener("keydown", (e) => {
+  if (e.key === "p" || e.key === "P") {
+    togglePause();
+  }
+  
+  // Shop selection
+  if (game && game.isShopOpen()) {
+    const shopOptions = game.getShopOptions();
+    const option = shopOptions.find(opt => opt.key === e.key);
+    if (option) {
+      game.selectShopOption(e.key);
+      return;
+    }
+  }
+  
+  // Track movement keys
+  if (movementKeys.hasOwnProperty(e.key)) {
+    keys[e.key] = true;
+  }
+});
+
+document.addEventListener("keyup", (e) => {
+  // Track movement keys
+  if (movementKeys.hasOwnProperty(e.key)) {
+    keys[e.key] = false;
+  }
+});
+
+// Game speed slider
+const gameSpeedSlider = document.getElementById("gameSpeed");
+const speedValueDisplay = document.getElementById("speedValue");
+
+gameSpeedSlider.addEventListener("input", function() {
+  speedValueDisplay.textContent = this.value + "x";
+});
+
+// Initialize
+loadSavedParameters();
+initGame();
+
+// Create background canvas with crop field
+createBackgroundCanvas();
+
+// Add auto-pathing checkbox listener
+document.getElementById("autoPath").addEventListener("change", function() {
+  if (game) {
+    game.setAutoPathing(this.checked);
+  }
+});
+
+// Add canvas click handlers
+canvas.addEventListener("click", (e) => {
+  // If game is over, restart on any click
+  if (game && game.isGameOver()) {
+    resetGame();
+    return;
+  }
+  
+  // Check if click is on the pause/play button (top-right corner)
+  const buttonX = canvas.width - 10;
+  const buttonY = 10;
+  const buttonSize = 30; // Approximate size of the emoji button
+  
+  if (e.offsetX >= buttonX - buttonSize && e.offsetX <= buttonX + buttonSize &&
+      e.offsetY >= buttonY - buttonSize && e.offsetY <= buttonY + buttonSize) {
+    // Click is on the button
+    togglePause();
+  }
+  // If click is not on the button and game is not over, do nothing
+});
+
+gameLoop();
+</script>
+</body>
+</html> 
