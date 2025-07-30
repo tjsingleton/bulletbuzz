@@ -99,7 +99,7 @@ class GameScreenshotTaker {
 
   async captureGitHubPages() {
     console.log('🌐 Testing GitHub Pages deployment...');
-    await this.captureGameStates('https://tjsingleton.github.io/bulletbuzz/');
+    await this.captureGameStates('https://tjsingleton.github.io/bulletbuzz/game/');
   }
 
   async captureDocumentation() {

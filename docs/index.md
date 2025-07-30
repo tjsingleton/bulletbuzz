@@ -2,7 +2,9 @@
 
 ## 🚀 Quick Start
 
-**Play BulletBuzz at**: [https://tjsingleton.github.io/bulletbuzz/](https://tjsingleton.github.io/bulletbuzz/)
+**🎮 [Play BulletBuzz Game](https://tjsingleton.github.io/bulletbuzz/game/)**
+
+**📖 [View Documentation](https://tjsingleton.github.io/bulletbuzz/)**
 
 **🎮 Development Mode**: Add `?speed=10` to the URL for 10x game speed!
 

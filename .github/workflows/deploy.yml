@@ -50,9 +50,10 @@ jobs:
     - name: Organize site structure
       run: |
         # Create a clean site structure
-        # Game files go to root, docs stay in their structure
-        cp index.html site/
-        cp -r dist site/
+        # Documentation stays at root, game goes to /game/ subdirectory
+        mkdir -p site/game
+        cp index.html site/game/
+        cp -r dist site/game/
         cp game-screenshot.png site/
         cp README.md site/
         cp LICENSE site/
