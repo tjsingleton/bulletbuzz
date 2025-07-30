@@ -222,14 +222,8 @@ window.debugGame = {
   }
 };
 
-console.log('Debug commands available:');
-console.log('- debugGame.logState() - Log current game state');
-console.log('- debugGame.logPerformance() - Log performance metrics');
-console.log('- debugGame.getMemory() - Get memory usage');
-console.log('- debugGame.getGameState() - Get full game state');
-console.log('- debugGame.reset() - Reset the game');
-console.log('- debugGame.pause() - Toggle pause');
-console.log('- debugGame.spawnEnemy() - Force spawn an enemy');
+// Debug commands are available in console:
+// debugGame.logState(), debugGame.getMemory(), debugGame.reset(), etc.
 
 let paused = false;
 let gameStatePrinted = false;
@@ -812,17 +806,12 @@ function updateStats() {
     statsDiv.innerText = `Level: ${game.level} | HP: ${Math.max(0, Math.floor(game.player.hp))}/${game.player.maxHp} | Speed: ${game.player.speed.toFixed(2)} | Pickup: ${game.player.pickupRange} | Attack Range: ${game.player.attackRange} | Axes: ${game.axes.length}`;
     enemyStatsDiv.innerText = `Enemies: ${game.enemies.length} | Type: 🐝 | HP: 1 | Speed: ${game.enemySpeed} | APS: 1.0`;
     
-    // Auto-log performance issues
+    // Auto-log performance issues (only when there's a problem)
     const memory = game.getMemoryUsage();
-    if (memory.enemies > memory.maxEnemies * 0.8 || 
-        memory.xpDrops > memory.maxXpDrops * 0.8 ||
-        memory.axes > memory.maxAxes * 0.8) {
+    if (memory.enemies > memory.maxEnemies * 0.9 || 
+        memory.xpDrops > memory.maxXpDrops * 0.9 ||
+        memory.axes > memory.maxAxes * 0.9) {
       console.warn('⚠️ High memory usage detected:', memory);
-    }
-    
-    // Log game state every 10 seconds for debugging
-    if (Math.floor(game.gameTime) % 10 === 0 && game.gameTime > 0) {
-      game.logGameState();
     }
   }
 }
