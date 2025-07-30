@@ -176,7 +176,60 @@
 <script src="dist/BulletBuzzGame.js"></script>
 <script>
 // Game instance using the core game class
-let game;
+let game = new BulletBuzzGame();
+
+// Debug methods for browser console
+window.debugGame = {
+  logState: () => game.logGameState(),
+  logPerformance: () => game.logPerformance(),
+  getMemory: () => game.getMemoryUsage(),
+  getGameState: () => game.getGameState(),
+  reset: () => {
+    game.reset();
+    console.log('Game reset');
+  },
+  pause: () => {
+    game.paused = !game.paused;
+    console.log(`Game ${game.paused ? 'paused' : 'unpaused'}`);
+  },
+  spawnEnemy: () => {
+    // Force spawn an enemy for testing
+    if (game.enemies.length < game.maxEnemies) {
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = 300;
+      let spawnX = game.player.x + Math.cos(angle) * distance;
+      let spawnY = game.player.y + Math.sin(angle) * distance;
+      
+      spawnX = Math.max(10, Math.min(800 - 10, spawnX));
+      spawnY = Math.max(10, Math.min(600 - 10, spawnY));
+      
+      const enemy = {
+        attackCooldown: 0,
+        x: spawnX,
+        y: spawnY,
+        radius: 10,
+        speed: game.enemySpeed,
+        type: 'bee',
+        hp: 1,
+        maxHp: 1,
+        lifetime: 0
+      };
+      
+      game.enemies.push(enemy);
+      console.log('Enemy spawned at', spawnX, spawnY);
+    }
+  }
+};
+
+console.log('Debug commands available:');
+console.log('- debugGame.logState() - Log current game state');
+console.log('- debugGame.logPerformance() - Log performance metrics');
+console.log('- debugGame.getMemory() - Get memory usage');
+console.log('- debugGame.getGameState() - Get full game state');
+console.log('- debugGame.reset() - Reset the game');
+console.log('- debugGame.pause() - Toggle pause');
+console.log('- debugGame.spawnEnemy() - Force spawn an enemy');
+
 let paused = false;
 let gameStatePrinted = false;
 let simulationMode = false;
@@ -757,6 +810,19 @@ function updateStats() {
   if (game) {
     statsDiv.innerText = `Level: ${game.level} | HP: ${Math.max(0, Math.floor(game.player.hp))}/${game.player.maxHp} | Speed: ${game.player.speed.toFixed(2)} | Pickup: ${game.player.pickupRange} | Attack Range: ${game.player.attackRange} | Axes: ${game.axes.length}`;
     enemyStatsDiv.innerText = `Enemies: ${game.enemies.length} | Type: 🐝 | HP: 1 | Speed: ${game.enemySpeed} | APS: 1.0`;
+    
+    // Auto-log performance issues
+    const memory = game.getMemoryUsage();
+    if (memory.enemies > memory.maxEnemies * 0.8 || 
+        memory.xpDrops > memory.maxXpDrops * 0.8 ||
+        memory.axes > memory.maxAxes * 0.8) {
+      console.warn('⚠️ High memory usage detected:', memory);
+    }
+    
+    // Log game state every 10 seconds for debugging
+    if (Math.floor(game.gameTime) % 10 === 0 && game.gameTime > 0) {
+      game.logGameState();
+    }
   }
 }
 

@@ -581,6 +581,27 @@ export class BulletBuzzGame {
     };
   }
 
+  // Debug logging methods
+  public logGameState(): void {
+    console.log('=== GAME STATE DEBUG ===');
+    console.log(`Time: ${this.gameTime.toFixed(2)}s`);
+    console.log(`Level: ${this.level}, Score: ${this.score}`);
+    console.log(`Player: HP ${this.player.hp}/${this.player.maxHp}, Pos (${this.player.x.toFixed(1)}, ${this.player.y.toFixed(1)})`);
+    console.log(`Objects: Enemies ${this.enemies.length}, XP ${this.xpDrops.length}, Hearts ${this.heartDrops.length}, Axes ${this.axes.length}`);
+    console.log(`Memory: ${JSON.stringify(this.getMemoryUsage())}`);
+    console.log(`Shop Open: ${this.showShop}, Paused: ${this.paused}`);
+    console.log('========================');
+  }
+
+  public logPerformance(): void {
+    console.log('=== PERFORMANCE DEBUG ===');
+    console.log(`Accumulator: ${this.accumulator.toFixed(4)}`);
+    console.log(`Timestep: ${this.timestep}`);
+    console.log(`Spawn Timer: ${this.spawnTimer}`);
+    console.log(`Attack Timer: ${this.attackTimer}`);
+    console.log('========================');
+  }
+
   public getGameState(): GameState {
     return {
       gameTime: this.gameTime,
