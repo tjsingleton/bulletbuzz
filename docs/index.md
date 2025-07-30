@@ -1,6 +1,6 @@
-# 🎮 BulletBuzz
+# BulletBuzz
 
-![BulletBuzz Logo](logo.png)
+![BulletBuzz Logo](logo.png){ width="100" }
 
 ## 🚀 Quick Start
 
