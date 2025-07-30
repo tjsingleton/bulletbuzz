@@ -381,12 +381,79 @@ class GameScreenshotTaker {
       await this.takeScreenshot('error-docs-load');
       this.reportErrors(); // Report any errors that occurred
       throw error;
-    } finally {
-      await this.close();
+          } finally {
+        await this.close();
+      }
     }
-  }
 
-  async captureSpeedTest(speed = 10) {
+    async testReadmeDocumentationLink() {
+      try {
+        await this.init();
+        
+        console.log('📖 Testing README documentation link...');
+        
+        // Load the README from GitHub
+        await this.page.goto('https://github.com/tjsingleton/bulletbuzz/blob/main/README.md', { 
+          waitUntil: 'networkidle',
+          timeout: 30000 
+        });
+        
+        // Wait for the README content to load
+        await this.page.waitForSelector('.markdown-body', { timeout: 10000 });
+        
+        // Look for the documentation link in the README
+        const docLink = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').isVisible();
+        if (docLink) {
+          console.log('✅ Documentation link found in README');
+        } else {
+          console.log('❌ Documentation link not found in README');
+        }
+        
+        // Check for the logo in README
+        const logoInReadme = await this.page.locator('img[alt*="BulletBuzz Logo"]').isVisible();
+        if (logoInReadme) {
+          console.log('✅ Logo found in README');
+        } else {
+          console.log('⚠️ Logo not found in README');
+        }
+        
+        // Take screenshot of README
+        await this.takeScreenshot('readme-test');
+        
+        // Test the documentation link by clicking it
+        const docLinkElement = await this.page.locator('a[href="https://tjsingleton.github.io/bulletbuzz/"]').first();
+        if (await docLinkElement.isVisible()) {
+          console.log('🔗 Testing documentation link click...');
+          
+          // Open link in new tab
+          await docLinkElement.click({ button: 'middle' });
+          
+          // Wait for new page to load
+          const pages = this.browser.contexts()[0].pages();
+          const newPage = pages[pages.length - 1];
+          
+          await newPage.waitForLoadState('networkidle', { timeout: 15000 });
+          
+          // Check if documentation loaded
+          const docTitle = await newPage.title();
+          if (docTitle.includes('BulletBuzz')) {
+            console.log('✅ Documentation link works correctly');
+          } else {
+            console.log('❌ Documentation link failed to load');
+          }
+          
+          await newPage.close();
+        }
+        
+      } catch (error) {
+        console.log(`❌ Error testing README documentation link: ${error.message}`);
+        await this.takeScreenshot('readme-error');
+      } finally {
+        await this.close();
+      }
+    }
+
+    async captureSpeedTest(speed = 10) {
     try {
       await this.init();
       
@@ -510,6 +577,11 @@ async function main() {
       case 'game-content':
         console.log('🎮 Testing game content and functionality...');
         await taker.testGameContent();
+        break;
+        
+      case 'readme-docs':
+        console.log('📖 Testing README documentation link...');
+        await taker.testReadmeDocumentationLink();
         break;
         
       case 'all':

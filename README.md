@@ -1,6 +1,6 @@
-# 🎮 BulletBuzz - Bullet Heaven Game
+# 🎮 BulletBuzz
 
-![BulletBuzz Logo](logo.png){ width="300" }
+![BulletBuzz Logo](logo.png){ width="150" }
 
 A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
 

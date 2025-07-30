@@ -1,6 +1,6 @@
-# 🎮 BulletBuzz - Bullet Heaven Game
+# 🎮 BulletBuzz
 
-![BulletBuzz Logo](logo.png){ width="300" }
+![BulletBuzz Logo](logo.png){ width="150" }
 
 ## 🚀 Quick Start
 
