@@ -334,19 +334,24 @@ function loadSavedParameters() {
   });
 }
 
-// Game loop
-function gameLoop() {
+// Game loop with fixed timestep
+let lastTime = 0;
+
+function gameLoop(currentTime) {
   if (!paused && game && !game.isGameOver()) {
+    // Calculate delta time
+    const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+    lastTime = currentTime;
+    
+    // Apply game speed multiplier
     const gameSpeed = parseFloat(document.getElementById("gameSpeed").value);
-    const updateFrames = Math.floor(gameSpeed);
+    const adjustedDeltaTime = deltaTime * gameSpeed;
     
     // Handle manual movement
     handleManualMovement();
     
-    // Update multiple times based on game speed
-    for (let i = 0; i < updateFrames; i++) {
-      game.step();
-    }
+    // Update game with proper delta time
+    game.step(adjustedDeltaTime);
     
     updateStats();
   }
@@ -814,7 +819,7 @@ function copyGameState() {
 function togglePause() {
   paused = !paused;
   if (!paused) {
-    gameLoop();
+    requestAnimationFrame(gameLoop);
   }
 }
 
@@ -851,7 +856,7 @@ function resetGame() {
     'ArrowRight': false, 'd': false, 'D': false
   };
   
-  gameLoop();
+  requestAnimationFrame(gameLoop);
 }
 
 // Simulation functions
@@ -891,7 +896,7 @@ function runSimulation(totalRuns, targetLevel, maxTime, currentRun) {
   
   // Run the game until completion, death, or timeout
   while (simGame.player.hp > 0 && !simGame.hasReachedLevel(targetLevel) && simGame.gameTime < maxTime) {
-    simGame.step();
+    simGame.step(1/60); // Use fixed timestep for simulations
   }
   
   // Record results
@@ -1055,7 +1060,7 @@ canvas.addEventListener("click", (e) => {
   // If click is not on the button and game is not over, do nothing
 });
 
-gameLoop();
+requestAnimationFrame(gameLoop);
 </script>
 </body>
 </html> 
