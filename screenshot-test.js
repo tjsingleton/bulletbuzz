@@ -1,10 +1,18 @@
 const { chromium } = require('playwright');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 async function takeGameScreenshots() {
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
+
+  // Create temporary screenshots directory
+  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  if (!fs.existsSync(screenshotsDir)) {
+    fs.mkdirSync(screenshotsDir, { recursive: true });
+  }
 
   try {
     // Navigate to the game
@@ -15,7 +23,7 @@ async function takeGameScreenshots() {
     
     // Take initial screenshot
     await page.screenshot({ 
-      path: 'screenshots/game-initial.png',
+      path: path.join(screenshotsDir, 'game-initial.png'),
       fullPage: true 
     });
     console.log('✅ Initial game screenshot saved');
@@ -25,7 +33,7 @@ async function takeGameScreenshots() {
 
     // Take screenshot after game has started
     await page.screenshot({ 
-      path: 'screenshots/game-started.png',
+      path: path.join(screenshotsDir, 'game-started.png'),
       fullPage: true 
     });
     console.log('✅ Game started screenshot saved');
@@ -35,7 +43,7 @@ async function takeGameScreenshots() {
 
     // Take screenshot with enemies
     await page.screenshot({ 
-      path: 'screenshots/game-with-enemies.png',
+      path: path.join(screenshotsDir, 'game-with-enemies.png'),
       fullPage: true 
     });
     console.log('✅ Game with enemies screenshot saved');
@@ -44,11 +52,11 @@ async function takeGameScreenshots() {
     console.log('⏳ Waiting for level up to test shop...');
     await page.waitForTimeout(15000);
 
-    // Check if shop is open
-    const shopVisible = await page.locator('text=SHOP').isVisible();
+    // Check if shop is open (use more specific selector)
+    const shopVisible = await page.locator('strong:has-text("Shop:")').isVisible();
     if (shopVisible) {
       await page.screenshot({ 
-        path: 'screenshots/game-shop-open.png',
+        path: path.join(screenshotsDir, 'game-shop-open.png'),
         fullPage: true 
       });
       console.log('✅ Shop screenshot saved');
@@ -62,7 +70,7 @@ async function takeGameScreenshots() {
     const gameOverVisible = await page.locator('text=GAME OVER').isVisible();
     if (gameOverVisible) {
       await page.screenshot({ 
-        path: 'screenshots/game-over.png',
+        path: path.join(screenshotsDir, 'game-over.png'),
         fullPage: true 
       });
       console.log('✅ Game over screenshot saved');
@@ -70,10 +78,12 @@ async function takeGameScreenshots() {
 
     // Take final screenshot
     await page.screenshot({ 
-      path: 'screenshots/game-final.png',
+      path: path.join(screenshotsDir, 'game-final.png'),
       fullPage: true 
     });
     console.log('✅ Final game screenshot saved');
+
+    console.log(`📁 Screenshots saved to: ${screenshotsDir}`);
 
   } catch (error) {
     console.error('❌ Error taking screenshots:', error);
@@ -87,6 +97,12 @@ async function takeScreenshotWithSpeed(speed = 10) {
   const context = await browser.newContext();
   const page = await context.newPage();
 
+  // Create temporary screenshots directory
+  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  if (!fs.existsSync(screenshotsDir)) {
+    fs.mkdirSync(screenshotsDir, { recursive: true });
+  }
+
   try {
     // Navigate to the game with speed parameter
     await page.goto(`http://localhost:8080/?speed=${speed}`);
@@ -99,7 +115,7 @@ async function takeScreenshotWithSpeed(speed = 10) {
 
     // Take screenshot
     await page.screenshot({ 
-      path: `screenshots/game-speed-${speed}x.png`,
+      path: path.join(screenshotsDir, `game-speed-${speed}x.png`),
       fullPage: true 
     });
     console.log(`✅ Game at ${speed}x speed screenshot saved`);
@@ -111,11 +127,13 @@ async function takeScreenshotWithSpeed(speed = 10) {
   }
 }
 
-// Create screenshots directory if it doesn't exist
-const fs = require('fs');
-const screenshotsDir = path.join(__dirname, 'screenshots');
-if (!fs.existsSync(screenshotsDir)) {
-  fs.mkdirSync(screenshotsDir);
+// Clean up temporary screenshots directory
+function cleanupScreenshots() {
+  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  if (fs.existsSync(screenshotsDir)) {
+    fs.rmSync(screenshotsDir, { recursive: true, force: true });
+    console.log('🧹 Cleaned up temporary screenshots directory');
+  }
 }
 
 // Run the screenshot tests
@@ -124,6 +142,9 @@ async function main() {
   
   // Start the development server if not running
   console.log('🚀 Make sure the development server is running: npm run dev');
+  
+  // Clean up any existing screenshots
+  cleanupScreenshots();
   
   await takeGameScreenshots();
   await takeScreenshotWithSpeed(10);
@@ -135,4 +156,4 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { takeGameScreenshots, takeScreenshotWithSpeed }; 
+module.exports = { takeGameScreenshots, takeScreenshotWithSpeed, cleanupScreenshots }; 

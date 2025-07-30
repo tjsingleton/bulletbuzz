@@ -1,0 +1,26 @@
+# Ignore temporary screenshots directory
+/tmp/bulletbuzz-screenshots/
+**/bulletbuzz-screenshots/
+
+# Ignore node modules
+node_modules/
+
+# Ignore build artifacts
+dist/
+build/
+
+# Ignore test files
+*.test.js
+*.test.ts
+tests/
+
+# Ignore screenshot scripts
+screenshot-test.js
+advanced-screenshots.js
+
+# Ignore git files
+.git/
+.gitignore
+
+# Ignore package files
+package-lock.json 

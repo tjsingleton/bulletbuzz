@@ -1,16 +1,17 @@
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 class GameScreenshotTaker {
   constructor() {
     this.browser = null;
     this.page = null;
-    this.screenshotsDir = path.join(__dirname, 'screenshots');
+    this.screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
     
     // Create screenshots directory if it doesn't exist
     if (!fs.existsSync(this.screenshotsDir)) {
-      fs.mkdirSync(this.screenshotsDir);
+      fs.mkdirSync(this.screenshotsDir, { recursive: true });
     }
   }
 
@@ -68,7 +69,7 @@ class GameScreenshotTaker {
       console.log('⏳ Testing auto-shop...');
       await this.page.waitForTimeout(10000);
       
-      const shopVisible = await this.page.locator('text=SHOP').isVisible();
+      const shopVisible = await this.page.locator('strong:has-text("Shop:")').isVisible();
       if (shopVisible) {
         await this.takeScreenshot('04-shop-open');
         
@@ -183,6 +184,14 @@ class GameScreenshotTaker {
       await this.close();
     }
   }
+
+  // Clean up temporary screenshots directory
+  cleanup() {
+    if (fs.existsSync(this.screenshotsDir)) {
+      fs.rmSync(this.screenshotsDir, { recursive: true, force: true });
+      console.log('🧹 Cleaned up temporary screenshots directory');
+    }
+  }
 }
 
 // Main execution
@@ -192,6 +201,9 @@ async function main() {
   
   const taker = new GameScreenshotTaker();
   
+  // Clean up any existing screenshots
+  taker.cleanup();
+  
   // Run different screenshot tests
   await taker.captureGameStates();
   await taker.captureSpeedTest(10);
@@ -199,7 +211,7 @@ async function main() {
   await taker.captureGameOverDetails();
   
   console.log('🎉 Advanced screenshot tests completed!');
-  console.log('📁 Check the screenshots directory for results');
+  console.log(`📁 Check the temporary directory for results: ${taker.screenshotsDir}`);
 }
 
 if (require.main === module) {
