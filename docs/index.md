@@ -1,6 +1,6 @@
 # BulletBuzz
 
-![BulletBuzz Logo](logo.png){ width="100" }
+<img src="logo.png" alt="BulletBuzz Logo" width="100" style="max-width: 100px; height: auto;">
 
 ## 🚀 Quick Start
 
