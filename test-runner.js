@@ -137,7 +137,7 @@ class GameSimulator {
 }
 
 // Run if called directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const simulator = new GameSimulator();
   
   if (process.argv.includes('--test-configs')) {
@@ -163,4 +163,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = GameSimulator; 
+export default GameSimulator; 
