@@ -1,4 +1,4 @@
-const BulletBuzzGame = require('./bulletbuzz-core.js');
+const BulletBuzzGame = require('./dist/BulletBuzzGame.js');
 
 class GameSimulator {
   constructor() {

@@ -2,10 +2,11 @@
   "name": "bulletbuzz",
   "version": "1.0.0",
   "description": "A browser-based auto-battler game with sophisticated AI and headless simulation capabilities for balance testing.",
-  "main": "bulletbuzz-core.js",
+  "main": "dist/BulletBuzzGame.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "live-server --port=3000 --open=/index.html",
+    "dev": "npm run build && live-server --port=3000 --open=/index.html",
+    "dev:watch": "npm run build:watch & live-server --port=3000 --open=/index.html",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "type-check": "tsc --noEmit"
