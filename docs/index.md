@@ -1,4 +1,4 @@
-# 🎮 BulletBuzz - Auto-Battler Game
+# 🎮 BulletBuzz - Bullet Heaven Game
 
 ## 🚀 Quick Start
 
@@ -10,10 +10,10 @@
 
 ## 🎯 What is BulletBuzz?
 
-BulletBuzz is an auto-battler game where you watch your character fight automatically using sophisticated AI. The game features:
+BulletBuzz is a bullet heaven game inspired by Brotato and Vampire Survivors, where you survive waves of enemies in an endless arena. The game features:
 
 - **🧠 Advanced AI**: Intelligent auto-pathing with wall avoidance and smart targeting
-- **⚔️ Auto-Battler**: Watch your character fight automatically with sophisticated combat mechanics
+- **⚔️ Bullet Heaven**: Survive waves of enemies in an endless arena
 - **🎨 Modern UI**: Professional shop modals and detailed game over screens
 - **🧪 Testing**: Comprehensive unit tests and automated screenshot testing
 
@@ -48,7 +48,7 @@ BulletBuzz is an auto-battler game where you watch your character fight automati
 
 ### ⚔️ Gameplay Mechanics
 
-- **Auto-Battler**: Watch your character fight automatically
+- **Bullet Heaven**: Survive waves of enemies in an endless arena
 - **XP System**: Level up to unlock new abilities with accurate progress tracking
 - **Pickup System**: Collect hearts and XP drops with attraction mechanics
 - **Shop System**: Choose upgrades between levels with auto-shop option

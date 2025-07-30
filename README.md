@@ -1,6 +1,6 @@
-# 🎮 BulletBuzz - Auto-Battler Game
+# 🎮 BulletBuzz - Bullet Heaven Game
 
-A browser-based auto-battler game with sophisticated AI, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
+A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
 
 ![BulletBuzz Game Screenshot](game-screenshot.png)
 
@@ -19,7 +19,7 @@ A browser-based auto-battler game with sophisticated AI, featuring auto-pathing,
 - **Robot Vacuum Mode**: Efficient pickup collection with pathfinding to drops
 
 ### ⚔️ Gameplay Mechanics
-- **Auto-Battler**: Watch your character fight automatically
+- **Bullet Heaven**: Survive waves of enemies in an endless arena
 - **XP System**: Level up to unlock new abilities with accurate progress tracking
 - **Pickup System**: Collect hearts and XP drops with attraction mechanics
 - **Shop System**: Choose upgrades between levels with auto-shop option
