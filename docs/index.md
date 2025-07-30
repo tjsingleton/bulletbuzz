@@ -1,5 +1,7 @@
 # 🎮 BulletBuzz - Bullet Heaven Game
 
+![BulletBuzz Logo](logo.png){ width="300" }
+
 ## 🚀 Quick Start
 
 **🎮 [Play BulletBuzz Game](https://tjsingleton.github.io/bulletbuzz/game/)**

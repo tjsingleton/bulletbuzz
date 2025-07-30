@@ -60,6 +60,7 @@ jobs:
         
         # Ensure documentation assets are preserved
         # The mkdocs build should have already created the proper structure
+        # DO NOT copy game files to root - they would overwrite docs
       
     - name: Setup Pages
       uses: actions/configure-pages@v4

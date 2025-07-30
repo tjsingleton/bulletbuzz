@@ -1,5 +1,5 @@
 site_name: BulletBuzz
-site_description: Auto-Battler Game Documentation
+site_description: Bullet Heaven Game Documentation
 site_author: tjsingleton
 
 repo_name: tjsingleton/bulletbuzz
@@ -7,6 +7,8 @@ repo_url: https://github.com/tjsingleton/bulletbuzz
 
 theme:
   name: material
+  logo: logo.png
+  favicon: favicon.ico
   palette:
     - scheme: default
       primary: indigo
