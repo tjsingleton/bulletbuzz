@@ -171,4 +171,131 @@ npm run test:comprehensive:game
 this.isDebugMode = true;
 ```
 
-This unified testing system provides consistent, reliable testing across all environments with minimal configuration changes. 
+This unified testing system provides consistent, reliable testing across all environments with minimal configuration changes.
+
+## 📚 Lessons Learned
+
+### Environment-Specific Challenges
+
+#### Local Development
+- **Server Structure**: Local dev server serves docs at root (`/`) and game at `/game/`
+- **Asset Paths**: Logo and favicon files may not exist in local environment
+- **Expected Errors**: 404s for missing assets are normal in local development
+- **Solution**: Use specific paths (`http://localhost:8080/game/`) for game testing
+
+#### GitHub Pages Deployment
+- **Asset Organization**: Game files are deployed to `/game/` subdirectory
+- **Favicon Issues**: Missing favicon.ico causes console errors but doesn't break functionality
+- **API Calls**: GitHub API calls for releases may fail (404) but don't affect core functionality
+- **Solution**: Accept some expected 404s while monitoring for actual issues
+
+#### Documentation Site
+- **Navigation Complexity**: MkDocs Material theme has multiple `nav` elements
+- **Selector Specificity**: Need specific selectors like `nav[data-md-level="0"]` instead of generic `nav`
+- **Search Integration**: Search functionality is available but may have different implementations
+- **Solution**: Use precise selectors and test for functionality rather than specific implementations
+
+### Error Handling Insights
+
+#### Expected vs Unexpected Errors
+- **Expected**: 404s for missing favicon, logo files, GitHub API calls
+- **Unexpected**: Game canvas not loading, navigation missing, search broken
+- **Strategy**: Distinguish between cosmetic errors and functional failures
+
+#### Error Tolerance
+- **Console Errors**: Some are acceptable (missing assets) while others indicate real problems
+- **Network Errors**: 404s for optional resources vs critical game files
+- **Page Errors**: Always indicate problems that need investigation
+
+### Selector Strategy
+
+#### Game Elements
+- **Canvas**: `#gameCanvas` - critical for game functionality
+- **Stats**: `#stats` and `#enemyStats` - show game state
+- **Controls**: `#gameSpeed`, `#autoPath`, `#autoShop` - user interaction
+- **Strategy**: Test for presence and functionality, not just visibility
+
+#### Documentation Elements
+- **Navigation**: `nav[data-md-level="0"]` - main site navigation
+- **Search**: `[data-md-component="search"]` - search functionality
+- **Strategy**: Focus on core functionality rather than specific styling
+
+### Performance Considerations
+
+#### Wait Times
+- **Page Load**: 2-3 seconds for initial load
+- **Game Start**: 3 seconds for game initialization
+- **Control Interaction**: 500ms-1s for UI responses
+- **Strategy**: Balance between reliability and speed
+
+#### Resource Loading
+- **Critical Resources**: Game JS files, canvas element
+- **Optional Resources**: Favicons, logos, external APIs
+- **Strategy**: Fail fast on critical resources, tolerate optional failures
+
+### Best Practices Discovered
+
+#### Environment Detection
+```javascript
+// Reliable environment detection
+if (baseUrl.includes('/game/') || baseUrl.includes('localhost')) {
+  // Game environment
+} else {
+  // Documentation environment
+}
+```
+
+#### Error Classification
+```javascript
+// Classify errors by severity
+const criticalErrors = this.networkErrors.filter(e => 
+  e.includes('game-ui.js') || e.includes('Game.js')
+);
+const cosmeticErrors = this.networkErrors.filter(e => 
+  e.includes('favicon.ico') || e.includes('logo')
+);
+```
+
+#### Selector Reliability
+```javascript
+// Use specific selectors for complex UIs
+const nav = await this.page.locator('nav[data-md-level="0"]').isVisible();
+const search = await this.page.locator('[data-md-component="search"]').isVisible();
+```
+
+### Deployment Integration
+
+#### Pre-Deployment Testing
+```bash
+# Test local before deploying
+npm run test:comprehensive:local
+
+# Verify deployment worked
+npm run test:comprehensive:game
+npm run test:comprehensive:docs
+```
+
+#### Continuous Monitoring
+- Run comprehensive tests after each deployment
+- Monitor for new error patterns
+- Update selectors as UI evolves
+- Document environment-specific behaviors
+
+### Future Improvements
+
+#### Enhanced Error Classification
+- Categorize errors by severity and impact
+- Provide actionable error messages
+- Include error context and resolution steps
+
+#### Environment-Specific Configurations
+- Custom wait times per environment
+- Environment-specific error thresholds
+- Targeted selectors for different deployments
+
+#### Automated Reporting
+- Generate test reports with pass/fail summaries
+- Track error trends over time
+- Provide deployment health scores
+
+These lessons inform the development of more robust testing systems and help maintain high-quality deployments across all environments. 

@@ -188,3 +188,22 @@ Tests are automatically run:
 - During development for quick feedback
 
 The testing system provides immediate feedback on deployment issues and ensures the game and documentation are always functional.
+
+## 🎓 Key Learnings
+
+### Environment-Specific Behaviors
+- **Local Development**: Game at `/game/`, docs at `/`, expected 404s for missing assets
+- **GitHub Pages**: Game at `/game/`, docs at `/`, some API calls may fail (404)
+- **Error Tolerance**: Distinguish between cosmetic errors (favicon 404) and functional failures
+
+### Selector Best Practices
+- **Game Elements**: Use specific IDs (`#gameCanvas`, `#stats`, `#gameSpeed`)
+- **Documentation**: Use precise selectors (`nav[data-md-level="0"]`, `[data-md-component="search"]`)
+- **Error Detection**: Monitor console, network, and page errors separately
+
+### Testing Strategy
+- **Comprehensive Tests**: Use `npm run test:comprehensive:*` for unified testing
+- **Environment Detection**: Automatic game vs docs detection based on URL
+- **Error Classification**: Accept expected errors while monitoring for real issues
+
+For detailed lessons learned, see [Comprehensive Testing System](comprehensive-testing.md#lessons-learned).
