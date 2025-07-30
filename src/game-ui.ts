@@ -505,7 +505,7 @@ function drawGameOver(): void {
   ctx.fillStyle = 'white';
   ctx.font = '48px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('💀 GAME OVER 💀', canvas.width / 2, panelY + 50);
+  ctx.fillText('💀 GAME OVER 💀', canvas.width / 2, panelY + 70);
   
   // Game statistics
   const gameState = game.getGameState();
@@ -516,7 +516,7 @@ function drawGameOver(): void {
   ctx.font = '18px serif';
   const statsX = panelX + 30;
   const statsWidth = panelWidth - 60;
-  let statsY = panelY + 100;
+  let statsY = panelY + 120;
   const lineHeight = 30;
   
   // Helper function to draw a stat line with proper alignment
