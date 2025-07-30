@@ -420,3 +420,33 @@
 5. **Gameplay Expansion** - More enemy types and combat options
 
 This TODO represents a comprehensive roadmap for transforming BulletBuzz from a prototype into a production-ready game with proper architecture, testing, and maintainability. The foundation is now solid and ready for advanced features! 
+
+## 📚 Documentation Improvements (Future)
+
+### 34. TypeDoc Documentation Enhancement
+- **Current**: Basic TypeDoc setup with minimal documentation
+- **Issues**:
+  - Generated docs are functional but not polished
+  - Missing comprehensive JSDoc comments on all classes
+  - TypeDoc warnings about referenced types not being documented
+  - Navigation could be better organized
+- **Improvements Needed**:
+  - Add comprehensive JSDoc comments to all classes and methods
+  - Fix TypeDoc warnings by ensuring all referenced types are documented
+  - Improve TypeDoc configuration for better organization
+  - Add code examples to JSDoc comments
+  - Create custom TypeDoc theme or improve styling
+  - Add API usage examples and tutorials
+  - Integrate generated docs better with MkDocs navigation
+- **Priority**: Medium - Documentation is functional but needs polish
+- **Status**: 🔄 SETUP COMPLETE - Basic TypeDoc integration working, needs refinement
+
+### 35. Documentation Workflow
+- **Current**: Manual documentation generation
+- **Improvements**:
+  - Automate documentation generation in CI/CD
+  - Add documentation quality checks
+  - Create documentation style guide
+  - Add screenshot generation for API examples
+  - Implement documentation versioning
+- **Status**: 📋 PLANNED - Future enhancement 
