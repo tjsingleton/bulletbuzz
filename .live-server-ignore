@@ -1,5 +1,6 @@
 # Ignore temporary screenshots directory
-/tmp/bulletbuzz-screenshots/
+.tmp/
+.tmp/screenshots/
 **/bulletbuzz-screenshots/
 
 # Ignore node modules
@@ -17,6 +18,7 @@ tests/
 # Ignore screenshot scripts
 screenshot-test.js
 advanced-screenshots.js
+scripts/screenshots.js
 
 # Ignore git files
 .git/

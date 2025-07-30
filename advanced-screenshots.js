@@ -1,13 +1,12 @@
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 
 class GameScreenshotTaker {
   constructor() {
     this.browser = null;
     this.page = null;
-    this.screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+    this.screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
     
     // Create screenshots directory if it doesn't exist
     if (!fs.existsSync(this.screenshotsDir)) {

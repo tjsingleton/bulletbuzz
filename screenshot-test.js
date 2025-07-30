@@ -8,8 +8,8 @@ async function takeGameScreenshots() {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  // Create temporary screenshots directory
-  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  // Create temporary screenshots directory relative to project
+  const screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
   if (!fs.existsSync(screenshotsDir)) {
     fs.mkdirSync(screenshotsDir, { recursive: true });
   }
@@ -97,8 +97,8 @@ async function takeScreenshotWithSpeed(speed = 10) {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  // Create temporary screenshots directory
-  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  // Create temporary screenshots directory relative to project
+  const screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
   if (!fs.existsSync(screenshotsDir)) {
     fs.mkdirSync(screenshotsDir, { recursive: true });
   }
@@ -129,7 +129,7 @@ async function takeScreenshotWithSpeed(speed = 10) {
 
 // Clean up temporary screenshots directory
 function cleanupScreenshots() {
-  const screenshotsDir = path.join(os.tmpdir(), 'bulletbuzz-screenshots');
+  const screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
   if (fs.existsSync(screenshotsDir)) {
     fs.rmSync(screenshotsDir, { recursive: true, force: true });
     console.log('🧹 Cleaned up temporary screenshots directory');
