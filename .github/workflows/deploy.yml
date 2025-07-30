@@ -47,14 +47,18 @@ jobs:
     - name: Build documentation
       run: mkdocs build
       
-    - name: Copy game files to site
+    - name: Organize site structure
       run: |
-        # Copy the game files to the site directory
+        # Create a clean site structure
+        # Game files go to root, docs stay in their structure
         cp index.html site/
         cp -r dist site/
         cp game-screenshot.png site/
         cp README.md site/
         cp LICENSE site/
+        
+        # Ensure documentation assets are preserved
+        # The mkdocs build should have already created the proper structure
       
     - name: Setup Pages
       uses: actions/configure-pages@v4

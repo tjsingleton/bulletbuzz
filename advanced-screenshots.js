@@ -45,12 +45,13 @@ class GameScreenshotTaker {
     return filepath;
   }
 
-  async captureGameStates() {
+  async captureGameStates(baseUrl = 'http://localhost:8080') {
     try {
       await this.init();
       
       // Navigate to game
-      await this.page.goto('http://localhost:8080');
+      console.log(`🌐 Loading game from: ${baseUrl}`);
+      await this.page.goto(baseUrl);
       await this.page.waitForSelector('#gameCanvas', { timeout: 10000 });
       
       // Initial state
@@ -91,6 +92,37 @@ class GameScreenshotTaker {
       
     } catch (error) {
       console.error('❌ Error capturing game states:', error);
+    } finally {
+      await this.close();
+    }
+  }
+
+  async captureGitHubPages() {
+    console.log('🌐 Testing GitHub Pages deployment...');
+    await this.captureGameStates('https://tjsingleton.github.io/bulletbuzz/');
+  }
+
+  async captureDocumentation() {
+    try {
+      await this.init();
+      
+      console.log('📚 Testing documentation site...');
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/');
+      await this.page.waitForTimeout(2000);
+      await this.takeScreenshot('docs-homepage');
+      
+      // Test API documentation
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/api/');
+      await this.page.waitForTimeout(2000);
+      await this.takeScreenshot('docs-api');
+      
+      // Test testing documentation
+      await this.page.goto('https://tjsingleton.github.io/bulletbuzz/testing/unit-testing/');
+      await this.page.waitForTimeout(2000);
+      await this.takeScreenshot('docs-testing');
+      
+    } catch (error) {
+      console.error('❌ Error capturing documentation:', error);
     } finally {
       await this.close();
     }
@@ -195,22 +227,47 @@ class GameScreenshotTaker {
 
 // Main execution
 async function main() {
+  const args = process.argv.slice(2);
+  const command = args[0] || 'all';
+  
   console.log('📸 Starting advanced screenshot tests...');
-  console.log('🚀 Make sure the development server is running: npm run dev');
   
   const taker = new GameScreenshotTaker();
   
   // Clean up any existing screenshots
   taker.cleanup();
   
-  // Run different screenshot tests
-  await taker.captureGameStates();
-  await taker.captureSpeedTest(10);
-  await taker.captureUIElements();
-  await taker.captureGameOverDetails();
-  
-  console.log('🎉 Advanced screenshot tests completed!');
-  console.log(`📁 Check the temporary directory for results: ${taker.screenshotsDir}`);
+  try {
+    switch (command) {
+      case 'github-pages':
+        console.log('🌐 Testing GitHub Pages deployment...');
+        await taker.captureGitHubPages();
+        break;
+        
+      case 'documentation':
+        console.log('📚 Testing documentation site...');
+        await taker.captureDocumentation();
+        break;
+        
+      case 'all':
+      default:
+        console.log('🚀 Running all tests (make sure dev server is running: npm run dev)');
+        await taker.captureGameStates();
+        await taker.captureSpeedTest(10);
+        await taker.captureUIElements();
+        await taker.captureGameOverDetails();
+        await taker.captureGitHubPages();
+        await taker.captureDocumentation();
+        break;
+    }
+    
+    console.log('🎉 Screenshot tests completed!');
+    console.log(`📁 Check the temporary directory for results: ${taker.screenshotsDir}`);
+    
+  } catch (error) {
+    console.error('❌ Error during screenshot tests:', error);
+    process.exit(1);
+  }
 }
 
 if (require.main === module) {

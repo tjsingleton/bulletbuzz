@@ -26,7 +26,9 @@
     "docs:deploy": "cd docs && npm run deploy",
     "docs:generate": "typedoc --out docs/api src/**/*.ts",
     "docs:generate:watch": "typedoc --out docs/api src/**/*.ts --watch",
-    "docs:generate:json": "typedoc --out docs/api src/**/*.ts --json docs/api/docs.json"
+    "docs:generate:json": "typedoc --out docs/api src/**/*.ts --json docs/api/docs.json",
+    "test:github-pages": "node advanced-screenshots.js github-pages",
+    "test:documentation": "node advanced-screenshots.js documentation"
   },
   "repository": {
     "type": "git",
