@@ -3,7 +3,7 @@
 ## 🚨 Critical Issues
 
 ### 1. Code Duplication & Architecture ✅ COMPLETED
-- **Problem**: Massive code duplication between `index.html` and `bulletbuzz-core.js`
+- **Problem**: Massive code duplication between `index.html` and `BulletBuzzGame.ts`
 - **Impact**: Maintenance nightmare, inconsistent behavior, bugs
 - **Solution**: 
   - Remove all game logic from `index.html` 
