@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Game and Documentation
 
 on:
   push:
@@ -33,8 +33,24 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Build TypeScript
+    - name: Build TypeScript game
       run: npm run build
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install MkDocs
+      run: pip install mkdocs mkdocs-material
+      
+    - name: Build documentation
+      run: mkdocs build
+      
+    - name: Copy game files to docs
+      run: |
+        cp index.html site/
+        cp -r dist site/
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -42,7 +58,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: '.'
+        path: 'site'
         
     - name: Deploy to GitHub Pages
       id: deployment
