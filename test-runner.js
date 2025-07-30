@@ -1,4 +1,4 @@
-const BulletBuzzGame = require('./dist/BulletBuzzGame.js');
+import { BulletBuzzGame } from './dist/BulletBuzzGame.js';
 
 class GameSimulator {
   constructor() {

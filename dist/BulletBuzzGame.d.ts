@@ -70,6 +70,8 @@ export declare class BulletBuzzGame {
     reset(): void;
     cleanup(): void;
     getMemoryUsage(): MemoryUsage;
+    logGameState(): void;
+    logPerformance(): void;
     getGameState(): GameState;
     isGameOver(): boolean;
     hasReachedLevel(targetLevel: number): boolean;

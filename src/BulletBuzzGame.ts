@@ -668,12 +668,7 @@ export class BulletBuzzGame {
   }
 }
 
-// Export for Node.js
-if (typeof module !== 'undefined' && module.exports) {
+// Export for Node.js (only in Node environment)
+if (typeof module !== 'undefined' && module.exports && typeof window === 'undefined') {
   module.exports = BulletBuzzGame;
-}
-
-// Export for browser
-if (typeof window !== 'undefined') {
-  (window as any).BulletBuzzGame = BulletBuzzGame;
 } 
