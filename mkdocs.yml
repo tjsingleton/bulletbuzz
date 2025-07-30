@@ -18,11 +18,7 @@ theme:
 nav:
   - Home: index.md
   - API Reference:
-    - Game API: api/game-api.md
-    - AI API: api/ai-api.md
-    - Configuration API: api/configuration-api.md
-    - Screenshot API: api/screenshot-api.md
-    - Testing API: api/testing-api.md
+    - Generated API Docs: api/index.html
   - Testing:
     - Unit Testing: testing/unit-testing.md
     - Integration Testing: testing/integration-testing.md

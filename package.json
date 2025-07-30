@@ -23,7 +23,10 @@
     "screenshots:help": "node scripts/screenshots.js",
     "docs:dev": "cd docs && npm start",
     "docs:build": "cd docs && npm run build",
-    "docs:deploy": "cd docs && npm run deploy"
+    "docs:deploy": "cd docs && npm run deploy",
+    "docs:generate": "typedoc --out docs/api src/**/*.ts",
+    "docs:generate:watch": "typedoc --out docs/api src/**/*.ts --watch",
+    "docs:generate:json": "typedoc --out docs/api src/**/*.ts --json docs/api/docs.json"
   },
   "repository": {
     "type": "git",
@@ -42,6 +45,7 @@
     "jest": "^29.7.0",
     "live-server": "^1.2.2",
     "ts-jest": "^29.4.0",
+    "typedoc": "^0.28.8",
     "typescript": "^5.8.3"
   },
   "dependencies": {
