@@ -142,4 +142,4 @@ The foundation is now solid and ready for advanced gameplay features, including:
 - Enemy variety with different AI patterns
 - Power-up system with skill trees
 - Level design with obstacles and terrain
-- Advanced AI with behavior trees and pathfinding 
+- Advanced AI with behavior trees and pathfinding # Trigger deployment for asset reorganization
