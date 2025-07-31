@@ -4,7 +4,7 @@
 
 A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
 
-![BulletBuzz Game Screenshot](game-screenshot.png)
+![BulletBuzz Game Screenshot](assets/game-screenshot.png)
 
 ## 🚀 Play Now
 
@@ -68,9 +68,9 @@ bulletbuzz/
 │   └── screenshots.js       # Screenshot automation
 ├── .tmp/                    # Temporary files (screenshots)
 ├── index.html              # Game interface
-├── test-runner.js          # Headless simulation
-├── screenshot-test.js       # Basic screenshot testing
-├── advanced-screenshots.js  # Advanced screenshot class
+├── scripts/test-runner.js  # Headless simulation
+├── scripts/screenshot-test.js       # Basic screenshot testing
+├── scripts/advanced-screenshots.js  # Advanced screenshot class
 └── package.json            # Dependencies & scripts
 ```
 
@@ -111,10 +111,10 @@ npm test
 ### Testing
 ```bash
 # Run headless simulation
-node test-runner.js
+node scripts/test-runner.js
 
 # Test different configurations
-node test-runner.js --test-configs
+node scripts/test-runner.js --test-configs
 
 # Browser console debugging
 # Open browser console and use: debugGame.logState()
@@ -225,13 +225,13 @@ npm run type-check
 npm test
 
 # Quick balance test
-node test-runner.js --quick
+node scripts/test-runner.js --quick
 
 # Configuration testing
-node test-runner.js --test-configs
+node scripts/test-runner.js --test-configs
 
 # Custom simulation
-node test-runner.js --runs 10 --target 5 --time 300
+node scripts/test-runner.js --runs 10 --target 5 --time 300
 ```
 
 ### Screenshot Development

@@ -55,8 +55,8 @@ jobs:
         mkdir -p site/game
         cp index.html site/game/
         cp -r dist site/game/
-        cp logo.png favicon.ico logo-192.png logo-512.png site/game/ || true
-        cp game-screenshot.png site/
+        cp assets/logo.png assets/favicon.ico assets/logo-192.png assets/logo-512.png site/game/ || true
+        cp assets/game-screenshot.png site/
         cp README.md site/
         cp LICENSE site/
         echo "Contents of site/game after copy:"
