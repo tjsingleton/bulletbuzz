@@ -965,6 +965,53 @@ class GameScreenshotTaker {
     }
   }
 
+  async testStatsDisplayCleanup() {
+    try {
+      await this.init();
+      
+      console.log('🎮 Testing stats display cleanup...');
+      
+      // Check if canvas is present
+      const canvas = await this.page.locator('#gameCanvas');
+      const isVisible = await canvas.isVisible();
+      
+      if (isVisible) {
+        console.log('✅ Canvas is visible');
+      } else {
+        console.log('❌ Canvas not visible');
+        return;
+      }
+      
+      // Check stats display content
+      const statsDiv = await this.page.locator('#stats');
+      const statsText = await statsDiv.textContent();
+      
+      console.log(`📊 Stats display: "${statsText}"`);
+      
+      // Check if redundant info is removed
+      if (statsText && !statsText.includes('Level:') && !statsText.includes('XP:') && !statsText.includes('HP:')) {
+        console.log('✅ Redundant stats (Level, XP, HP) removed from display');
+      } else {
+        console.log('❌ Redundant stats still present in display');
+      }
+      
+      // Check if useful stats are still present
+      if (statsText && (statsText.includes('Speed:') || statsText.includes('Pickup:') || statsText.includes('Attack Range:'))) {
+        console.log('✅ Useful stats still present in display');
+      } else {
+        console.log('❌ Useful stats missing from display');
+      }
+      
+      await this.takeScreenshot('stats-display-cleanup-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing stats display cleanup:', error);
+      await this.takeScreenshot('error-stats-display-cleanup-test');
+    } finally {
+      await this.close();
+    }
+  }
+
   async testStartupLogoAndResponsiveCanvas() {
     try {
       await this.init();
@@ -1264,6 +1311,11 @@ async function main() {
         case 'startup-logo-responsive':
           console.log('🎮 Testing startup logo and responsive canvas...');
           await taker.testStartupLogoAndResponsiveCanvas();
+          break;
+          
+        case 'stats-cleanup':
+          console.log('🎮 Testing stats display cleanup...');
+          await taker.testStatsDisplayCleanup();
           break;
           
         case 'game-over-restart':
