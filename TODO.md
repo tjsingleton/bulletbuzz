@@ -6,7 +6,7 @@
 - [x] **Mobile Controls Documentation** - Document virtual joystick, touch detection, responsive design
 - [x] **AI Auto-Pathing Documentation** - Document intelligent movement system, wall avoidance, target tracking
 - [x] **Shop System Documentation** - Document upgrade system and shop mechanics
-- [ ] **Combat System Documentation** - Document axe throwing, collision detection
+- [x] **Combat System Documentation** - Document axe throwing, collision detection
 - [ ] **Pickup System Documentation** - Document XP and heart collection mechanics
 - [ ] **Level System Documentation** - Document progression and upgrades
 - [ ] **Spawn System Documentation** - Document enemy and pickup generation

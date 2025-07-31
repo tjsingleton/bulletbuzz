@@ -57,7 +57,7 @@ BulletBuzz is a feature-rich bullet heaven game with advanced systems for gamepl
 | **Event System** | ✅ Complete | ✅ [Event System](event-system.md) | ✅ Good |
 | **AI Auto-Pathing** | ✅ Complete | ✅ [AI Auto-Pathing](ai-auto-pathing.md) | ⚠️ Partial |
 | **Shop System** | ✅ Complete | ✅ [Shop System](shop-system.md) | ⚠️ Partial |
-| **Combat System** | ✅ Complete | ❌ Missing | ✅ Good |
+| **Combat System** | ✅ Complete | ✅ [Combat System](combat-system.md) | ✅ Good |
 | **Pickup System** | ✅ Complete | ❌ Missing | ✅ Good |
 | **Level System** | ✅ Complete | ❌ Missing | ✅ Good |
 | **Spawn System** | ✅ Complete | ❌ Missing | ✅ Good |
