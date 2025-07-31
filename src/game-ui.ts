@@ -145,6 +145,17 @@ function initGameUI(): void {
     paused = true;
     showManualStartOverlay();
   }
+  
+  // Show mobile controls on touch devices
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    const mobileControls = document.querySelector('.mobile-controls') as HTMLElement;
+    if (mobileControls) {
+      mobileControls.style.display = 'block';
+      console.log('📱 Mobile controls enabled');
+    }
+  } else {
+    console.log('🖥️ Desktop detected, mobile controls hidden');
+  }
 }
 
 // Show manual start overlay
@@ -252,9 +263,10 @@ function updateJoystickPosition(touch: Touch): void {
   const newX = joystickCenter.x + limitedDistance * Math.cos(angle);
   const newY = joystickCenter.y + limitedDistance * Math.sin(angle);
   
-  // Update thumb position
-  joystickThumb.style.left = `${newX - joystickCenter.x + 60}px`;
-  joystickThumb.style.top = `${newY - joystickCenter.y + 60}px`;
+  // Update thumb position (adjusted for new joystick size)
+  const thumbOffset = 70; // Half of the new thumb size (50px) + some padding
+  joystickThumb.style.left = `${newX - joystickCenter.x + thumbOffset}px`;
+  joystickThumb.style.top = `${newY - joystickCenter.y + thumbOffset}px`;
   
   // Calculate normalized movement values (-1 to 1)
   if (distance > 0) {
@@ -270,8 +282,9 @@ function updateJoystickPosition(touch: Touch): void {
 function resetJoystick(): void {
   const joystickThumb = document.getElementById("joystickThumb");
   if (joystickThumb) {
-    joystickThumb.style.left = '60px';
-    joystickThumb.style.top = '60px';
+    const thumbOffset = 70; // Half of the new thumb size (50px) + some padding
+    joystickThumb.style.left = `${thumbOffset}px`;
+    joystickThumb.style.top = `${thumbOffset}px`;
   }
   touchMovement.x = 0;
   touchMovement.y = 0;

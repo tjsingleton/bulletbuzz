@@ -184,78 +184,184 @@
             pointer-events: none;
         }
         
+        /* Show mobile controls on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .mobile-controls {
+                display: block;
+            }
+        }
+        
         .joystick-container {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 120px;
-            height: 120px;
+            bottom: 80px;
+            left: 30px;
+            width: 140px;
+            height: 140px;
             pointer-events: auto;
         }
         
         .joystick-base {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            width: 140px;
+            height: 140px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.7);
             border-radius: 50%;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .joystick-base::before {
+            content: "MOVE";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            user-select: none;
         }
         
         .joystick-thumb {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.9);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid rgba(255, 255, 255, 1);
             border-radius: 50%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             transition: all 0.1s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
         .action-buttons {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            right: 30px;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             pointer-events: auto;
         }
         
         .action-button {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             color: white;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             transition: all 0.2s ease;
             user-select: none;
             -webkit-user-select: none;
             -webkit-touch-callout: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .action-button::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
         }
         
         .action-button:active {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.9);
         }
         
         .action-button.pause {
-            background: rgba(255, 193, 7, 0.3);
-            border-color: rgba(255, 193, 7, 0.6);
+            background: rgba(255, 193, 7, 0.4);
+            border-color: rgba(255, 193, 7, 0.8);
         }
         
         .action-button.reset {
-            background: rgba(220, 53, 69, 0.3);
-            border-color: rgba(220, 53, 69, 0.6);
+            background: rgba(220, 53, 69, 0.4);
+            border-color: rgba(220, 53, 69, 0.8);
+        }
+        
+        /* Responsive mobile controls */
+        @media (max-width: 480px) {
+            .joystick-container {
+                bottom: 60px;
+                left: 20px;
+                width: 120px;
+                height: 120px;
+            }
+            
+            .joystick-base {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .joystick-thumb {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .action-buttons {
+                top: 20px;
+                right: 20px;
+                gap: 15px;
+            }
+            
+            .action-button {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .joystick-container {
+                bottom: 50px;
+                left: 15px;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .joystick-base {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .joystick-thumb {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .action-buttons {
+                top: 15px;
+                right: 15px;
+                gap: 12px;
+            }
+            
+            .action-button {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
         }
         
         /* Startup logo flash */
@@ -390,8 +496,8 @@
                 <div class="joystick-thumb" id="joystickThumb"></div>
             </div>
             <div class="action-buttons">
-                <div class="action-button pause" id="pauseButton">⏸️</div>
-                <div class="action-button reset" id="resetButton">🔄</div>
+                <div class="action-button pause" id="pauseButton" data-label="PAUSE">⏸️</div>
+                <div class="action-button reset" id="resetButton" data-label="RESTART">🔄</div>
             </div>
         </div>
         
