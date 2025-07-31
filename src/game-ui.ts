@@ -959,20 +959,28 @@ function resetGame(): void {
   requestAnimationFrame(gameLoop);
 }
 
-// Make functions globally available for HTML onclick handlers
+// Global function to recreate background canvas (for responsive resizing)
+function recreateBackgroundCanvas(): void {
+  createBackgroundCanvas();
+}
+
+// Expose functions globally for HTML access
 declare global {
   interface Window {
     togglePause: typeof togglePause;
     resetGame: typeof resetGame;
     printGameState: typeof printGameState;
     copyGameState: typeof copyGameState;
+    recreateBackgroundCanvas: typeof recreateBackgroundCanvas;
   }
 }
 
+// Make functions available globally
 window.togglePause = togglePause;
 window.resetGame = resetGame;
 window.printGameState = printGameState;
 window.copyGameState = copyGameState;
+window.recreateBackgroundCanvas = recreateBackgroundCanvas;
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initGameUI); 

@@ -511,6 +511,11 @@
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
             
+            // Recreate background canvas with new dimensions
+            if (window.recreateBackgroundCanvas) {
+                window.recreateBackgroundCanvas();
+            }
+            
             // Update game dimensions if game is running
             if (window.internalGame) {
                 window.internalGame.canvasWidth = canvasWidth;
