@@ -1,7 +1,7 @@
 {
   "name": "bulletbuzz",
   "version": "1.0.0",
-  "description": "A browser-based auto-battler game with sophisticated AI and headless simulation capabilities for balance testing.",
+  "description": "A browser-based bullet heaven game with sophisticated AI and headless simulation capabilities for balance testing.",
   "main": "dist/BulletBuzzGame.js",
   "scripts": {
     "build": "tsc",

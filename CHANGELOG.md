@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Real-time error reporting during screenshot tests
 
 ### Changed
-- Updated game genre from "Auto-Battler" to "Bullet Heaven"
+- Updated game genre from "Auto-Battler" to "Bullet Heaven" (completed)
 - Corrected documentation to reflect Brotato/Vampire Survivors inspiration
 - Clarified that player AI is for playtesting, not core gameplay
 
