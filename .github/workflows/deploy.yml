@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -51,74 +51,7 @@ jobs:
       run: mkdocs build
       
     - name: Organize site structure
-      run: |
-        set -e
-        echo "Contents of project root after build:"
-        ls -l
-        echo "Contents of dist directory:"
-        ls -l dist/
-        echo "Contents of assets directory:"
-        ls -l assets/
-        
-        # Create game directory
-        mkdir -p site/game
-        
-        # Copy game files
-        cp index.html site/game/
-        cp -r dist site/game/
-        
-        # Copy assets with error handling
-        if [ -f "assets/logo.png" ]; then
-          cp assets/logo.png site/game/
-        else
-          echo "⚠️ Warning: logo.png not found in assets/"
-        fi
-        
-        if [ -f "assets/favicon.ico" ]; then
-          cp assets/favicon.ico site/game/
-        else
-          echo "⚠️ Warning: favicon.ico not found in assets/"
-        fi
-        
-        if [ -f "assets/logo-192.png" ]; then
-          cp assets/logo-192.png site/game/
-        else
-          echo "⚠️ Warning: logo-192.png not found in assets/"
-        fi
-        
-        if [ -f "assets/logo-512.png" ]; then
-          cp assets/logo-512.png site/game/
-        else
-          echo "⚠️ Warning: logo-512.png not found in assets/"
-        fi
-        
-        if [ -f "assets/game-screenshot.png" ]; then
-          cp assets/game-screenshot.png site/
-        else
-          echo "⚠️ Warning: game-screenshot.png not found in assets/"
-        fi
-        
-        # Copy documentation files
-        cp README.md site/
-        cp LICENSE site/
-        
-        echo "Contents of site/game after copy:"
-        ls -la site/game/
-        echo "Contents of site root after copy:"
-        ls -la site/
-        
-        # Verify critical files exist
-        if [ ! -f "site/game/index.html" ]; then
-          echo "❌ Error: index.html not copied to site/game/"
-          exit 1
-        fi
-        
-        if [ ! -f "site/game/dist/game-ui.js" ]; then
-          echo "❌ Error: game-ui.js not copied to site/game/dist/"
-          exit 1
-        fi
-        
-        echo "✅ All critical files verified"
+      run: ./scripts/deploy-organize-site.sh
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -134,39 +67,8 @@ jobs:
       
     - name: Wait for deployment
       run: |
-        echo "⏳ Waiting 30 seconds for deployment to propagate..."
-        sleep 30
+        echo "⏳ Waiting 60 seconds for deployment to propagate..."
+        sleep 60
         
     - name: Test deployment
-      run: |
-        echo "🧪 Testing deployed site..."
-        
-        # Test game page
-        GAME_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://tjsingleton.github.io/bulletbuzz/game/)
-        echo "Game page status: $GAME_STATUS"
-        
-        if [ "$GAME_STATUS" = "200" ]; then
-          echo "✅ Game page accessible"
-        else
-          echo "❌ Game page returned status $GAME_STATUS"
-        fi
-        
-        # Test documentation page
-        DOCS_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://tjsingleton.github.io/bulletbuzz/)
-        echo "Documentation page status: $DOCS_STATUS"
-        
-        if [ "$DOCS_STATUS" = "200" ]; then
-          echo "✅ Documentation page accessible"
-        else
-          echo "❌ Documentation page returned status $DOCS_STATUS"
-        fi
-        
-        # Test critical game files
-        GAME_UI_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://tjsingleton.github.io/bulletbuzz/game/dist/game-ui.js)
-        echo "Game UI JS status: $GAME_UI_STATUS"
-        
-        if [ "$GAME_UI_STATUS" = "200" ]; then
-          echo "✅ Game UI JavaScript accessible"
-        else
-          echo "❌ Game UI JavaScript returned status $GAME_UI_STATUS"
-        fi 
+      run: ./scripts/deploy-test-site.sh 
