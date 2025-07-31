@@ -965,6 +965,97 @@ class GameScreenshotTaker {
     }
   }
 
+  async testStartupLogoAndResponsiveCanvas() {
+    try {
+      await this.init();
+      
+      console.log('🎮 Testing startup logo and responsive canvas...');
+      
+      // Check if startup logo is present initially
+      const startupLogo = await this.page.locator('#startupLogo');
+      const logoVisible = await startupLogo.isVisible();
+      
+      if (logoVisible) {
+        console.log('✅ Startup logo is visible initially');
+      } else {
+        console.log('❌ Startup logo not found');
+      }
+      
+      // Wait for startup logo to fade out (2 seconds + 1 second fade)
+      await this.page.waitForTimeout(3500);
+      
+      // Check if startup logo is hidden
+      const logoHidden = await startupLogo.isHidden();
+      
+      if (logoHidden) {
+        console.log('✅ Startup logo faded out correctly');
+      } else {
+        console.log('❌ Startup logo still visible after timeout');
+      }
+      
+      // Check canvas responsiveness
+      const canvas = await this.page.locator('#gameCanvas');
+      const isVisible = await canvas.isVisible();
+      
+      if (isVisible) {
+        console.log('✅ Canvas is visible');
+        
+        // Get canvas dimensions
+        const canvasWidth = await canvas.getAttribute('width');
+        const canvasHeight = await canvas.getAttribute('height');
+        const offsetWidth = await canvas.evaluate(el => el.offsetWidth);
+        const offsetHeight = await canvas.evaluate(el => el.offsetHeight);
+        
+        console.log(`📏 Canvas dimensions: ${canvasWidth}x${canvasHeight} (display: ${offsetWidth}x${offsetHeight})`);
+        
+        // Check if canvas is using responsive sizing
+        const maxWidth = await canvas.evaluate(el => {
+          const style = window.getComputedStyle(el);
+          return style.maxWidth;
+        });
+        
+        if (maxWidth.includes('vw') || maxWidth.includes('%')) {
+          console.log('✅ Canvas has responsive max-width');
+        } else {
+          console.log('⚠️ Canvas max-width not responsive');
+        }
+        
+        // Check if canvas is taking up more screen space on mobile
+        const viewport = await this.page.viewportSize();
+        if (viewport && viewport.width <= 768) {
+          const canvasRatio = offsetWidth / viewport.width;
+          if (canvasRatio > 0.9) {
+            console.log('✅ Canvas taking up most of screen width on mobile');
+          } else {
+            console.log('⚠️ Canvas not taking up enough screen width on mobile');
+          }
+        }
+        
+      } else {
+        console.log('❌ Canvas not visible');
+        return;
+      }
+      
+      // Check if header logo is removed
+      const headerLogo = await this.page.locator('.logo-section');
+      const headerLogoCount = await headerLogo.count();
+      
+      if (headerLogoCount === 0) {
+        console.log('✅ Header logo section removed');
+      } else {
+        console.log('❌ Header logo section still present');
+      }
+      
+      await this.takeScreenshot('startup-logo-responsive-canvas-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing startup logo and responsive canvas:', error);
+      await this.takeScreenshot('error-startup-logo-responsive-canvas-test');
+    } finally {
+      await this.close();
+    }
+  }
+
   async testResponsiveCanvas() {
     try {
       await this.init();
@@ -1168,6 +1259,11 @@ async function main() {
         case 'responsive-canvas':
           console.log('📱 Testing responsive canvas...');
           await taker.testResponsiveCanvas();
+          break;
+          
+        case 'startup-logo-responsive':
+          console.log('🎮 Testing startup logo and responsive canvas...');
+          await taker.testStartupLogoAndResponsiveCanvas();
           break;
           
         case 'game-over-restart':

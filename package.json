@@ -36,6 +36,7 @@
     "test:mermaid-diagram": "node scripts/advanced-screenshots.js mermaid-diagram",
     "test:mobile-controls": "node scripts/advanced-screenshots.js mobile-controls",
     "test:responsive-canvas": "node scripts/advanced-screenshots.js responsive-canvas",
+    "test:startup-logo-responsive": "node scripts/advanced-screenshots.js startup-logo-responsive",
     "test:game-over-restart": "node scripts/advanced-screenshots.js game-over-restart",
     "test:comprehensive": "node scripts/advanced-screenshots.js comprehensive",
     "test:comprehensive:local": "node scripts/advanced-screenshots.js comprehensive http://localhost:8080/game/",
