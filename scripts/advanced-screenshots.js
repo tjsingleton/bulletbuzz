@@ -7,7 +7,7 @@ class GameScreenshotTaker {
     this.url = url;
     this.browser = null;
     this.page = null;
-    this.screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
+    this.screenshotsDir = path.join(__dirname, '..', 'tmp', 'screenshots');
     this.consoleErrors = [];
     this.networkErrors = [];
     this.pageErrors = [];
