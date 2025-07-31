@@ -18,6 +18,7 @@ BulletBuzz is a bullet heaven game inspired by Brotato and Vampire Survivors, wh
 
 - **🧠 Advanced AI**: Intelligent auto-pathing with wall avoidance and smart targeting
 - **⚔️ Bullet Heaven**: Survive waves of enemies in an endless arena
+- **📱 Mobile Controls**: Virtual joystick and touch controls for mobile devices
 - **🎨 Modern UI**: Professional shop modals and detailed game over screens
 - **🧪 Testing**: Comprehensive unit tests, integration tests, and automated screenshot testing with error detection
 
