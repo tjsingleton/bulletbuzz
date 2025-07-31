@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 class GameScreenshotTaker {
-  constructor(url = 'http://localhost:8080/game/') {
+  constructor(url = 'http://localhost:8080/') {
     this.url = url;
     this.browser = null;
     this.page = null;
@@ -992,7 +992,7 @@ class GameScreenshotTaker {
         
         // Navigate to the game
         await this.page.goto(this.url);
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(3000); // Wait for startup logo animation to complete
         
         // Check if canvas is visible
         const canvas = await this.page.locator('#gameCanvas');
@@ -1033,6 +1033,8 @@ class GameScreenshotTaker {
           
           if (logoVisible) {
             console.log(`✅ Startup logo present on ${device.name}`);
+            // Wait a bit more for the logo to fade out
+            await this.page.waitForTimeout(1000);
           } else {
             console.log(`ℹ️ Startup logo not visible (likely faded out) on ${device.name}`);
           }
@@ -1080,7 +1082,7 @@ class GameScreenshotTaker {
         // Navigate to manual mode URL
         const manualModeUrl = `${this.url}?autoPath=false&autoShop=false&manualStart=true`;
         await this.page.goto(manualModeUrl);
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(3000); // Wait for startup logo animation to complete
         
         // Check if manual start overlay is present
         const overlay = await this.page.locator('#manualStartOverlay');
@@ -1503,7 +1505,7 @@ class GameScreenshotTaker {
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'all';
-  const url = args[1] || null;
+  const url = args[1] || 'http://localhost:8080/';
   
   console.log('📸 Starting advanced screenshot tests...');
   
