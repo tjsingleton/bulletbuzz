@@ -965,6 +965,76 @@ class GameScreenshotTaker {
     }
   }
 
+  async testManualMode() {
+    try {
+      await this.init();
+      
+      console.log('🎮 Testing manual mode functionality...');
+      
+      // Check if manual start overlay is present
+      const overlay = await this.page.locator('#manualStartOverlay');
+      const overlayVisible = await overlay.isVisible();
+      
+      if (overlayVisible) {
+        console.log('✅ Manual start overlay is visible');
+        
+        // Check overlay content
+        const overlayText = await overlay.textContent();
+        if (overlayText && overlayText.includes('Tap to Start')) {
+          console.log('✅ Manual start overlay has correct text');
+        } else {
+          console.log('❌ Manual start overlay text not found');
+        }
+        
+        // Check if auto-features are disabled
+        const autoPathCheckbox = await this.page.locator('#autoPath');
+        const autoShopCheckbox = await this.page.locator('#autoShop');
+        
+        const autoPathChecked = await autoPathCheckbox.isChecked();
+        const autoShopChecked = await autoShopCheckbox.isChecked();
+        
+        if (!autoPathChecked && !autoShopChecked) {
+          console.log('✅ Auto-features are correctly disabled');
+        } else {
+          console.log('❌ Auto-features not properly disabled');
+        }
+        
+        // Click the overlay to start the game
+        await overlay.click();
+        await this.page.waitForTimeout(1000);
+        
+        // Check if overlay is hidden after click
+        const overlayHidden = await overlay.isHidden();
+        if (overlayHidden) {
+          console.log('✅ Manual start overlay hidden after click');
+        } else {
+          console.log('❌ Manual start overlay still visible after click');
+        }
+        
+        // Check if game is running (canvas should be visible and active)
+        const canvas = await this.page.locator('#gameCanvas');
+        const canvasVisible = await canvas.isVisible();
+        
+        if (canvasVisible) {
+          console.log('✅ Game canvas visible after manual start');
+        } else {
+          console.log('❌ Game canvas not visible after manual start');
+        }
+        
+      } else {
+        console.log('❌ Manual start overlay not visible');
+      }
+      
+      await this.takeScreenshot('manual-mode-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing manual mode:', error);
+      await this.takeScreenshot('error-manual-mode-test');
+    } finally {
+      await this.close();
+    }
+  }
+
   async testStatsDisplayCleanup() {
     try {
       await this.init();
@@ -1316,6 +1386,11 @@ async function main() {
         case 'stats-cleanup':
           console.log('🎮 Testing stats display cleanup...');
           await taker.testStatsDisplayCleanup();
+          break;
+          
+        case 'manual-mode':
+          console.log('🎮 Testing manual mode functionality...');
+          await taker.testManualMode();
           break;
           
         case 'game-over-restart':

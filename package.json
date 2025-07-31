@@ -38,6 +38,7 @@
     "test:responsive-canvas": "node scripts/advanced-screenshots.js responsive-canvas",
     "test:startup-logo-responsive": "node scripts/advanced-screenshots.js startup-logo-responsive",
     "test:stats-cleanup": "node scripts/advanced-screenshots.js stats-cleanup",
+    "test:manual-mode": "node scripts/advanced-screenshots.js manual-mode",
     "test:game-over-restart": "node scripts/advanced-screenshots.js game-over-restart",
     "test:comprehensive": "node scripts/advanced-screenshots.js comprehensive",
     "test:comprehensive:local": "node scripts/advanced-screenshots.js comprehensive http://localhost:8080/game/",
