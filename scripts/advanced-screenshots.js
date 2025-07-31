@@ -829,12 +829,32 @@ class GameScreenshotTaker {
         await this.page.waitForTimeout(1000);
         console.log('✅ Speed control functional');
         
-        // Test auto-pathing toggle
+        // Test auto-pathing toggle by clicking the label
+        const autoPathLabel = await this.page.locator('label[for="autoPath"]');
+        if (await autoPathLabel.isVisible()) {
+          await autoPathLabel.click();
+          await this.page.waitForTimeout(500);
+          console.log('✅ Auto-pathing label click functional');
+        } else {
+          console.log('⚠️ Auto-pathing label not found');
+        }
+        
+        // Test auto-shop toggle by clicking the label
+        const autoShopLabel = await this.page.locator('label[for="autoShop"]');
+        if (await autoShopLabel.isVisible()) {
+          await autoShopLabel.click();
+          await this.page.waitForTimeout(500);
+          console.log('✅ Auto-shop label click functional');
+        } else {
+          console.log('⚠️ Auto-shop label not found');
+        }
+        
+        // Test auto-pathing toggle by clicking the checkbox directly
         await this.page.click('#autoPath');
         await this.page.waitForTimeout(500);
         console.log('✅ Auto-pathing toggle functional');
         
-        // Test auto-shop toggle
+        // Test auto-shop toggle by clicking the checkbox directly
         await this.page.click('#autoShop');
         await this.page.waitForTimeout(500);
         console.log('✅ Auto-shop toggle functional');
