@@ -62,6 +62,20 @@ export class BulletBuzzGame {
   }
   
   /**
+   * Set game pause state
+   */
+  public setPaused(paused: boolean): void {
+    this.game.paused = paused;
+  }
+  
+  /**
+   * Get game pause state
+   */
+  public getPaused(): boolean {
+    return this.game.paused;
+  }
+  
+  /**
    * Set canvas dimensions
    */
   public setCanvasDimensions(width: number, height: number): void {

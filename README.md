@@ -10,6 +10,8 @@ A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, fe
 
 **[Play BulletBuzz on GitHub Pages](https://tjsingleton.github.io/bulletbuzz/game/)**
 
+**[🎮 Manual Mode - Tap to Start](https://tjsingleton.github.io/bulletbuzz/game/?autoPath=false&autoShop=false&manualStart=true)** - Auto-features disabled, requires manual tapping to start
+
 **📚 [View Documentation](https://tjsingleton.github.io/bulletbuzz/)**
 
 **🎮 Development Mode**: Add `?speed=10` to the URL for 10x game speed for faster testing!

@@ -49,6 +49,18 @@ export class BulletBuzzGame {
         this.game.setAutoPathing(enabled);
     }
     /**
+     * Set game pause state
+     */
+    setPaused(paused) {
+        this.game.paused = paused;
+    }
+    /**
+     * Get game pause state
+     */
+    getPaused() {
+        return this.game.paused;
+    }
+    /**
      * Set canvas dimensions
      */
     setCanvasDimensions(width, height) {

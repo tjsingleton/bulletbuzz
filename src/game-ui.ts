@@ -33,14 +33,35 @@ function getGameSpeedFromURL(): number {
   return 1.0; // Default speed
 }
 
+function getAutoFeaturesFromURL(): { autoPath: boolean; autoShop: boolean; manualStart: boolean } {
+  const urlParams = new URLSearchParams(window.location.search);
+  const autoPathParam = urlParams.get('autoPath');
+  const autoShopParam = urlParams.get('autoShop');
+  const manualStartParam = urlParams.get('manualStart');
+  
+  return {
+    autoPath: autoPathParam !== 'false', // Default to true unless explicitly false
+    autoShop: autoShopParam !== 'false', // Default to true unless explicitly false
+    manualStart: manualStartParam === 'true' // Default to false unless explicitly true
+  };
+}
+
 // Initialize game UI
 function initGameUI(): void {
   // Set game speed from URL parameter
   gameSpeed = getGameSpeedFromURL();
   
+  // Get auto-feature settings from URL
+  const autoFeatures = getAutoFeaturesFromURL();
+  
   // Log if game speed was set from URL
   if (gameSpeed !== 1.0) {
     console.log(`🎮 Game speed set to ${gameSpeed}x from URL parameter`);
+  }
+  
+  // Log auto-feature settings
+  if (!autoFeatures.autoPath || !autoFeatures.autoShop || autoFeatures.manualStart) {
+    console.log(`🎮 Auto-features: Path=${autoFeatures.autoPath}, Shop=${autoFeatures.autoShop}, ManualStart=${autoFeatures.manualStart}`);
   }
   
   canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
@@ -106,7 +127,48 @@ function initGameUI(): void {
   // Initialize auto-pathing checkbox
   const autoPathCheckbox = document.getElementById("autoPath") as HTMLInputElement;
   if (autoPathCheckbox) {
-    autoPathCheckbox.checked = true; // Start with auto-pathing enabled
+    autoPathCheckbox.checked = autoFeatures.autoPath;
+    if (game) {
+      game.setAutoPathing(autoFeatures.autoPath);
+    }
+  }
+  
+  // Initialize auto-shop checkbox
+  const autoShopCheckbox = document.getElementById("autoShop") as HTMLInputElement;
+  if (autoShopCheckbox) {
+    autoShopCheckbox.checked = autoFeatures.autoShop;
+  }
+  
+  // If manual start is enabled, pause the game and show overlay
+  if (autoFeatures.manualStart && game) {
+    game.setPaused(true);
+    paused = true;
+    showManualStartOverlay();
+  }
+}
+
+// Show manual start overlay
+function showManualStartOverlay(): void {
+  const overlay = document.getElementById("manualStartOverlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    
+    // Add click event to start the game
+    overlay.addEventListener('click', startManualGame, { once: true });
+  }
+}
+
+// Start manual game
+function startManualGame(): void {
+  const overlay = document.getElementById("manualStartOverlay");
+  if (overlay) {
+    overlay.style.display = "none";
+  }
+  
+  if (game) {
+    game.setPaused(false);
+    paused = false;
+    requestAnimationFrame(gameLoop);
   }
 }
 

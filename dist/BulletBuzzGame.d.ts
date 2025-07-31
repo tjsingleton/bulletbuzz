@@ -34,6 +34,14 @@ export declare class BulletBuzzGame {
      */
     setAutoPathing(enabled: boolean): void;
     /**
+     * Set game pause state
+     */
+    setPaused(paused: boolean): void;
+    /**
+     * Get game pause state
+     */
+    getPaused(): boolean;
+    /**
      * Set canvas dimensions
      */
     setCanvasDimensions(width: number, height: number): void;
