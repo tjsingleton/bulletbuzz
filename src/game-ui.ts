@@ -14,6 +14,12 @@ let gameStatePrinted: boolean = false;
 let autoShopTimer: number | null = null;
 let gameSpeed: number = 1.0;
 
+// Mobile control variables
+let joystickActive: boolean = false;
+let joystickCenter: { x: number; y: number } = { x: 0, y: 0 };
+let joystickMaxDistance: number = 40;
+let touchMovement: { x: number; y: number } = { x: 0, y: 0 };
+
 // Get game speed from URL parameters
 function getGameSpeedFromURL(): number {
   const urlParams = new URLSearchParams(window.location.search);
@@ -74,6 +80,9 @@ function initGameUI(): void {
   // Set up event listeners
   setupEventListeners();
   
+  // Initialize mobile controls
+  setupMobileControls();
+  
   // Initialize UI elements
   const speedValueDisplay = document.getElementById("gameSpeedValue");
   if (speedValueDisplay) {
@@ -91,6 +100,111 @@ function initGameUI(): void {
   if (autoPathCheckbox) {
     autoPathCheckbox.checked = true; // Start with auto-pathing enabled
   }
+}
+
+// Set up mobile controls
+function setupMobileControls(): void {
+  const joystickBase = document.getElementById("joystickBase");
+  const joystickThumb = document.getElementById("joystickThumb");
+  const pauseButton = document.getElementById("pauseButton");
+  const resetButton = document.getElementById("resetButton");
+  
+  if (!joystickBase || !joystickThumb || !pauseButton || !resetButton) {
+    console.warn("Mobile control elements not found");
+    return;
+  }
+  
+  // Initialize joystick center position
+  const rect = joystickBase.getBoundingClientRect();
+  joystickCenter.x = rect.left + rect.width / 2;
+  joystickCenter.y = rect.top + rect.height / 2;
+  
+  // Joystick touch events
+  joystickBase.addEventListener('touchstart', handleJoystickStart);
+  joystickBase.addEventListener('touchmove', handleJoystickMove);
+  joystickBase.addEventListener('touchend', handleJoystickEnd);
+  
+  // Action button events
+  pauseButton.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    togglePause();
+  });
+  
+  resetButton.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    resetGame();
+  });
+  
+  // Prevent default touch behaviors
+  joystickBase.addEventListener('touchstart', (e) => e.preventDefault());
+  joystickBase.addEventListener('touchmove', (e) => e.preventDefault());
+  pauseButton.addEventListener('touchstart', (e) => e.preventDefault());
+  resetButton.addEventListener('touchstart', (e) => e.preventDefault());
+}
+
+// Handle joystick touch start
+function handleJoystickStart(e: TouchEvent): void {
+  e.preventDefault();
+  joystickActive = true;
+  updateJoystickPosition(e.touches[0]);
+}
+
+// Handle joystick touch move
+function handleJoystickMove(e: TouchEvent): void {
+  e.preventDefault();
+  if (joystickActive) {
+    updateJoystickPosition(e.touches[0]);
+  }
+}
+
+// Handle joystick touch end
+function handleJoystickEnd(e: TouchEvent): void {
+  e.preventDefault();
+  joystickActive = false;
+  resetJoystick();
+}
+
+// Update joystick position
+function updateJoystickPosition(touch: Touch): void {
+  const joystickThumb = document.getElementById("joystickThumb");
+  if (!joystickThumb) return;
+  
+  // Calculate distance from center
+  const dx = touch.clientX - joystickCenter.x;
+  const dy = touch.clientY - joystickCenter.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  
+  // Limit to max distance
+  const limitedDistance = Math.min(distance, joystickMaxDistance);
+  const angle = Math.atan2(dy, dx);
+  
+  // Calculate new position
+  const newX = joystickCenter.x + limitedDistance * Math.cos(angle);
+  const newY = joystickCenter.y + limitedDistance * Math.sin(angle);
+  
+  // Update thumb position
+  joystickThumb.style.left = `${newX - joystickCenter.x + 60}px`;
+  joystickThumb.style.top = `${newY - joystickCenter.y + 60}px`;
+  
+  // Calculate normalized movement values (-1 to 1)
+  if (distance > 0) {
+    touchMovement.x = (dx / distance) * (limitedDistance / joystickMaxDistance);
+    touchMovement.y = (dy / distance) * (limitedDistance / joystickMaxDistance);
+  } else {
+    touchMovement.x = 0;
+    touchMovement.y = 0;
+  }
+}
+
+// Reset joystick to center
+function resetJoystick(): void {
+  const joystickThumb = document.getElementById("joystickThumb");
+  if (joystickThumb) {
+    joystickThumb.style.left = '60px';
+    joystickThumb.style.top = '60px';
+  }
+  touchMovement.x = 0;
+  touchMovement.y = 0;
 }
 
 // Set up event listeners
@@ -208,11 +322,17 @@ function handlePlayerMovement(): void {
   const moveSpeed = player.speed * gameSpeed;
   let dx = 0, dy = 0;
   
-  // Check movement keys
+  // Check keyboard movement keys
   if (keys['ArrowUp'] || keys['w'] || keys['W']) dy -= moveSpeed;
   if (keys['ArrowDown'] || keys['s'] || keys['S']) dy += moveSpeed;
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) dx -= moveSpeed;
   if (keys['ArrowRight'] || keys['d'] || keys['D']) dx += moveSpeed;
+  
+  // Check touch movement (mobile controls)
+  if (joystickActive && (touchMovement.x !== 0 || touchMovement.y !== 0)) {
+    dx += touchMovement.x * moveSpeed;
+    dy += touchMovement.y * moveSpeed;
+  }
   
   // Apply diagonal movement normalization
   if (dx !== 0 && dy !== 0) {
