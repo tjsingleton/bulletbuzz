@@ -1,6 +1,6 @@
 # 🎮 BulletBuzz
 
-![BulletBuzz Logo](logo.png){ width="150" }
+![BulletBuzz Logo](assets/logo.png){ width="150" }
 
 A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, featuring auto-pathing, combat mechanics, and headless simulation capabilities for balance testing.
 
@@ -8,7 +8,9 @@ A browser-based bullet heaven game inspired by Brotato and Vampire Survivors, fe
 
 ## 🚀 Play Now
 
-**[Play BulletBuzz on GitHub Pages](https://tjsingleton.github.io/bulletbuzz/)**
+**[Play BulletBuzz on GitHub Pages](https://tjsingleton.github.io/bulletbuzz/game/)**
+
+**📚 [View Documentation](https://tjsingleton.github.io/bulletbuzz/)**
 
 **🎮 Development Mode**: Add `?speed=10` to the URL for 10x game speed for faster testing!
 
@@ -104,8 +106,8 @@ npm test
 ```
 
 ### Game Speed Control
-- **Development**: `http://localhost:XXXX/?speed=10` for 10x speed
-- **Production**: `https://tjsingleton.github.io/bulletbuzz/` (1x speed)
+- **Development**: `http://localhost:XXXX/game/?speed=10` for 10x speed
+- **Production**: `https://tjsingleton.github.io/bulletbuzz/game/` (1x speed)
 - **Custom**: `?speed=X` where X is any positive number
 
 ### Testing
