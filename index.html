@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="version" content="750b788">
+    <meta name="version" content="<%= gitSha %>">
     <title>BulletBuzz</title>
     
     <!-- Favicon -->
@@ -457,6 +457,89 @@
             }
         }
         
+        /* Full screen styles */
+        .fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .fullscreen .container {
+            max-width: none !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .fullscreen .game-section {
+            flex: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+        }
+        
+        .fullscreen #gameCanvas {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+        }
+        
+        .fullscreen .controls,
+        .fullscreen .instructions,
+        .fullscreen .stats {
+            display: none !important;
+        }
+        
+        .fullscreen .mobile-controls {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            z-index: 10000 !important;
+        }
+        
+        .fullscreen .mobile-controls .action-buttons {
+            display: flex !important;
+            gap: 10px !important;
+        }
+        
+        .fullscreen .mobile-controls .action-button {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 24px !important;
+        }
+        
+        /* Full screen button styles */
+        #fullScreenBtn {
+            background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+            color: #333 !important;
+            font-weight: bold !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        #fullScreenBtn:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4) !important;
+        }
+        
+        .fullscreen #fullScreenBtn {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            z-index: 10001 !important;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E) !important;
+        }
+        
         /* Hide mobile controls on desktop */
         @media (hover: hover) and (pointer: fine) {
             .mobile-controls {
@@ -498,6 +581,7 @@
             <div class="action-buttons">
                 <div class="action-button pause" id="pauseButton" data-label="PAUSE">⏸️</div>
                 <div class="action-button reset" id="resetButton" data-label="RESTART">🔄</div>
+                <div class="action-button fullscreen" id="mobileFullScreenBtn" data-label="FULL">🖥️</div>
             </div>
         </div>
         
@@ -536,6 +620,7 @@
                 <button onclick="togglePause()">Pause/Resume (P)</button>
                 <button onclick="resetGame()">Reset Game (R)</button>
                 <button onclick="printGameState()">Print Game State</button>
+                <button onclick="toggleFullScreen()" id="fullScreenBtn">🖥️ Full Screen (F)</button>
             </div>
         </div>
         
@@ -550,6 +635,7 @@
                 <li><strong>Leveling:</strong> Collect XP to level up and get stronger</li>
                 <li><strong>Shop:</strong> Every 5 levels, choose upgrades to improve your character</li>
                 <li><strong>Survival:</strong> Avoid enemies and try to survive as long as possible!</li>
+                <li><strong>Full Screen:</strong> Press F or click the full screen button for immersive gameplay</li>
             </ul>
             
             <h3>🎯 Game Features</h3>
@@ -560,6 +646,7 @@
                 <li><strong>RPG Elements:</strong> Level up, collect XP, and choose upgrades</li>
                 <li><strong>Performance Monitoring:</strong> Built-in memory management and performance tracking</li>
                 <li><strong>Headless Mode:</strong> Can run without UI for testing and simulation</li>
+                <li><strong>Full Screen Mode:</strong> Immersive full screen gameplay with keyboard shortcut (F)</li>
             </ul>
         </div>
         
@@ -669,6 +756,48 @@
              
              // Hide startup logo after 2 seconds
              setTimeout(hideStartupLogo, 2000);
+             
+             // Full screen functionality
+             function toggleFullScreen() {
+                 const body = document.body;
+                 const fullScreenBtn = document.getElementById('fullScreenBtn');
+                 
+                 if (body.classList.contains('fullscreen')) {
+                     // Exit full screen
+                     body.classList.remove('fullscreen');
+                     fullScreenBtn.innerHTML = '🖥️ Full Screen (F)';
+                     fullScreenBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                     
+                     // Show controls and instructions
+                     document.querySelector('.controls').style.display = 'block';
+                     document.querySelector('.instructions').style.display = 'block';
+                     document.querySelector('.stats').style.display = 'block';
+                     
+                     // Resize canvas for normal mode
+                     setTimeout(resizeCanvas, 100);
+                 } else {
+                     // Enter full screen
+                     body.classList.add('fullscreen');
+                     fullScreenBtn.innerHTML = '❌ Exit Full Screen (F)';
+                     fullScreenBtn.style.background = 'linear-gradient(135deg, #FF6B6B, #FF8E8E)';
+                     
+                     // Hide controls and instructions
+                     document.querySelector('.controls').style.display = 'none';
+                     document.querySelector('.instructions').style.display = 'none';
+                     document.querySelector('.stats').style.display = 'none';
+                     
+                     // Resize canvas for full screen
+                     setTimeout(resizeCanvas, 100);
+                 }
+             }
+             
+             // Keyboard shortcut for full screen (F key)
+             document.addEventListener('keydown', function(event) {
+                 if (event.key === 'f' || event.key === 'F') {
+                     event.preventDefault();
+                     toggleFullScreen();
+                 }
+             });
          </script>
     
     <!-- Load the compiled game modules -->

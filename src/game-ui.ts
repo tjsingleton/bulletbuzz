@@ -362,6 +362,17 @@ function setupEventListeners(): void {
       // Auto-shop setting will be used when shop opens
     });
   }
+  
+  // Mobile full screen button
+  const mobileFullScreenBtn = document.getElementById("mobileFullScreenBtn");
+  if (mobileFullScreenBtn) {
+    mobileFullScreenBtn.addEventListener("click", function() {
+      // Call the global toggleFullScreen function
+      if (typeof window.toggleFullScreen === 'function') {
+        window.toggleFullScreen();
+      }
+    });
+  }
 }
 
 // Main game loop
@@ -985,6 +996,7 @@ declare global {
     printGameState: typeof printGameState;
     copyGameState: typeof copyGameState;
     recreateBackgroundCanvas: typeof recreateBackgroundCanvas;
+    toggleFullScreen: () => void;
   }
 }
 
