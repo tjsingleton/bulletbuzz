@@ -1,70 +1,40 @@
 #!/bin/bash
 
-# BulletBuzz Deployment Script
-# This script handles the complete deployment process
+# Comprehensive deployment script
+set -e
 
-set -e  # Exit on any error
+echo "🚀 Starting comprehensive deployment..."
 
-echo "🚀 Starting BulletBuzz deployment..."
+# Get current commit
+CURRENT_COMMIT=$(git rev-parse --short HEAD)
+echo "📋 Current commit: $CURRENT_COMMIT"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Build with version
+echo "🔧 Building with version..."
+npm run build:version
 
-# Function to print colored output
-print_status() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# Check if we're in the right directory
-if [ ! -f "package.json" ]; then
-    print_error "Please run this script from the bulletbuzz root directory"
-    exit 1
+# Check if there are changes
+if git diff --quiet; then
+    echo "ℹ️ No changes to commit"
+else
+    echo "📝 Committing changes..."
+    git add .
+    git commit -m "Deploy version $CURRENT_COMMIT"
 fi
 
-print_status "Building documentation..."
-mkdocs build
+# Push to remote
+echo "📤 Pushing to remote..."
+git push
 
-print_status "Recreating site/game directory..."
-rm -rf site/game
-mkdir -p site/game
+echo ""
+echo "⏳ Starting deployment monitoring..."
+echo "📊 This will monitor for 5 minutes to ensure deployment completes"
+echo ""
 
-print_status "Copying game files..."
-cp index.html site/game/
-cp -r dist site/game/
-cp logo.png favicon.ico logo-192.png logo-512.png site/game/
+# Monitor deployment
+npm run deploy:monitor
 
-print_status "Adding files to git..."
-git add -f site/game/
-git add docs/
-git add index.html
-
-# Check if there are changes to commit
-if git diff --cached --quiet; then
-    print_warning "No changes to commit"
-else
-    print_status "Committing changes..."
-    git commit -m "Deploy BulletBuzz - $(date '+%Y-%m-%d %H:%M:%S')"
-    
-    print_status "Pushing to GitHub..."
-    git push
-    
-    print_success "Deployment completed! 🎉"
-    print_status "Game will be available at: https://tjsingleton.github.io/bulletbuzz/game/"
-    print_status "Documentation will be available at: https://tjsingleton.github.io/bulletbuzz/"
-fi 
+echo ""
+echo "✅ Deployment process complete!"
+echo "🎮 Game: https://tjsingleton.github.io/bulletbuzz/game/"
+echo "📚 Docs: https://tjsingleton.github.io/bulletbuzz/" 

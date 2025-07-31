@@ -44,6 +44,8 @@
     "test:mobile-all": "node scripts/advanced-screenshots.js mobile-all",
     "test:game-over-restart": "node scripts/advanced-screenshots.js game-over-restart",
     "deploy:monitor": "node scripts/deploy-monitor.js",
+    "deploy:watch": "./scripts/watch-deploy.sh",
+    "deploy": "./scripts/deploy.sh",
     "build:version": "node scripts/build-with-version.js",
     "test:comprehensive": "node scripts/advanced-screenshots.js comprehensive",
     "test:comprehensive:local": "node scripts/advanced-screenshots.js comprehensive http://localhost:8080/game/",
