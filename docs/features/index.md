@@ -60,7 +60,7 @@ BulletBuzz is a feature-rich bullet heaven game with advanced systems for gamepl
 | **Combat System** | ✅ Complete | ✅ [Combat System](combat-system.md) | ✅ Good |
 | **Pickup System** | ✅ Complete | ✅ [Pickup System](pickup-system.md) | ✅ Good |
 | **Level System** | ✅ Complete | ✅ [Level System](level-system.md) | ✅ Good |
-| **Spawn System** | ✅ Complete | ❌ Missing | ✅ Good |
+| **Spawn System** | ✅ Complete | ✅ [Spawn System](spawn-system.md) | ✅ Good |
 
 ### 🔄 **In Progress**
 
