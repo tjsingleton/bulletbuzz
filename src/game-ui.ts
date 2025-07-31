@@ -784,9 +784,11 @@ function updateStats(): void {
   
   if (game && statsDiv && enemyStatsDiv) {
     const gameState = game.getGameState();
-    const xpProgress = (game as any).game.levelSystem.getXpProgress();
-    statsDiv.innerText = `Level: ${gameState.level} | XP: ${xpProgress.current}/${xpProgress.required} | HP: ${Math.max(0, Math.floor(gameState.player.hp))}/${gameState.player.maxHp} | Speed: ${gameState.player.speed.toFixed(2)} | Pickup: ${gameState.player.pickupRange} | Attack Range: ${gameState.player.attackRange} | Axes: ${gameState.axesCount}`;
-    enemyStatsDiv.innerText = `Enemies: ${gameState.enemiesCount} | Type: 🐝 | HP: 1 | Speed: ${gameState.player.speed} | APS: 1.0`;
+    
+    // Only show stats that aren't already visible on canvas
+    // Remove Level, XP, HP since they're shown on canvas
+    statsDiv.innerText = `Speed: ${gameState.player.speed.toFixed(2)} | Pickup: ${gameState.player.pickupRange} | Attack Range: ${gameState.player.attackRange} | Axes: ${gameState.axesCount}`;
+    enemyStatsDiv.innerText = `Enemies: ${gameState.enemiesCount} | Type: 🐝 | HP: 1 | APS: 1.0`;
     
     // Auto-log performance issues (only when there's a problem)
     const memory = game.getMemoryUsage();

@@ -47,15 +47,15 @@
         /* Responsive canvas sizing */
         @media (max-width: 768px) {
             #gameCanvas {
-                max-width: 95vw;
-                max-height: 60vh;
+                max-width: 98vw;
+                max-height: 75vh;
             }
         }
         
         @media (max-width: 480px) {
             #gameCanvas {
-                max-width: 90vw;
-                max-height: 50vh;
+                max-width: 95vw;
+                max-height: 70vh;
             }
         }
         
@@ -257,6 +257,39 @@
             border-color: rgba(220, 53, 69, 0.6);
         }
         
+        /* Startup logo flash */
+        .startup-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        
+        .startup-logo.fade-out {
+            opacity: 0;
+        }
+        
+        .startup-logo img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: pulse 2s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
         /* Show mobile controls on touch devices */
         @media (hover: none) and (pointer: coarse) {
             .mobile-controls {
@@ -273,11 +306,12 @@
     </style>
 </head>
 <body>
+    <!-- Startup Logo Flash -->
+    <div class="startup-logo" id="startupLogo">
+        <img src="logo.png" alt="BulletBuzz Logo">
+    </div>
+    
     <div class="container">
-        <div class="logo-section" style="text-align: center; margin-bottom: 30px;">
-            <img src="logo.png" alt="BulletBuzz Logo" style="max-width: 150px; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-        </div>
-        
         <div class="game-section">
             <canvas id="gameCanvas"></canvas>
         </div>
@@ -392,19 +426,19 @@
             // Calculate responsive dimensions
             let canvasWidth, canvasHeight;
             
-            if (window.innerWidth <= 480) {
-                // Mobile: 90% width, 50% viewport height
-                canvasWidth = Math.min(containerWidth * 0.9, 400);
-                canvasHeight = Math.min(window.innerHeight * 0.5, 300);
-            } else if (window.innerWidth <= 768) {
-                // Tablet: 95% width, 60% viewport height
-                canvasWidth = Math.min(containerWidth * 0.95, 600);
-                canvasHeight = Math.min(window.innerHeight * 0.6, 450);
-            } else {
-                // Desktop: 800x600 or smaller if needed
-                canvasWidth = Math.min(800, containerWidth - 40);
-                canvasHeight = Math.min(600, window.innerHeight * 0.7);
-            }
+                             if (window.innerWidth <= 480) {
+                     // Mobile: 95% width, 70% viewport height
+                     canvasWidth = Math.min(containerWidth * 0.95, window.innerWidth * 0.95);
+                     canvasHeight = Math.min(window.innerHeight * 0.7, window.innerHeight * 0.7);
+                 } else if (window.innerWidth <= 768) {
+                     // Tablet: 98% width, 75% viewport height
+                     canvasWidth = Math.min(containerWidth * 0.98, window.innerWidth * 0.98);
+                     canvasHeight = Math.min(window.innerHeight * 0.75, window.innerHeight * 0.75);
+                 } else {
+                     // Desktop: 800x600 or larger if space allows
+                     canvasWidth = Math.min(800, containerWidth - 40);
+                     canvasHeight = Math.min(600, window.innerHeight * 0.8);
+                 }
             
             // Set canvas dimensions
             canvas.width = canvasWidth;
@@ -439,11 +473,25 @@
         window.addEventListener('load', resizeCanvas);
         window.addEventListener('resize', resizeCanvas);
         
-        // Resize on orientation change (mobile)
-        window.addEventListener('orientationchange', () => {
-            setTimeout(resizeCanvas, 100);
-        });
-    </script>
+                     // Resize on orientation change (mobile)
+             window.addEventListener('orientationchange', () => {
+                 setTimeout(resizeCanvas, 100);
+             });
+             
+             // Handle startup logo flash
+             function hideStartupLogo() {
+                 const startupLogo = document.getElementById('startupLogo');
+                 if (startupLogo) {
+                     startupLogo.classList.add('fade-out');
+                     setTimeout(() => {
+                         startupLogo.style.display = 'none';
+                     }, 1000);
+                 }
+             }
+             
+             // Hide startup logo after 2 seconds
+             setTimeout(hideStartupLogo, 2000);
+         </script>
     
     <!-- Load the compiled game modules -->
     <script type="module">
