@@ -35,6 +35,7 @@
     "test:docs-logo-size": "node scripts/advanced-screenshots.js docs-logo-size",
     "test:mermaid-diagram": "node scripts/advanced-screenshots.js mermaid-diagram",
     "test:mobile-controls": "node scripts/advanced-screenshots.js mobile-controls",
+    "test:responsive-canvas": "node scripts/advanced-screenshots.js responsive-canvas",
     "test:comprehensive": "node scripts/advanced-screenshots.js comprehensive",
     "test:comprehensive:local": "node scripts/advanced-screenshots.js comprehensive http://localhost:8080/game/",
     "test:comprehensive:game": "node scripts/advanced-screenshots.js comprehensive https://tjsingleton.github.io/bulletbuzz/game/",

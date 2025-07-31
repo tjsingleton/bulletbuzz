@@ -901,6 +901,73 @@ class GameScreenshotTaker {
     }
   }
 
+  async testResponsiveCanvas() {
+    try {
+      await this.init();
+      
+      console.log('📱 Testing responsive canvas...');
+      
+      // Test 1: Check if canvas is present
+      const canvas = await this.page.locator('#gameCanvas');
+      const isVisible = await canvas.isVisible();
+      
+      if (isVisible) {
+        console.log('✅ Canvas is visible');
+      } else {
+        console.log('❌ Canvas not visible');
+        return;
+      }
+      
+      // Test 2: Check canvas dimensions
+      const canvasDimensions = await this.page.evaluate(() => {
+        const canvas = document.getElementById('gameCanvas');
+        if (!canvas) return null;
+        return {
+          width: canvas.width,
+          height: canvas.height,
+          offsetWidth: canvas.offsetWidth,
+          offsetHeight: canvas.offsetHeight
+        };
+      });
+      
+      if (canvasDimensions) {
+        console.log(`📏 Canvas dimensions: ${canvasDimensions.width}x${canvasDimensions.height}`);
+        console.log(`📐 Display size: ${canvasDimensions.offsetWidth}x${canvasDimensions.offsetHeight}`);
+        
+        if (canvasDimensions.width > 0 && canvasDimensions.height > 0) {
+          console.log('✅ Canvas has valid dimensions');
+        } else {
+          console.log('❌ Canvas has invalid dimensions');
+        }
+      } else {
+        console.log('❌ Could not get canvas dimensions');
+      }
+      
+      // Test 3: Check if canvas is responsive
+      const isResponsive = await this.page.evaluate(() => {
+        const canvas = document.getElementById('gameCanvas');
+        if (!canvas) return false;
+        
+        const styles = window.getComputedStyle(canvas);
+        return styles.maxWidth === '100%' || styles.maxWidth.includes('vw');
+      });
+      
+      if (isResponsive) {
+        console.log('✅ Canvas has responsive CSS');
+      } else {
+        console.log('⚠️ Canvas may not be fully responsive');
+      }
+      
+      await this.takeScreenshot('responsive-canvas-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing responsive canvas:', error);
+      await this.takeScreenshot('error-responsive-canvas-test');
+    } finally {
+      await this.close();
+    }
+  }
+
   async testMobileControls() {
     try {
       await this.init();
@@ -1032,6 +1099,11 @@ async function main() {
         case 'mobile-controls':
           console.log('📱 Testing mobile controls...');
           await taker.testMobileControls();
+          break;
+          
+        case 'responsive-canvas':
+          console.log('📱 Testing responsive canvas...');
+          await taker.testResponsiveCanvas();
           break;
         
       case 'all':

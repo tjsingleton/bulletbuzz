@@ -251,6 +251,11 @@ function setupEventListeners(): void {
     if (game && game.isShopOpen()) {
       handleShopClick(x, y);
     }
+    
+    // Handle game over clicks
+    if (game && game.isGameOver()) {
+      handleGameOverClick(x, y);
+    }
   });
   
   // Game speed slider
@@ -703,11 +708,31 @@ function drawGameOver(): void {
   const xpEfficiency = (gameState.xpCollected / Math.max(1, gameState.enemiesKilled)).toFixed(2);
   drawStatLine('🎯', 'XP Efficiency', `${xpEfficiency} XP/kill`, '#F39C12');
   
-  // Instructions
+  // Restart button
+  const restartButtonY = panelY + panelHeight - 50;
+  const restartButtonHeight = 30;
+  const restartButtonWidth = 200;
+  const restartButtonX = (canvas.width - restartButtonWidth) / 2;
+  
+  // Button background
+  ctx.fillStyle = '#4CAF50';
+  ctx.fillRect(restartButtonX, restartButtonY, restartButtonWidth, restartButtonHeight);
+  
+  // Button border
+  ctx.strokeStyle = '#45a049';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(restartButtonX, restartButtonY, restartButtonWidth, restartButtonHeight);
+  
+  // Button text
   ctx.fillStyle = 'white';
-  ctx.font = '20px serif';
+  ctx.font = '16px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Press R to restart or refresh the page', canvas.width / 2, panelY + panelHeight - 30);
+  ctx.fillText('🔄 Restart Game', canvas.width / 2, restartButtonY + 20);
+  
+  // Additional instruction
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px serif';
+  ctx.fillText('Or press R key', canvas.width / 2, restartButtonY + restartButtonHeight + 20);
 }
 
 // Handle shop click
@@ -729,6 +754,26 @@ function handleShopClick(x: number, y: number): void {
         game!.selectShopOption(option.key);
       }
     });
+  }
+}
+
+// Handle game over click
+function handleGameOverClick(x: number, y: number): void {
+  if (!game || !canvas) return;
+  
+  const panelWidth = 500;
+  const panelHeight = 400;
+  const panelX = (canvas.width - panelWidth) / 2;
+  const panelY = (canvas.height - panelHeight) / 2;
+  
+  // Check if click is within the restart button area (bottom of panel)
+  const restartButtonY = panelY + panelHeight - 50;
+  const restartButtonHeight = 30;
+  
+  if (x >= panelX && x <= panelX + panelWidth &&
+      y >= restartButtonY && y <= restartButtonY + restartButtonHeight) {
+    // Restart the game
+    resetGame();
   }
 }
 
