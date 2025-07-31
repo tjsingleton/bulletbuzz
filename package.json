@@ -55,7 +55,12 @@
     "deploy": "./scripts/deploy.sh",
     "deploy:quick": "./scripts/quick-deploy.sh",
     "test:all": "./scripts/test-deployment.sh",
-    "logo:update": "./scripts/update-logo.sh"
+    "logo:update": "./scripts/update-logo.sh",
+    "clean:tmp": "rm -rf tmp/",
+    "clean:dist": "rm -rf dist/",
+    "clean:site": "rm -rf site/",
+    "clean:build": "npm run clean:dist && npm run clean:site",
+    "clean:all": "npm run clean:build && npm run clean:tmp"
   },
   "repository": {
     "type": "git",
