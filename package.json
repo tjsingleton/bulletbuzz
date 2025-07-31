@@ -34,6 +34,7 @@
     "test:game-doc-link": "node advanced-screenshots.js game-doc-link",
     "test:docs-logo-size": "node advanced-screenshots.js docs-logo-size",
     "test:mermaid-diagram": "node advanced-screenshots.js mermaid-diagram",
+    "test:mobile-controls": "node advanced-screenshots.js mobile-controls",
   "test:comprehensive": "node advanced-screenshots.js comprehensive",
   "test:comprehensive:local": "node advanced-screenshots.js comprehensive http://localhost:8080/game/",
   "test:comprehensive:game": "node advanced-screenshots.js comprehensive https://tjsingleton.github.io/bulletbuzz/game/",

@@ -881,6 +881,69 @@ class GameScreenshotTaker {
     }
   }
 
+  async testMobileControls() {
+    try {
+      await this.init();
+      
+      console.log('📱 Testing mobile controls...');
+      
+      // Test 1: Check if mobile controls are present
+      const mobileControls = await this.page.locator('.mobile-controls').isVisible();
+      if (mobileControls) {
+        console.log('✅ Mobile controls container visible');
+      } else {
+        console.log('⚠️ Mobile controls not visible (may be desktop)');
+      }
+      
+      // Test 2: Check joystick elements
+      const joystickBase = await this.page.locator('#joystickBase').isVisible();
+      const joystickThumb = await this.page.locator('#joystickThumb').isVisible();
+      
+      if (joystickBase && joystickThumb) {
+        console.log('✅ Virtual joystick elements present');
+      } else {
+        console.log('⚠️ Virtual joystick elements not found');
+      }
+      
+      // Test 3: Check action buttons
+      const pauseButton = await this.page.locator('#pauseButton').isVisible();
+      const resetButton = await this.page.locator('#resetButton').isVisible();
+      
+      if (pauseButton && resetButton) {
+        console.log('✅ Action buttons present');
+      } else {
+        console.log('⚠️ Action buttons not found');
+      }
+      
+      // Test 4: Check CSS for mobile responsiveness
+      const mobileStyles = await this.page.evaluate(() => {
+        const mobileControls = document.querySelector('.mobile-controls');
+        if (!mobileControls) return false;
+        
+        const styles = window.getComputedStyle(mobileControls);
+        return {
+          display: styles.display,
+          position: styles.position,
+          zIndex: styles.zIndex
+        };
+      });
+      
+      if (mobileStyles) {
+        console.log('✅ Mobile controls CSS properly configured');
+        console.log(`   Display: ${mobileStyles.display}, Position: ${mobileStyles.position}, Z-index: ${mobileStyles.zIndex}`);
+      }
+      
+      await this.takeScreenshot('mobile-controls-test');
+      
+    } catch (error) {
+      console.error('❌ Error testing mobile controls:', error);
+      await this.takeScreenshot('error-mobile-controls-test');
+      throw error;
+    } finally {
+      await this.close();
+    }
+  }
+
   // Clean up temporary screenshots directory
   cleanup() {
     if (fs.existsSync(this.screenshotsDir)) {
@@ -941,10 +1004,15 @@ async function main() {
         await taker.testDocumentationLogoSize();
         break;
         
-      case 'mermaid-diagram':
-        console.log('📊 Testing Mermaid diagram rendering...');
-        await taker.testMermaidDiagram();
-        break;
+              case 'mermaid-diagram':
+          console.log('📊 Testing Mermaid diagram rendering...');
+          await taker.testMermaidDiagram();
+          break;
+          
+        case 'mobile-controls':
+          console.log('📱 Testing mobile controls...');
+          await taker.testMobileControls();
+          break;
         
       case 'all':
       default:
