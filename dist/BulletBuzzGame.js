@@ -5,6 +5,9 @@ import { Game } from './core/Game.js';
  */
 export class BulletBuzzGame {
     constructor(config = {}) {
+        // Canvas dimensions
+        this.canvasWidth = 800;
+        this.canvasHeight = 600;
         // Shop system
         this.shopOptions = [];
         this.game = new Game(config);
@@ -44,6 +47,15 @@ export class BulletBuzzGame {
      */
     setAutoPathing(enabled) {
         this.game.setAutoPathing(enabled);
+    }
+    /**
+     * Set canvas dimensions
+     */
+    setCanvasDimensions(width, height) {
+        this.canvasWidth = width;
+        this.canvasHeight = height;
+        this.game.canvasWidth = width;
+        this.game.canvasHeight = height;
     }
     /**
      * Get auto-pathing status

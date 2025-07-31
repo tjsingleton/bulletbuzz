@@ -25,8 +25,13 @@ export class Player implements PlayerType {
   private lastKilledEnemy: { x: number; y: number } | null = null;
   
   // Canvas dimensions
-  private readonly canvasWidth: number = 800;
-  private readonly canvasHeight: number = 600;
+  private canvasWidth: number = 800;
+  private canvasHeight: number = 600;
+  
+  public setCanvasDimensions(width: number, height: number): void {
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+  }
 
   constructor(config: GameConfig = {}) {
     this.hp = config.startHp ?? 10;

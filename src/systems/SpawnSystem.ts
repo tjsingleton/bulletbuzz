@@ -10,8 +10,13 @@ import { HeartDrop } from '../core/HeartDrop.js';
 export class SpawnSystem {
   private game: Game;
   private spawnTimer: number = 0;
-  private readonly canvasWidth: number = 800;
-  private readonly canvasHeight: number = 600;
+  private canvasWidth: number = 800;
+  private canvasHeight: number = 600;
+  
+  public setCanvasDimensions(width: number, height: number): void {
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+  }
 
   constructor(game: Game) {
     this.game = game;

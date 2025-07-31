@@ -72,7 +72,15 @@ function initGameUI(): void {
     minSpawnInterval: 4500
   };
   
+  // Get canvas dimensions for game initialization
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  
   game = new BulletBuzzGame(config);
+  
+  // Update game canvas dimensions to match the actual canvas
+  game.canvasWidth = canvasWidth;
+  game.canvasHeight = canvasHeight;
   
   // Start game loop
   requestAnimationFrame(gameLoop);

@@ -5,6 +5,8 @@ import { GameConfig, GameState, MemoryUsage, ShopOption } from './types.js';
  */
 export declare class BulletBuzzGame {
     private game;
+    canvasWidth: number;
+    canvasHeight: number;
     private shopOptions;
     constructor(config?: GameConfig);
     /**
@@ -31,6 +33,10 @@ export declare class BulletBuzzGame {
      * Set auto-pathing mode
      */
     setAutoPathing(enabled: boolean): void;
+    /**
+     * Set canvas dimensions
+     */
+    setCanvasDimensions(width: number, height: number): void;
     /**
      * Get auto-pathing status
      */

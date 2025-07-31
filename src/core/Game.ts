@@ -77,8 +77,8 @@ export class Game {
   public levelSystem: LevelSystem;
   
   // Canvas dimensions (for bounds checking)
-  public readonly canvasWidth: number = 800;
-  public readonly canvasHeight: number = 600;
+  public canvasWidth: number = 800;
+  public canvasHeight: number = 600;
 
   constructor(config: GameConfig = {}) {
     // Initialize game parameters with defaults

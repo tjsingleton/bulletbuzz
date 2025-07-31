@@ -8,6 +8,10 @@ import { Game } from './core/Game.js';
 export class BulletBuzzGame {
   private game: Game;
   
+  // Canvas dimensions
+  public canvasWidth: number = 800;
+  public canvasHeight: number = 600;
+  
   // Shop system
   private shopOptions: ShopOption[] = [];
 
@@ -55,6 +59,16 @@ export class BulletBuzzGame {
    */
   public setAutoPathing(enabled: boolean): void {
     this.game.setAutoPathing(enabled);
+  }
+  
+  /**
+   * Set canvas dimensions
+   */
+  public setCanvasDimensions(width: number, height: number): void {
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+    this.game.canvasWidth = width;
+    this.game.canvasHeight = height;
   }
 
   /**

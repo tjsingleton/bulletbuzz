@@ -29,6 +29,8 @@
             text-align: center;
             margin-bottom: 30px;
             position: relative;
+            max-width: 100%;
+            overflow: hidden;
         }
         
         #gameCanvas {
@@ -36,6 +38,25 @@
             border-radius: 10px;
             background: #1a1a1a;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Responsive canvas sizing */
+        @media (max-width: 768px) {
+            #gameCanvas {
+                max-width: 95vw;
+                max-height: 60vh;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #gameCanvas {
+                max-width: 90vw;
+                max-height: 50vh;
+            }
         }
         
         .controls {
@@ -258,7 +279,7 @@
         </div>
         
         <div class="game-section">
-            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <canvas id="gameCanvas"></canvas>
         </div>
         
         <!-- Mobile Controls -->
@@ -358,6 +379,72 @@
         </footer>
     </div>
 
+    <!-- Responsive canvas sizing -->
+    <script>
+        function resizeCanvas() {
+            const canvas = document.getElementById('gameCanvas');
+            if (!canvas) return;
+            
+            const container = canvas.parentElement;
+            const containerWidth = container.clientWidth;
+            const containerHeight = window.innerHeight * 0.6; // 60% of viewport height
+            
+            // Calculate responsive dimensions
+            let canvasWidth, canvasHeight;
+            
+            if (window.innerWidth <= 480) {
+                // Mobile: 90% width, 50% viewport height
+                canvasWidth = Math.min(containerWidth * 0.9, 400);
+                canvasHeight = Math.min(window.innerHeight * 0.5, 300);
+            } else if (window.innerWidth <= 768) {
+                // Tablet: 95% width, 60% viewport height
+                canvasWidth = Math.min(containerWidth * 0.95, 600);
+                canvasHeight = Math.min(window.innerHeight * 0.6, 450);
+            } else {
+                // Desktop: 800x600 or smaller if needed
+                canvasWidth = Math.min(800, containerWidth - 40);
+                canvasHeight = Math.min(600, window.innerHeight * 0.7);
+            }
+            
+            // Set canvas dimensions
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            
+            // Update game dimensions if game is running
+            if (window.internalGame) {
+                window.internalGame.canvasWidth = canvasWidth;
+                window.internalGame.canvasHeight = canvasHeight;
+                
+                // Update all game objects with new canvas dimensions
+                if (window.internalGame.player) {
+                    window.internalGame.player.setCanvasDimensions(canvasWidth, canvasHeight);
+                }
+                if (window.internalGame.spawnSystem) {
+                    window.internalGame.spawnSystem.setCanvasDimensions(canvasWidth, canvasHeight);
+                }
+                
+                // Update all enemies
+                window.internalGame.enemies.forEach(enemy => {
+                    enemy.setCanvasDimensions(canvasWidth, canvasHeight);
+                });
+                
+                // Update all axes
+                window.internalGame.axes.forEach(axe => {
+                    axe.setCanvasDimensions(canvasWidth, canvasHeight);
+                });
+            }
+        }
+        
+        // Resize on load and window resize
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Resize on orientation change (mobile)
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeCanvas, 100);
+        });
+    </script>
+    
     <!-- Load the compiled game modules -->
     <script type="module">
         import { BulletBuzzGame } from './dist/BulletBuzzGame.js';

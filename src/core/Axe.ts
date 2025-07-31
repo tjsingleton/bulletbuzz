@@ -16,8 +16,13 @@ export class Axe implements AxeType {
   // Movement
   private velocityX: number;
   private velocityY: number;
-  private readonly canvasWidth: number = 800;
-  private readonly canvasHeight: number = 600;
+  private canvasWidth: number = 800;
+  private canvasHeight: number = 600;
+  
+  public setCanvasDimensions(width: number, height: number): void {
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+  }
 
   constructor(x: number, y: number, targetX: number, targetY: number, speed: number, damage: number) {
     this.x = x;
