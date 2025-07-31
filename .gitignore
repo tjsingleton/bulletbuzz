@@ -9,7 +9,7 @@ dist/
 *.js.map
 
 # Temporary files
-.tmp/
+tmp/
 
 # IDE files
 .vscode/
