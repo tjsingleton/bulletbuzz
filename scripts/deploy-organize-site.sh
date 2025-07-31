@@ -17,27 +17,30 @@ mkdir -p site/game
 cp index.html site/game/
 cp -r dist site/game/
 
+# Create assets directory and copy assets
+mkdir -p site/game/assets
+
 # Copy assets with error handling
 if [ -f "assets/logo.png" ]; then
-  cp assets/logo.png site/game/
+  cp assets/logo.png site/game/assets/
 else
   echo "⚠️ Warning: logo.png not found in assets/"
 fi
 
 if [ -f "assets/favicon.ico" ]; then
-  cp assets/favicon.ico site/game/
+  cp assets/favicon.ico site/game/assets/
 else
   echo "⚠️ Warning: favicon.ico not found in assets/"
 fi
 
 if [ -f "assets/logo-192.png" ]; then
-  cp assets/logo-192.png site/game/
+  cp assets/logo-192.png site/game/assets/
 else
   echo "⚠️ Warning: logo-192.png not found in assets/"
 fi
 
 if [ -f "assets/logo-512.png" ]; then
-  cp assets/logo-512.png site/game/
+  cp assets/logo-512.png site/game/assets/
 else
   echo "⚠️ Warning: logo-512.png not found in assets/"
 fi
@@ -54,6 +57,8 @@ cp LICENSE site/
 
 echo "Contents of site/game after copy:"
 ls -la site/game/
+echo "Contents of site/game/assets after copy:"
+ls -la site/game/assets/
 echo "Contents of site root after copy:"
 ls -la site/
 
@@ -65,6 +70,11 @@ fi
 
 if [ ! -f "site/game/dist/game-ui.js" ]; then
   echo "❌ Error: game-ui.js not copied to site/game/dist/"
+  exit 1
+fi
+
+if [ ! -f "site/game/assets/logo.png" ]; then
+  echo "❌ Error: logo.png not copied to site/game/assets/"
   exit 1
 fi
 
