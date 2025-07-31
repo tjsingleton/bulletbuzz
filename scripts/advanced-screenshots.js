@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 class GameScreenshotTaker {
-  constructor() {
+  constructor(url = 'http://localhost:8080/game/') {
+    this.url = url;
     this.browser = null;
     this.page = null;
     this.screenshotsDir = path.join(__dirname, '.tmp', 'screenshots');
@@ -965,6 +966,192 @@ class GameScreenshotTaker {
     }
   }
 
+  async testMobileDevices() {
+    try {
+      await this.init();
+      
+      console.log('📱 Testing mobile device compatibility...');
+      
+      // Test different mobile devices and orientations
+      const devices = [
+        { name: 'iPhone 12', width: 390, height: 844, orientation: 'portrait' },
+        { name: 'iPhone 12', width: 844, height: 390, orientation: 'landscape' },
+        { name: 'iPhone 12 Pro Max', width: 428, height: 926, orientation: 'portrait' },
+        { name: 'iPhone 12 Pro Max', width: 926, height: 428, orientation: 'landscape' },
+        { name: 'iPad', width: 768, height: 1024, orientation: 'portrait' },
+        { name: 'iPad', width: 1024, height: 768, orientation: 'landscape' },
+        { name: 'iPad Pro', width: 834, height: 1194, orientation: 'portrait' },
+        { name: 'iPad Pro', width: 1194, height: 834, orientation: 'landscape' }
+      ];
+      
+      for (const device of devices) {
+        console.log(`📱 Testing ${device.name} (${device.orientation})...`);
+        
+        // Set viewport for device
+        await this.page.setViewportSize({ width: device.width, height: device.height });
+        
+        // Navigate to the game
+        await this.page.goto(this.url);
+        await this.page.waitForTimeout(2000);
+        
+        // Check if canvas is visible
+        const canvas = await this.page.locator('#gameCanvas');
+        const isVisible = await canvas.isVisible();
+        
+        if (isVisible) {
+          console.log(`✅ Canvas visible on ${device.name} (${device.orientation})`);
+          
+          // Get canvas dimensions
+          const canvasWidth = await canvas.getAttribute('width');
+          const canvasHeight = await canvas.getAttribute('height');
+          const offsetWidth = await canvas.evaluate(el => el.offsetWidth);
+          const offsetHeight = await canvas.evaluate(el => el.offsetHeight);
+          
+          console.log(`📏 Canvas: ${canvasWidth}x${canvasHeight} (display: ${offsetWidth}x${offsetHeight})`);
+          
+          // Check responsive behavior
+          const viewportRatio = offsetWidth / device.width;
+          if (viewportRatio > 0.8) {
+            console.log(`✅ Canvas taking up good screen space (${(viewportRatio * 100).toFixed(1)}%)`);
+          } else {
+            console.log(`⚠️ Canvas could use more space (${(viewportRatio * 100).toFixed(1)}%)`);
+          }
+          
+          // Check mobile controls visibility
+          const mobileControls = await this.page.locator('.mobile-controls');
+          const controlsVisible = await mobileControls.isVisible();
+          
+          if (controlsVisible) {
+            console.log(`✅ Mobile controls visible on ${device.name}`);
+          } else {
+            console.log(`⚠️ Mobile controls not visible on ${device.name}`);
+          }
+          
+          // Check if startup logo is present (should fade out)
+          const startupLogo = await this.page.locator('#startupLogo');
+          const logoVisible = await startupLogo.isVisible();
+          
+          if (logoVisible) {
+            console.log(`✅ Startup logo present on ${device.name}`);
+          } else {
+            console.log(`ℹ️ Startup logo not visible (likely faded out) on ${device.name}`);
+          }
+          
+        } else {
+          console.log(`❌ Canvas not visible on ${device.name} (${device.orientation})`);
+        }
+        
+        // Take screenshot for this device
+        await this.takeScreenshot(`mobile-${device.name.toLowerCase().replace(/\s+/g, '-')}-${device.orientation}`);
+        
+        console.log(`📸 Screenshot saved for ${device.name} (${device.orientation})`);
+      }
+      
+      console.log('✅ Mobile device testing completed');
+      
+    } catch (error) {
+      console.error('❌ Error testing mobile devices:', error);
+      await this.takeScreenshot('error-mobile-devices-test');
+    } finally {
+      await this.close();
+    }
+  }
+
+  async testManualModeMobile() {
+    try {
+      await this.init();
+      
+      console.log('📱 Testing manual mode on mobile devices...');
+      
+      // Test manual mode on different mobile devices
+      const devices = [
+        { name: 'iPhone 12', width: 390, height: 844, orientation: 'portrait' },
+        { name: 'iPhone 12', width: 844, height: 390, orientation: 'landscape' },
+        { name: 'iPad', width: 768, height: 1024, orientation: 'portrait' },
+        { name: 'iPad', width: 1024, height: 768, orientation: 'landscape' }
+      ];
+      
+      for (const device of devices) {
+        console.log(`📱 Testing manual mode on ${device.name} (${device.orientation})...`);
+        
+        // Set viewport for device
+        await this.page.setViewportSize({ width: device.width, height: device.height });
+        
+        // Navigate to manual mode URL
+        const manualModeUrl = `${this.url}?autoPath=false&autoShop=false&manualStart=true`;
+        await this.page.goto(manualModeUrl);
+        await this.page.waitForTimeout(2000);
+        
+        // Check if manual start overlay is present
+        const overlay = await this.page.locator('#manualStartOverlay');
+        const overlayVisible = await overlay.isVisible();
+        
+        if (overlayVisible) {
+          console.log(`✅ Manual start overlay visible on ${device.name} (${device.orientation})`);
+          
+          // Check overlay content
+          const overlayText = await overlay.textContent();
+          if (overlayText && overlayText.includes('Tap to Start')) {
+            console.log(`✅ Manual start overlay has correct text on ${device.name}`);
+          } else {
+            console.log(`❌ Manual start overlay text not found on ${device.name}`);
+          }
+          
+          // Check if auto-features are disabled
+          const autoPathCheckbox = await this.page.locator('#autoPath');
+          const autoShopCheckbox = await this.page.locator('#autoShop');
+          
+          const autoPathChecked = await autoPathCheckbox.isChecked();
+          const autoShopChecked = await autoShopCheckbox.isChecked();
+          
+          if (!autoPathChecked && !autoShopChecked) {
+            console.log(`✅ Auto-features correctly disabled on ${device.name}`);
+          } else {
+            console.log(`❌ Auto-features not properly disabled on ${device.name}`);
+          }
+          
+          // Click the overlay to start the game
+          await overlay.click();
+          await this.page.waitForTimeout(1000);
+          
+          // Check if overlay is hidden after click
+          const overlayHidden = await overlay.isHidden();
+          if (overlayHidden) {
+            console.log(`✅ Manual start overlay hidden after click on ${device.name}`);
+          } else {
+            console.log(`❌ Manual start overlay still visible after click on ${device.name}`);
+          }
+          
+          // Check if game is running
+          const canvas = await this.page.locator('#gameCanvas');
+          const canvasVisible = await canvas.isVisible();
+          
+          if (canvasVisible) {
+            console.log(`✅ Game canvas visible after manual start on ${device.name}`);
+          } else {
+            console.log(`❌ Game canvas not visible after manual start on ${device.name}`);
+          }
+          
+        } else {
+          console.log(`❌ Manual start overlay not visible on ${device.name} (${device.orientation})`);
+        }
+        
+        // Take screenshot for this device
+        await this.takeScreenshot(`manual-mobile-${device.name.toLowerCase().replace(/\s+/g, '-')}-${device.orientation}`);
+        
+        console.log(`📸 Screenshot saved for manual mode on ${device.name} (${device.orientation})`);
+      }
+      
+      console.log('✅ Manual mode mobile testing completed');
+      
+    } catch (error) {
+      console.error('❌ Error testing manual mode on mobile:', error);
+      await this.takeScreenshot('error-manual-mode-mobile-test');
+    } finally {
+      await this.close();
+    }
+  }
+
   async testManualMode() {
     try {
       await this.init();
@@ -1320,7 +1507,7 @@ async function main() {
   
   console.log('📸 Starting advanced screenshot tests...');
   
-  const taker = new GameScreenshotTaker();
+  const taker = new GameScreenshotTaker(url);
   
   // Clean up any existing screenshots
   taker.cleanup();
@@ -1388,14 +1575,30 @@ async function main() {
           await taker.testStatsDisplayCleanup();
           break;
           
+        case 'mobile-devices':
+          console.log('📱 Testing mobile device compatibility...');
+          await taker.testMobileDevices();
+          break;
+          
         case 'manual-mode':
           console.log('🎮 Testing manual mode functionality...');
           await taker.testManualMode();
           break;
           
+        case 'manual-mode-mobile':
+          console.log('📱 Testing manual mode on mobile devices...');
+          await taker.testManualModeMobile();
+          break;
+          
         case 'game-over-restart':
           console.log('🎮 Testing game over restart button...');
           await taker.testGameOverRestartButton();
+          break;
+          
+        case 'mobile-all':
+          console.log('📱 Running all mobile tests...');
+          await taker.testMobileDevices();
+          await taker.testManualModeMobile();
           break;
         
       case 'all':
