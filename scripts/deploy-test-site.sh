@@ -31,13 +31,16 @@ test_url_with_retries() {
   return 1
 }
 
-# Test game page
-test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/game/" "Game page"
+# Test game page (served from root)
+test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/" "Game page"
 
 # Test documentation page
 test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/" "Documentation page"
 
 # Test critical game files
-test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/game/dist/game-ui.js" "Game UI JavaScript"
+test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/dist/game-ui.js" "Game UI JavaScript"
+
+# Test logo file
+test_url_with_retries "https://tjsingleton.github.io/bulletbuzz/assets/logo.png" "Logo file"
 
 echo "✅ Deployment testing complete" 
