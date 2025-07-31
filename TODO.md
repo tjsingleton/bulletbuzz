@@ -8,7 +8,7 @@
 - [x] **Shop System Documentation** - Document upgrade system and shop mechanics
 - [x] **Combat System Documentation** - Document axe throwing, collision detection
 - [x] **Pickup System Documentation** - Document XP and heart collection mechanics
-- [ ] **Level System Documentation** - Document progression and upgrades
+- [x] **Level System Documentation** - Document progression and upgrades
 - [ ] **Spawn System Documentation** - Document enemy and pickup generation
 - [ ] **UI Features Documentation** - Document game over screen, pause functionality, manual mode
 - [x] **Create Features Index** - Organize all feature documentation with navigation
