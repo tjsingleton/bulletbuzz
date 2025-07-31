@@ -43,6 +43,8 @@
     "test:manual-mode-mobile": "node scripts/advanced-screenshots.js manual-mode-mobile",
     "test:mobile-all": "node scripts/advanced-screenshots.js mobile-all",
     "test:game-over-restart": "node scripts/advanced-screenshots.js game-over-restart",
+    "deploy:monitor": "node scripts/deploy-monitor.js",
+    "build:version": "node scripts/build-with-version.js",
     "test:comprehensive": "node scripts/advanced-screenshots.js comprehensive",
     "test:comprehensive:local": "node scripts/advanced-screenshots.js comprehensive http://localhost:8080/game/",
     "test:comprehensive:game": "node scripts/advanced-screenshots.js comprehensive https://tjsingleton.github.io/bulletbuzz/game/",

@@ -2,6 +2,8 @@
 
 <img src="logo.png" alt="BulletBuzz Logo" width="100" style="max-width: 100px; height: auto;">
 
+<!-- Version: 750b788 -->
+
 ## 🚀 Quick Start
 
 **🎮 [Play BulletBuzz Game](https://tjsingleton.github.io/bulletbuzz/game/)**
