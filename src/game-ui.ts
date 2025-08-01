@@ -305,6 +305,21 @@ function setupEventListeners(): void {
     if (e.key === 'r' || e.key === 'R') {
       resetGame();
     }
+    // Toggle Auto-Pathing with 'A'
+    if (e.key === 'a' || e.key === 'A') {
+      const autoPathCheckbox = document.getElementById('autoPath') as HTMLInputElement;
+      if (autoPathCheckbox) {
+        autoPathCheckbox.checked = !autoPathCheckbox.checked;
+        if (game) game.setAutoPathing(autoPathCheckbox.checked);
+      }
+    }
+    // Toggle Auto-Shop with 'S'
+    if (e.key === 's' || e.key === 'S') {
+      const autoShopCheckbox = document.getElementById('autoShop') as HTMLInputElement;
+      if (autoShopCheckbox) {
+        autoShopCheckbox.checked = !autoShopCheckbox.checked;
+      }
+    }
     if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4' || e.key === '5') {
       if (game && game.isShopOpen()) {
         game.selectShopOption(e.key);
