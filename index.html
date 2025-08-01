@@ -489,10 +489,13 @@
         }
         
         .fullscreen #gameCanvas {
-            max-width: 100% !important;
-            max-height: 100% !important;
-            width: auto !important;
-            height: auto !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            max-height: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
         
         .fullscreen .controls,
@@ -679,30 +682,37 @@
             const canvas = document.getElementById('gameCanvas');
             if (!canvas) return;
             
-            const container = canvas.parentElement;
-            const containerWidth = container.clientWidth;
-            const containerHeight = window.innerHeight * 0.6; // 60% of viewport height
-            
-            // Calculate responsive dimensions
-            let canvasWidth, canvasHeight;
-            
-                             if (window.innerWidth <= 480) {
-                     // Mobile: 95% width, 70% viewport height
-                     canvasWidth = Math.min(containerWidth * 0.95, window.innerWidth * 0.95);
-                     canvasHeight = Math.min(window.innerHeight * 0.7, window.innerHeight * 0.7);
-                 } else if (window.innerWidth <= 768) {
-                     // Tablet: 98% width, 75% viewport height
-                     canvasWidth = Math.min(containerWidth * 0.98, window.innerWidth * 0.98);
-                     canvasHeight = Math.min(window.innerHeight * 0.75, window.innerHeight * 0.75);
-                 } else {
-                     // Desktop: 800x600 or larger if space allows
-                     canvasWidth = Math.min(800, containerWidth - 40);
-                     canvasHeight = Math.min(600, window.innerHeight * 0.8);
-                 }
-            
-            // Set canvas dimensions
-            canvas.width = canvasWidth;
-            canvas.height = canvasHeight;
+            // Check if in full screen mode
+            if (document.body.classList.contains('fullscreen')) {
+                // Use full viewport dimensions for full screen
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            } else {
+                const container = canvas.parentElement;
+                const containerWidth = container.clientWidth;
+                const containerHeight = window.innerHeight * 0.6; // 60% of viewport height
+                
+                // Calculate responsive dimensions
+                let canvasWidth, canvasHeight;
+                
+                if (window.innerWidth <= 480) {
+                    // Mobile: 95% width, 70% viewport height
+                    canvasWidth = Math.min(containerWidth * 0.95, window.innerWidth * 0.95);
+                    canvasHeight = Math.min(window.innerHeight * 0.7, window.innerHeight * 0.7);
+                } else if (window.innerWidth <= 768) {
+                    // Tablet: 98% width, 75% viewport height
+                    canvasWidth = Math.min(containerWidth * 0.98, window.innerWidth * 0.98);
+                    canvasHeight = Math.min(window.innerHeight * 0.75, window.innerHeight * 0.75);
+                } else {
+                    // Desktop: 800x600 or larger if space allows
+                    canvasWidth = Math.min(800, containerWidth - 40);
+                    canvasHeight = Math.min(600, window.innerHeight * 0.8);
+                }
+                
+                // Set canvas dimensions
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+            }
             
             // Recreate background canvas with new dimensions
             if (window.recreateBackgroundCanvas) {
@@ -711,25 +721,25 @@
             
             // Update game dimensions if game is running
             if (window.internalGame) {
-                window.internalGame.canvasWidth = canvasWidth;
-                window.internalGame.canvasHeight = canvasHeight;
+                window.internalGame.canvasWidth = canvas.width;
+                window.internalGame.canvasHeight = canvas.height;
                 
                 // Update all game objects with new canvas dimensions
                 if (window.internalGame.player) {
-                    window.internalGame.player.setCanvasDimensions(canvasWidth, canvasHeight);
+                    window.internalGame.player.setCanvasDimensions(canvas.width, canvas.height);
                 }
                 if (window.internalGame.spawnSystem) {
-                    window.internalGame.spawnSystem.setCanvasDimensions(canvasWidth, canvasHeight);
+                    window.internalGame.spawnSystem.setCanvasDimensions(canvas.width, canvas.height);
                 }
                 
                 // Update all enemies
                 window.internalGame.enemies.forEach(enemy => {
-                    enemy.setCanvasDimensions(canvasWidth, canvasHeight);
+                    enemy.setCanvasDimensions(canvas.width, canvas.height);
                 });
                 
                 // Update all axes
                 window.internalGame.axes.forEach(axe => {
-                    axe.setCanvasDimensions(canvasWidth, canvasHeight);
+                    axe.setCanvasDimensions(canvas.width, canvas.height);
                 });
             }
         }
@@ -786,8 +796,43 @@
                      document.querySelector('.instructions').style.display = 'none';
                      document.querySelector('.stats').style.display = 'none';
                      
-                     // Resize canvas for full screen
-                     setTimeout(resizeCanvas, 100);
+                     // Resize canvas for full screen - use full viewport dimensions
+                     setTimeout(() => {
+                         const canvas = document.getElementById('gameCanvas');
+                         if (canvas) {
+                             canvas.width = window.innerWidth;
+                             canvas.height = window.innerHeight;
+                             
+                             // Update game dimensions if game is running
+                             if (window.internalGame) {
+                                 window.internalGame.canvasWidth = window.innerWidth;
+                                 window.internalGame.canvasHeight = window.innerHeight;
+                                 
+                                 // Update all game objects with new canvas dimensions
+                                 if (window.internalGame.player) {
+                                     window.internalGame.player.setCanvasDimensions(window.innerWidth, window.innerHeight);
+                                 }
+                                 if (window.internalGame.spawnSystem) {
+                                     window.internalGame.spawnSystem.setCanvasDimensions(window.innerWidth, window.innerHeight);
+                                 }
+                                 
+                                 // Update all enemies
+                                 window.internalGame.enemies.forEach(enemy => {
+                                     enemy.setCanvasDimensions(window.innerWidth, window.innerHeight);
+                                 });
+                                 
+                                 // Update all axes
+                                 window.internalGame.axes.forEach(axe => {
+                                     axe.setCanvasDimensions(window.innerWidth, window.innerHeight);
+                                 });
+                             }
+                             
+                             // Recreate background canvas with new dimensions
+                             if (window.recreateBackgroundCanvas) {
+                                 window.recreateBackgroundCanvas();
+                             }
+                         }
+                     }, 100);
                  }
              }
              
