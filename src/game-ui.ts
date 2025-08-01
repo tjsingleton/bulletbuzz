@@ -378,11 +378,33 @@ function setupEventListeners(): void {
     });
   }
   
+    // Mobile auto-path toggle button
+  const autoPathBtn = document.getElementById("autoPathBtn");
+  if (autoPathBtn) {
+    autoPathBtn.addEventListener("click", function() {
+      const chk = document.getElementById('autoPath') as HTMLInputElement;
+      if (chk) {
+        chk.checked = !chk.checked;
+        if (game) game.setAutoPathing(chk.checked);
+      }
+    });
+  }
+
+  // Mobile auto-shop toggle button
+  const autoShopBtn = document.getElementById("autoShopBtn");
+  if (autoShopBtn) {
+    autoShopBtn.addEventListener("click", function() {
+      const chk = document.getElementById('autoShop') as HTMLInputElement;
+      if (chk) {
+        chk.checked = !chk.checked;
+      }
+    });
+  }
+
   // Mobile full screen button
   const mobileFullScreenBtn = document.getElementById("mobileFullScreenBtn");
   if (mobileFullScreenBtn) {
     mobileFullScreenBtn.addEventListener("click", function() {
-      // Call the global toggleFullScreen function
       if (typeof window.toggleFullScreen === 'function') {
         window.toggleFullScreen();
       }
