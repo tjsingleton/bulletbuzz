@@ -527,6 +527,22 @@
         .action-button.autoshop {
             background: rgba(255,255,255,0.15);
         }
+        /* Settings overlay */
+        .settings-overlay{
+            position:fixed;top:0;left:0;width:100vw;height:100vh;
+            background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;
+            z-index:10002;
+        }
+        .settings-content{
+            background:#222;padding:30px 40px;border-radius:12px;max-width:400px;width:90%;color:#fff;
+        }
+        .settings-content h2{margin-top:0;text-align:center;}
+        .settings-content label{display:inline-block;width:140px;}
+        .setting-group{margin:15px 0;}
+        .settings-content input[type=range]{width:180px;}
+        .settings-content button{margin-top:20px;padding:8px 20px;border:none;border-radius:6px;background:#FFD700;color:#333;font-weight:bold;cursor:pointer;}
+        .settings-content button:hover{background:#FFC107;}
+
         /* Fullscreen footer tweaks */
         .fullscreen footer {
             display: flex !important;
@@ -790,7 +806,49 @@
              // Hide startup logo after 2 seconds
              setTimeout(hideStartupLogo, 2000);
              
-             // Full screen functionality
+             // Utility to pause/resume if needed
+function ensurePaused(state){
+    if(typeof window.togglePause==='function'){
+        const isPaused = window.internalGame? window.internalGame.getPaused && window.internalGame.getPaused(): false;
+        if(state && !isPaused) window.togglePause();
+        if(!state && isPaused) window.togglePause();
+    }
+}
+
+// Settings panel functionality
+function toggleSettingsPanel(){
+    const overlay=document.getElementById('settingsOverlay');
+    if(!overlay) return;
+    if(overlay.style.display==='none' || overlay.style.display===''){
+        overlay.style.display='flex';
+        // populate fields
+        const ps=document.getElementById('devPlayerSpeed');
+        const es=document.getElementById('devEnemySpeed');
+        const ap=document.getElementById('devAutoPathChk');
+        const as=document.getElementById('devAutoShopChk');
+        if(window.internalGame){
+            if(ps) {ps.value=window.internalGame.config.playerSpeed.toString();document.getElementById('devPlayerSpeedVal').textContent=ps.value;}
+            if(es) {es.value=window.internalGame.config.enemySpeed.toString();document.getElementById('devEnemySpeedVal').textContent=es.value;}
+        }
+        if(ap){ap.checked=document.getElementById('autoPath').checked;}
+        if(as){as.checked=document.getElementById('autoShop').checked;}
+        ensurePaused(true);
+    }else{
+        // save values
+        const ps=document.getElementById('devPlayerSpeed');
+        const es=document.getElementById('devEnemySpeed');
+        const ap=document.getElementById('devAutoPathChk');
+        const as=document.getElementById('devAutoShopChk');
+        if(ps&&window.internalGame){window.internalGame.config.playerSpeed=parseFloat(ps.value);} 
+        if(es&&window.internalGame){window.internalGame.config.enemySpeed=parseFloat(es.value);} 
+        if(ap){const chk=document.getElementById('autoPath');chk.checked=ap.checked;if(window.internalGame) window.internalGame.setAutoPathing(ap.checked);} 
+        if(as){const chk=document.getElementById('autoShop');chk.checked=as.checked;} 
+        overlay.style.display='none';
+        ensurePaused(false);
+    }
+}
+
+// Full screen functionality
              function toggleFullScreen() {
                  const body = document.body;
                  const fullScreenBtn = document.getElementById('fullScreenBtn');
@@ -865,6 +923,17 @@
                      event.preventDefault();
                      toggleFullScreen();
                  }
+                 if(event.key==='o'||event.key==='O'){
+                     event.preventDefault();
+                     toggleSettingsPanel();
+                 }
+                 if(event.key==='Escape'){
+                     const overlay=document.getElementById('settingsOverlay');
+                     if(overlay && overlay.style.display!=='none'){
+                         event.preventDefault();
+                         toggleSettingsPanel();
+                     }
+                 }
              });
          </script>
     
@@ -876,5 +945,29 @@
     
     <!-- Load the game UI -->
     <script type="module" src="./dist/game-ui.js"></script>
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settingsOverlay" style="display:none;">
+        <div class="settings-content">
+            <h2>⚙️ Game Settings</h2>
+            <div class="setting-group">
+                <label for="devPlayerSpeed">Player Speed:</label>
+                <input type="range" id="devPlayerSpeed" min="0.1" max="5" step="0.05">
+                <span id="devPlayerSpeedVal"></span>
+            </div>
+            <div class="setting-group">
+                <label for="devEnemySpeed">Enemy Speed:</label>
+                <input type="range" id="devEnemySpeed" min="0.05" max="1" step="0.05">
+                <span id="devEnemySpeedVal"></span>
+            </div>
+            <div class="setting-group">
+                <label><input type="checkbox" id="devAutoPathChk"> Auto-Pathing</label>
+            </div>
+            <div class="setting-group">
+                <label><input type="checkbox" id="devAutoShopChk"> Auto-Shop</label>
+            </div>
+            <button id="settingsSaveBtn">Save & Resume (Esc)</button>
+        </div>
+    </div>
+
 </body>
 </html> 
