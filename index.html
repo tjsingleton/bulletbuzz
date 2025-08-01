@@ -852,6 +852,34 @@ function toggleSettingsPanel(){
     }
 }
 
+// ---- Browser Fullscreen Helpers ----
+function requestBrowserFullscreen(elem){
+    if(elem.requestFullscreen) return elem.requestFullscreen();
+    if(elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
+    if(elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
+    if(elem.msRequestFullscreen) return elem.msRequestFullscreen();
+}
+function exitBrowserFullscreen(){
+    if(document.exitFullscreen) return document.exitFullscreen();
+    if(document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    if(document.mozCancelFullScreen) return document.mozCancelFullScreen();
+    if(document.msExitFullscreen) return document.msExitFullscreen();
+}
+
+// Sync custom fullscreen UI with browser fullscreen toggle (e.g. fn-F)
+document.addEventListener('fullscreenchange',()=>{
+    const body=document.body;
+    const isBrowserFS=!!(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement);
+    if(isBrowserFS && !body.classList.contains('fullscreen')){
+        // user pressed native fullscreen key – enable our UI fullscreen mode
+        toggleFullScreen();
+    }
+    if(!isBrowserFS && body.classList.contains('fullscreen')){
+        // exited via Esc or fn-F again – disable our UI fullscreen
+        toggleFullScreen();
+    }
+});
+
 // Full screen functionality
              function toggleFullScreen() {
                  const body = document.body;
@@ -860,6 +888,7 @@ function toggleSettingsPanel(){
                  if (body.classList.contains('fullscreen')) {
                      // Exit full screen
                      body.classList.remove('fullscreen');
+                     exitBrowserFullscreen();
                      fullScreenBtn.innerHTML = '🖥️ Full Screen (F)';
                      fullScreenBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
                      
@@ -873,6 +902,7 @@ function toggleSettingsPanel(){
                  } else {
                      // Enter full screen
                      body.classList.add('fullscreen');
+                     requestBrowserFullscreen(document.documentElement);
                      fullScreenBtn.innerHTML = '❌ Exit Full Screen (F)';
                      fullScreenBtn.style.background = 'linear-gradient(135deg, #FF6B6B, #FF8E8E)';
                      
