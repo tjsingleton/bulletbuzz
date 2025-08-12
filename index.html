@@ -458,7 +458,7 @@
         }
         
         /* Full screen styles */
-        .fullscreen {
+        body.fullscreen {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
@@ -470,7 +470,7 @@
             padding: 0 !important;
         }
         
-        .fullscreen .container {
+        body.fullscreen .container {
             max-width: none !important;
             width: 100% !important;
             height: 100% !important;
@@ -481,7 +481,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; /* match body gradient */
         }
         
-        .fullscreen .game-section {
+        body.fullscreen .game-section {
             flex: 1 !important;
             display: flex !important;
             align-items: center !important;
@@ -489,7 +489,7 @@
             margin: 0 !important;
         }
         
-        .fullscreen #gameCanvas {
+        body.fullscreen #gameCanvas {
             width: 100vw !important;
             height: 100vh !important;
             max-width: none !important;
@@ -499,25 +499,25 @@
             box-shadow: none !important;
         }
         
-        .fullscreen .controls,
-        .fullscreen .instructions,
-        .fullscreen .stats {
+        body.fullscreen .controls,
+        body.fullscreen .instructions,
+        body.fullscreen .stats {
             display: none !important;
         }
         
-        .fullscreen .mobile-controls {
+        body.fullscreen .mobile-controls {
             position: fixed !important;
             bottom: 20px !important;
             right: 20px !important;
             z-index: 10000 !important;
         }
         
-        .fullscreen .mobile-controls .action-buttons {
+        body.fullscreen .mobile-controls .action-buttons {
             display: flex !important;
             gap: 10px !important;
         }
         
-        .fullscreen .mobile-controls .action-button {
+        body.fullscreen .mobile-controls .action-button {
             width: 60px !important;
             height: 60px !important;
             font-size: 24px !important;
@@ -544,7 +544,7 @@
         .settings-content button:hover{background:#FFC107;}
 
         /* Fullscreen footer tweaks */
-        .fullscreen footer {
+        body.fullscreen footer {
             position: absolute !important;
             bottom: 0 !important;
             left: 0 !important;
@@ -556,8 +556,8 @@
             padding: 4px 10px !important;
             flex-wrap: wrap !important;
         }
-        .fullscreen footer h4,
-        .fullscreen footer p {
+        body.fullscreen footer h4,
+        body.fullscreen footer p {
             display: none !important;
         }
         
@@ -574,7 +574,7 @@
             box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4) !important;
         }
         
-        .fullscreen #fullScreenBtn {
+        body.fullscreen #fullScreenBtn {
             position: fixed !important;
             top: 20px !important;
             right: 20px !important;
@@ -625,7 +625,7 @@
                 <div class="action-button reset" id="resetButton" data-label="RESTART">🔄</div>
                 <div class="action-button autopath" id="autoPathBtn" data-label="AP">🤖</div>
                 <div class="action-button autoshop" id="autoShopBtn" data-label="AS">🏪</div>
-                <div class="action-button fullscreen" id="mobileFullScreenBtn" data-label="FULL">🖥️</div>
+                <div class="action-button fullscreen-toggle" id="mobileFullScreenBtn" data-label="FULL">🖥️</div>
             </div>
         </div>
         
